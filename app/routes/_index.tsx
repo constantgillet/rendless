@@ -1,6 +1,8 @@
 import type { MetaFunction } from "@remix-run/node";
 import { css, cx } from "styled-system/css";
 import Moveable, { OnDrag, OnResize, OnScale } from "react-moveable";
+import Selecto from "react-selecto";
+import { useRef, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,7 +11,29 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const DATA_SCENA_ELEMENT_ID = "data-scena-element-id";
+
 export default function Index() {
+  const selecto = useRef<Selecto>(null);
+  const container = useRef<HTMLDivElement>(null);
+  const moveableManager = useRef<Moveable>(null);
+  const [selectedTargets, setSelectedTargets] = useState<HTMLElement[]>([]);
+
+  const checkBlur = () => {
+    const activeElement = document.activeElement;
+    if (activeElement) {
+      (activeElement as HTMLElement).blur();
+    }
+    const selection = document.getSelection()!;
+
+    console.log("selection", selection);
+
+    if (selection) {
+      selection.removeAllRanges();
+    }
+    // this.eventBus.trigger("blur");
+  };
+
   if (typeof document === "undefined") {
     return null;
   }
@@ -26,24 +50,27 @@ export default function Index() {
           justifyContent: "center",
         }}
       >
-        <div className={css({ w: 1200, h: 630, backgroundColor: "gray.300" })}>
+        <div
+          ref={container}
+          className={cx(
+            "scena-viewer",
+            css({ w: 1200, h: 630, backgroundColor: "gray.300" })
+          )}
+        >
           <div
             className={cx(
               "target",
               css({ w: 70, h: 70, backgroundColor: "red.300" })
             )}
-          />
-
-          <div
-            className={cx(
-              "target-2",
-              css({ w: 70, h: 70, backgroundColor: "green.300" })
-            )}
+            {...{
+              [DATA_SCENA_ELEMENT_ID]: "1",
+            }}
           />
         </div>
       </div>
       <Moveable
-        target={document.querySelector(".target")}
+        ref={moveableManager}
+        targets={selectedTargets}
         container={null}
         origin={true}
         /* Resize event edges */
@@ -54,6 +81,7 @@ export default function Index() {
         onDragStart={({ target, clientX, clientY }) => {
           console.log("onDragStart", target);
         }}
+        // dragContainer={container.current}
         onDrag={({
           target,
           beforeDelta,
@@ -144,6 +172,62 @@ export default function Index() {
         onPinchEnd={({ isDrag, target, clientX, clientY, datas }) => {
           // pinchEnd event occur before dragEnd, rotateEnd, scaleEnd, resizeEnd
           console.log("onPinchEnd");
+        }}
+      />
+      <Selecto
+        ref={selecto}
+        dragContainer={".scena-viewer"}
+        selectableTargets={[".scena-viewer .target"]}
+        hitRate={0}
+        selectableTargets={[`.scena-viewer [${DATA_SCENA_ELEMENT_ID}]`]}
+        selectByClick={true}
+        selectFromInside={false}
+        toggleContinueSelect={["shift"]}
+        preventDefault={true}
+        onDragStart={(e) => {
+          const inputEvent = e.inputEvent;
+          const target = inputEvent.target;
+
+          checkBlur();
+          // if (selectedMenu === "Text" && target.isContentEditable) {
+          //   const contentElement = getContentElement(target);
+
+          //   if (
+          //     contentElement &&
+          //     contentElement.hasAttribute(DATA_SCENA_ELEMENT_ID)
+          //   ) {
+          //     e.stop();
+          //     this.setSelectedTargets([contentElement]);
+          //   }
+          // }
+          if (
+            (inputEvent.type === "touchstart" && e.isTrusted) ||
+            moveableManager.current!.isMoveableElement(target) ||
+            selectedTargets.some((t) => t === target || t.contains(target))
+          ) {
+            e.stop();
+          }
+        }}
+        onSelectEnd={({ isDragStart, selected, inputEvent, rect }) => {
+          // console.log("select end");
+
+          // if (isDragStart) {
+          //   inputEvent.preventDefault();
+          // }
+          // if (selectEndMaker(rect)) {
+          //   return;
+          // }
+
+          console.log("selected", selected);
+
+          setSelectedTargets(selected);
+
+          // this.setSelectedTargets(selected).then(() => {
+          //   if (!isDragStart) {
+          //     return;
+          //   }
+          //   moveableManager.current!.getMoveable().dragStart(inputEvent);
+          // });
         }}
       />
     </>
