@@ -3,6 +3,7 @@ import { css, cx } from "styled-system/css";
 import Moveable, { OnDrag, OnResize, OnScale } from "react-moveable";
 import Selecto from "react-selecto";
 import { useRef, useState } from "react";
+import { Button } from "@radix-ui/themes";
 
 export const meta: MetaFunction = () => {
   return [
@@ -50,20 +51,49 @@ export default function Index() {
           justifyContent: "center",
         }}
       >
+        <Button>Button</Button>
         <div
           ref={container}
           className={cx(
             "scena-viewer",
-            css({ w: 1200, h: 630, backgroundColor: "gray.300" })
+            css({
+              w: 1200,
+              h: 630,
+              backgroundColor: "gray.300",
+              position: "relative",
+            })
           )}
         >
           <div
             className={cx(
               "target",
-              css({ w: 70, h: 70, backgroundColor: "red.300" })
+              css({
+                w: 70,
+                h: 70,
+                backgroundColor: "red.300",
+                position: "absolute",
+                top: 100,
+                left: 100,
+              })
             )}
             {...{
               [DATA_SCENA_ELEMENT_ID]: "1",
+            }}
+          />
+          <div
+            className={cx(
+              "target",
+              css({
+                w: 70,
+                h: 70,
+                backgroundColor: "green.300",
+                position: "absolute",
+                top: 100,
+                left: 100,
+              })
+            )}
+            {...{
+              [DATA_SCENA_ELEMENT_ID]: "2",
             }}
           />
         </div>

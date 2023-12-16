@@ -7,10 +7,15 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { Theme } from "@radix-ui/themes";
 
 import styles from "./index.css";
+import radixStyles from "@radix-ui/themes/styles.css";
 
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: styles },
+  { rel: "stylesheet", href: radixStyles },
+];
 
 export default function App() {
   return (
@@ -22,7 +27,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Theme accentColor="crimson" grayColor="sand" radius="large">
+          <Outlet />
+        </Theme>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
