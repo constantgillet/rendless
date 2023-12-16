@@ -3,7 +3,17 @@ import { css, cx } from "styled-system/css";
 import Moveable, { OnDrag, OnResize, OnScale } from "react-moveable";
 import Selecto from "react-selecto";
 import { useRef, useState } from "react";
-import { Button } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  Grid,
+  IconButton,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
+import { PropertiesAside } from "~/components/PropertiesAside";
 
 export const meta: MetaFunction = () => {
   return [
@@ -51,7 +61,24 @@ export default function Index() {
           justifyContent: "center",
         }}
       >
-        <Button>Button</Button>
+        <aside
+          className={css({
+            w: 100,
+            backgroundColor: "var(--color-panel)",
+            border: "var(--card-border-width) solid transparent",
+            borderColor: "var(--global-color-border, currentColor)",
+            padding: "var(--space-3)",
+            borderRight: "var(--card-border-width) solid var(--color-border)",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            height: "100%",
+          })}
+        >
+          Panel
+        </aside>
+        <Button variant="classic">Button</Button>
+        <Card>TEs card</Card>
         <div
           ref={container}
           className={cx(
@@ -97,7 +124,9 @@ export default function Index() {
             }}
           />
         </div>
+        <PropertiesAside />
       </div>
+
       <Moveable
         ref={moveableManager}
         targets={selectedTargets}
@@ -136,7 +165,7 @@ export default function Index() {
           console.log("onDragEnd", target, isDrag);
         }}
         /* When resize or scale, keeps a ratio of the width, height. */
-        keepRatio={true}
+        // keepRatio={true}
         /* resizable*/
         /* Only one of resizable, scalable, warpable can be used. */
         resizable={true}

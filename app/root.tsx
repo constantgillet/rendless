@@ -26,8 +26,8 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
-        <Theme accentColor="crimson" grayColor="sand" radius="large">
+      <body className="dark">
+        <Theme accentColor="indigo" grayColor="olive" radius="large">
           <Outlet />
         </Theme>
         <ScrollRestoration />

@@ -17,7 +17,11 @@ export default defineConfig({
 
   // Useful for theme customization
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "tomato",
+      },
+    },
   },
 
   // The output directory for your css system
