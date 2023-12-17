@@ -1,4 +1,5 @@
 import { css } from "styled-system/css";
+import { Icon } from "./Icon";
 
 export const TopBar = () => {
   return (
