@@ -13,7 +13,9 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
-import { PropertiesAside } from "~/components/PropertiesAside";
+import { PropertiesPanel } from "~/components/PropertiesPanel";
+import { TopBar } from "~/components/TopBar";
+import { LayersPanel } from "~/components/LayersPanel";
 
 export const meta: MetaFunction = () => {
   return [
@@ -61,22 +63,8 @@ export default function Index() {
           justifyContent: "center",
         }}
       >
-        <aside
-          className={css({
-            w: 100,
-            backgroundColor: "var(--color-panel)",
-            border: "var(--card-border-width) solid transparent",
-            borderColor: "var(--global-color-border, currentColor)",
-            padding: "var(--space-3)",
-            borderRight: "var(--card-border-width) solid var(--color-border)",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            height: "100%",
-          })}
-        >
-          Panel
-        </aside>
+        <TopBar />
+        <LayersPanel />
         <Button variant="classic">Button</Button>
         <Card>TEs card</Card>
         <div
@@ -124,7 +112,7 @@ export default function Index() {
             }}
           />
         </div>
-        <PropertiesAside />
+        <PropertiesPanel />
       </div>
 
       <Moveable

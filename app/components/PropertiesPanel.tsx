@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/themes";
 import { css } from "styled-system/css";
 
-export const PropertiesAside = () => {
+export const PropertiesPanel = () => {
   return (
     <aside
       className={css({
@@ -19,9 +19,9 @@ export const PropertiesAside = () => {
         padding: "var(--space-3)",
         borderLeft: "1px solid var(--gray-a5)",
         position: "absolute",
-        top: 0,
+        bottom: 0,
         right: 0,
-        height: "100%",
+        height: "calc(100vh - 48px)",
       })}
     >
       <PanelGroup title="Position">
