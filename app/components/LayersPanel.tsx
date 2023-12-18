@@ -11,7 +11,7 @@ export const LayersPanel = () => {
         position: "absolute",
         bottom: 0,
         left: 0,
-        height: "calc(100vh - 48px)",
+        height: "calc(100vh - 58px)",
       })}
     ></aside>
   );

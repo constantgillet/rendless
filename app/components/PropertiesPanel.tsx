@@ -21,7 +21,7 @@ export const PropertiesPanel = () => {
         position: "absolute",
         bottom: 0,
         right: 0,
-        height: "calc(100vh - 48px)",
+        height: "calc(100vh - 58px)",
       })}
     >
       <PanelGroup title="Position">

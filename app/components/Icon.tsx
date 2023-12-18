@@ -1,25 +1,7 @@
 import { RecipeVariantProps, css, cva, cx } from "styled-system/css";
 import { SVGProps } from "react";
 
-export type IconName =
-  | "lock"
-  | "github"
-  | "chevron-down"
-  | "chevron-up"
-  | "chevron-right"
-  | "chevron-left"
-  | "refresh-ccw"
-  | "loader"
-  | "git-branch"
-  | "git-commit"
-  | "user"
-  | "code"
-  | "check"
-  | "plus"
-  | "alert-circle"
-  | "alert-triangle"
-  | "alert-octagon"
-  | "book-open";
+export type IconName = "text" | "shape";
 
 export const iconStyle = cva({
   base: {
@@ -27,17 +9,13 @@ export const iconStyle = cva({
   },
   variants: {
     size: {
-      sm: { width: "12px", height: "12px" },
-      md: { width: "14px", height: "14px" },
-      lg: { width: "16px", height: "16px" },
-      xl: { width: "18px", height: "18px" },
-      "2xl": { width: "20px", height: "20px" },
-      "3xl": { width: "24px", height: "24px" },
-      "4xl": { width: "28px", height: "28px" },
-      "5xl": { width: "32px", height: "32px" },
-      "6xl": { width: "36px", height: "36px" },
-      "7xl": { width: "40px", height: "40px" },
-      "8xl": { width: "44px", height: "44px" },
+      xs: { width: "12px", height: "12px" },
+      sm: { width: "14px", height: "14px" },
+      md: { width: "16px", height: "16px" },
+      lg: { width: "18px", height: "18px" },
+      xl: { width: "20px", height: "20px" },
+      "2xl": { width: "24px", height: "24px" },
+      "3xl": { width: "28px", height: "28px" },
     },
     spin: {
       true: {
