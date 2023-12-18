@@ -1,6 +1,6 @@
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
-import { IconButton, Tooltip } from "@radix-ui/themes";
+import { Button, IconButton, Tooltip } from "@radix-ui/themes";
 
 export const TopBar = () => {
   return (
@@ -19,6 +19,7 @@ export const TopBar = () => {
         className={css({
           paddingX: "var(--space-3)",
           height: "100%",
+          display: "flex",
         })}
       >
         <div
@@ -39,6 +40,18 @@ export const TopBar = () => {
               <Icon name="shape" size="lg" />
             </IconButton>
           </Tooltip>
+        </div>
+        <div
+          className={css({
+            gap: "var(--space-2)",
+            display: "flex",
+            flex: 1,
+            justifyContent: "flex-end",
+            alignItems: "center",
+          })}
+        >
+          <Button variant="outline">Use image</Button>
+          <Button>Preview</Button>
         </div>
       </div>
     </header>
