@@ -23,6 +23,14 @@ module.exports = {
   // Base config
   extends: ["eslint:recommended"],
 
+  settings: {
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
+  },
+
   overrides: [
     // React
     {

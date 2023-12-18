@@ -1,6 +1,5 @@
-import type { RecipeVariantProps } from "~/styled-system/css";
-import { css, cva, cx } from "styled-system/css";
-import { SVGAttributes, SVGProps } from "react";
+import { RecipeVariantProps, css, cva, cx } from "styled-system/css";
+import { SVGProps } from "react";
 
 export type IconName =
   | "lock"
@@ -53,19 +52,20 @@ export const iconStyle = cva({
 
 export type ButtonVariants = RecipeVariantProps<typeof iconStyle>;
 
-export type IconProps = ButtonVariants;
+export type IconProps = SVGProps<SVGSVGElement> &
+  ButtonVariants & { name: IconName };
 
-export const Icon = (props: ButtonVariants) => {
+export const Icon = (props: IconProps) => {
   return (
     <svg
       {...props}
       className={cx(
-        iconStyle({ size: props.size, spin: props.spin }),
+        iconStyle(props),
         css({ color: "currentcolor" }),
         props.className
       )}
     >
-      <use href={`/images/icons-sprite.svg#${name}`}></use>
+      <use href={`/images/icons-sprite.svg#${props.name}`}></use>
     </svg>
   );
 };
