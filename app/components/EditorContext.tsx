@@ -3,11 +3,15 @@ import { createContext, useContext, useState } from "react";
 type EditorContextType = {
   selected: string | null;
   setSelected: React.Dispatch<React.SetStateAction<null>>;
+  tree: Array<string>;
+  setTree: React.Dispatch<React.SetStateAction<Array<string>>>;
 };
 
 const EditorContext = createContext<EditorContextType>({
   selected: null,
   setSelected: () => {},
+  tree: [],
+  setTree: () => {},
 });
 
 type EditorContextProviderProps = {
@@ -18,9 +22,10 @@ export const EditorContextProvider = ({
   children,
 }: EditorContextProviderProps) => {
   const [selected, setSelected] = useState(null);
+  const [tree, setTree] = useState<Array<string>>([]);
 
   return (
-    <EditorContext.Provider value={{ selected, setSelected }}>
+    <EditorContext.Provider value={{ selected, setSelected, tree, setTree }}>
       {children}
     </EditorContext.Provider>
   );
