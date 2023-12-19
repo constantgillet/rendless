@@ -28,6 +28,7 @@ export const TopBar = () => {
             alignItems: "center",
             height: "100%",
             gap: "var(--space-2)",
+            flex: 1,
           })}
         >
           <Tooltip content="Add a text">
@@ -40,6 +41,26 @@ export const TopBar = () => {
               <Icon name="shape" size="lg" />
             </IconButton>
           </Tooltip>
+        </div>
+        <div
+          className={css({
+            flex: 1,
+            display: "flex",
+            justifyContent: "center",
+          })}
+        >
+          <input
+            value={"Template name"}
+            className={css({
+              border: "none",
+              outline: "none",
+              textAlign: "center",
+              fontSize: "var(--font-size-3)",
+              fontWeight: "var(--font-weight-medium)",
+              color: "var(--color-text)",
+              backgroundColor: "transparent",
+            })}
+          />
         </div>
         <div
           className={css({

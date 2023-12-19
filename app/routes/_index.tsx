@@ -65,8 +65,6 @@ export default function Index() {
       >
         <TopBar />
         <LayersPanel />
-        <Button variant="classic">Button</Button>
-        <Card>TEs card</Card>
         <div
           ref={container}
           className={cx(
