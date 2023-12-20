@@ -27,6 +27,21 @@ export const meta: MetaFunction = () => {
 
 export const DATA_SCENA_ELEMENT_ID = "data-scena-element-id";
 
+const tree = {
+  id: "1",
+  type: "page",
+  chilren: [
+    {
+      id: "2",
+      type: "div",
+    },
+    {
+      id: "4",
+      type: "shape",
+    },
+  ],
+};
+
 export default function Index() {
   const selecto = useRef<Selecto>(null);
   const container = useRef<HTMLDivElement>(null);
