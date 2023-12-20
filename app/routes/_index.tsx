@@ -16,6 +16,7 @@ import {
 import { PropertiesPanel } from "~/components/PropertiesPanel";
 import { TopBar } from "~/components/TopBar";
 import { LayersPanel } from "~/components/LayersPanel";
+import { useEditorStore } from "~/components/EditorStore";
 
 export const meta: MetaFunction = () => {
   return [
@@ -30,7 +31,8 @@ export default function Index() {
   const selecto = useRef<Selecto>(null);
   const container = useRef<HTMLDivElement>(null);
   const moveableManager = useRef<Moveable>(null);
-  const [selectedTargets, setSelectedTargets] = useState<HTMLElement[]>([]);
+  const selectedTargets = useEditorStore((state) => state.selected);
+  const setSelectedTargets = useEditorStore((state) => state.setSelected);
 
   const checkBlur = () => {
     const activeElement = document.activeElement;
@@ -50,6 +52,12 @@ export default function Index() {
   if (typeof document === "undefined") {
     return null;
   }
+
+  const selectedTargetsElements = selectedTargets.map((id) =>
+    container.current!.querySelector<HTMLElement | SVGElement>(
+      `[${DATA_SCENA_ELEMENT_ID}="${id}"]`
+    )
+  );
 
   return (
     <>
@@ -115,7 +123,7 @@ export default function Index() {
 
       <Moveable
         ref={moveableManager}
-        targets={selectedTargets}
+        targets={selectedTargetsElements}
         container={null}
         origin={true}
         /* Resize event edges */
@@ -248,7 +256,9 @@ export default function Index() {
           if (
             (inputEvent.type === "touchstart" && e.isTrusted) ||
             moveableManager.current!.isMoveableElement(target) ||
-            selectedTargets.some((t) => t === target || t.contains(target))
+            selectedTargetsElements.some(
+              (t) => t === target || t?.contains(target)
+            )
           ) {
             e.stop();
           }
@@ -264,8 +274,8 @@ export default function Index() {
           // }
 
           console.log("selected", selected);
-
-          setSelectedTargets(selected);
+          const ids = getIdsFromElements(selected);
+          setSelectedTargets(ids);
 
           // this.setSelectedTargets(selected).then(() => {
           //   if (!isDragStart) {
@@ -278,3 +288,7 @@ export default function Index() {
     </>
   );
 }
+
+const getIdsFromElements = (targets: (HTMLElement | SVGElement)[]) => {
+  return targets.map((t) => t.getAttribute(DATA_SCENA_ELEMENT_ID)!);
+};

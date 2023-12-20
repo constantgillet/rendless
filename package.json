@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@radix-ui/themes": "^2.0.2",
+    "@redux-devtools/extension": "^3.3.0",
     "@remix-run/css-bundle": "^2.4.0",
     "@remix-run/node": "^2.4.0",
     "@remix-run/react": "^2.4.0",
@@ -20,7 +21,8 @@
     "isbot": "^3.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-moveable": "^0.56.0"
+    "react-moveable": "^0.56.0",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@pandacss/dev": "^0.22.0",
