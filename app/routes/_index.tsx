@@ -27,27 +27,14 @@ export const meta: MetaFunction = () => {
 
 export const DATA_SCENA_ELEMENT_ID = "data-scena-element-id";
 
-const tree = {
-  id: "1",
-  type: "page",
-  chilren: [
-    {
-      id: "2",
-      type: "div",
-    },
-    {
-      id: "4",
-      type: "shape",
-    },
-  ],
-};
-
 export default function Index() {
   const selecto = useRef<Selecto>(null);
   const container = useRef<HTMLDivElement>(null);
   const moveableManager = useRef<Moveable>(null);
   const selectedTargets = useEditorStore((state) => state.selected);
   const setSelectedTargets = useEditorStore((state) => state.setSelected);
+
+  const tree = useEditorStore((state) => state.tree);
 
   const checkBlur = () => {
     const activeElement = document.activeElement;
@@ -100,38 +87,32 @@ export default function Index() {
             })
           )}
         >
-          <div
-            className={cx(
-              "target",
-              css({
-                w: 70,
-                h: 70,
-                backgroundColor: "red.300",
-                position: "absolute",
-                top: 100,
-                left: 100,
-              })
-            )}
-            {...{
-              [DATA_SCENA_ELEMENT_ID]: "1",
-            }}
-          />
-          <div
-            className={cx(
-              "target",
-              css({
-                w: 70,
-                h: 70,
-                backgroundColor: "green.300",
-                position: "absolute",
-                top: 100,
-                left: 100,
-              })
-            )}
-            {...{
-              [DATA_SCENA_ELEMENT_ID]: "2",
-            }}
-          />
+          {tree?.chilren?.map((child) => {
+            const id = child.id;
+            return (
+              <div
+                key={id}
+                className={cx(
+                  "target",
+                  css({
+                    w: 70,
+                    h: 70,
+                    backgroundColor: "red.300",
+                    position: "absolute",
+                  })
+                )}
+                {...{
+                  [DATA_SCENA_ELEMENT_ID]: id,
+                }}
+                style={{
+                  left: child.x,
+                  top: child.y,
+                  width: child.width,
+                  height: child.height,
+                }}
+              />
+            );
+          })}
         </div>
         <PropertiesPanel />
       </div>
