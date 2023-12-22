@@ -8,6 +8,7 @@ interface EditorState {
   tree: Tree;
   increase: (by: number) => void;
   setSelected: (selected: string[]) => void;
+  addElement: (element: Tree) => void;
 }
 
 type Tree = {
@@ -52,5 +53,9 @@ export const useEditorStore = create<EditorState>()(
     selected: [],
     increase: (by) => set((state) => ({ bears: state.bears + by })),
     setSelected: (selected) => set({ selected }),
+    addElement: (element: Tree) =>
+      set((state) => ({
+        tree: { ...state.tree, chilren: [...state.tree.chilren, element] },
+      })),
   }))
 );

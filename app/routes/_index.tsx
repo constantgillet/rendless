@@ -33,6 +33,7 @@ export default function Index() {
   const moveableManager = useRef<Moveable>(null);
   const selectedTargets = useEditorStore((state) => state.selected);
   const setSelectedTargets = useEditorStore((state) => state.setSelected);
+  const addElement = useEditorStore((state) => state.addElement);
 
   const tree = useEditorStore((state) => state.tree);
 
@@ -268,6 +269,19 @@ export default function Index() {
           // if (selectEndMaker(rect)) {
           //   return;
           // }
+
+          console.log("rect", rect);
+
+          const containerRect = container.current!.getBoundingClientRect();
+
+          addElement({
+            id: "5",
+            type: "div",
+            x: rect.left - containerRect.left,
+            y: rect.top - containerRect.top,
+            width: rect.width,
+            height: rect.height,
+          });
 
           console.log("selected", selected);
           const ids = getIdsFromElements(selected);
