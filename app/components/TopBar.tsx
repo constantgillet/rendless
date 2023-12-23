@@ -1,8 +1,30 @@
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
 import { Button, IconButton, Tooltip } from "@radix-ui/themes";
+import { Tool, useEditorStore } from "./EditorStore";
+
+const toolsData = [
+  {
+    name: "select",
+    icon: "select",
+    tooltipText: "Select frame elements",
+  },
+  {
+    name: "text",
+    icon: "text",
+    tooltipText: "Add a text",
+  },
+  {
+    name: "shape",
+    icon: "shape",
+    tooltipText: "Add a shape",
+  },
+];
 
 export const TopBar = () => {
+  const selectedTool = useEditorStore((state) => state.selectedTool);
+  const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
+
   return (
     <header
       className={css({
@@ -31,16 +53,19 @@ export const TopBar = () => {
             flex: 1,
           })}
         >
-          <Tooltip content="Add a text">
-            <IconButton size="3" variant="outline" highContrast radius="none">
-              <Icon name="text" size="lg" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip content="Add a shape">
-            <IconButton size="3" variant="outline" highContrast radius="none">
-              <Icon name="shape" size="lg" />
-            </IconButton>
-          </Tooltip>
+          {toolsData.map(({ name, icon, tooltipText }) => (
+            <Tooltip content={tooltipText} key={name}>
+              <IconButton
+                size="3"
+                variant={selectedTool === name ? "solid" : "outline"}
+                highContrast
+                radius="none"
+                onClick={() => setSelectedTool(name as Tool)}
+              >
+                <Icon name={icon} size="lg" />
+              </IconButton>
+            </Tooltip>
+          ))}
         </div>
         <div
           className={css({

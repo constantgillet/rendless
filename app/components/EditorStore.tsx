@@ -2,14 +2,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import type {} from "@redux-devtools/extension"; // required for devtools typing
 
-interface EditorState {
-  bears: number;
-  selected: string[];
-  tree: Tree;
-  increase: (by: number) => void;
-  setSelected: (selected: string[]) => void;
-  addElement: (element: Tree) => void;
-}
+export type Tool = "select" | "text";
 
 type Tree = {
   id: string;
@@ -20,6 +13,17 @@ type Tree = {
   width: number;
   height: number;
 };
+
+interface EditorState {
+  bears: number;
+  selected: string[];
+  tree: Tree;
+  selectedTool: Tool;
+  increase: (by: number) => void;
+  setSelected: (selected: string[]) => void;
+  addElement: (element: Tree) => void;
+  setSelectedTool: (tool: Tool) => void;
+}
 
 export const useEditorStore = create<EditorState>()(
   devtools((set) => ({
@@ -51,11 +55,13 @@ export const useEditorStore = create<EditorState>()(
       ],
     },
     selected: [],
+    selectedTool: "select",
     increase: (by) => set((state) => ({ bears: state.bears + by })),
     setSelected: (selected) => set({ selected }),
     addElement: (element: Tree) =>
       set((state) => ({
         tree: { ...state.tree, chilren: [...state.tree.chilren, element] },
       })),
+    setSelectedTool: (selectedTool) => set({ selectedTool }),
   }))
 );

@@ -17,6 +17,8 @@ import { PropertiesPanel } from "~/components/PropertiesPanel";
 import { TopBar } from "~/components/TopBar";
 import { LayersPanel } from "~/components/LayersPanel";
 import { useEditorStore } from "~/components/EditorStore";
+import { v4 as uuidv4 } from "uuid";
+import { Rect } from "selecto";
 
 export const meta: MetaFunction = () => {
   return [
@@ -50,6 +52,22 @@ export default function Index() {
       selection.removeAllRanges();
     }
     // this.eventBus.trigger("blur");
+  };
+
+  const selectEndMaker = (rect: Rect) => {
+    const containerRect = container.current!.getBoundingClientRect();
+
+    const newElement = {
+      id: uuidv4(),
+      type: "div",
+      x: rect.left - containerRect.left,
+      y: rect.top - containerRect.top,
+      width: rect.width,
+      height: rect.height,
+    };
+
+    addElement(newElement);
+    setSelectedTargets([]);
   };
 
   if (typeof document === "undefined") {
@@ -261,27 +279,16 @@ export default function Index() {
           }
         }}
         onSelectEnd={({ isDragStart, selected, inputEvent, rect }) => {
-          // console.log("select end");
-
-          // if (isDragStart) {
-          //   inputEvent.preventDefault();
-          // }
+          if (isDragStart) {
+            inputEvent.preventDefault();
+          }
           // if (selectEndMaker(rect)) {
           //   return;
           // }
 
           console.log("rect", rect);
 
-          const containerRect = container.current!.getBoundingClientRect();
-
-          addElement({
-            id: "5",
-            type: "div",
-            x: rect.left - containerRect.left,
-            y: rect.top - containerRect.top,
-            width: rect.width,
-            height: rect.height,
-          });
+          selectEndMaker(rect);
 
           console.log("selected", selected);
           const ids = getIdsFromElements(selected);
