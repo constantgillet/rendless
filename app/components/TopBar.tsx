@@ -6,7 +6,7 @@ import { Tool, useEditorStore } from "./EditorStore";
 const toolsData = [
   {
     name: "select",
-    icon: "select",
+    icon: "cursor",
     tooltipText: "Select frame elements",
   },
   {
@@ -58,7 +58,6 @@ export const TopBar = () => {
               <IconButton
                 size="3"
                 variant={selectedTool === name ? "solid" : "outline"}
-                highContrast
                 radius="none"
                 onClick={() => setSelectedTool(name as Tool)}
               >

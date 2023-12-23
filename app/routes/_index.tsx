@@ -34,8 +34,11 @@ export default function Index() {
   const container = useRef<HTMLDivElement>(null);
   const moveableManager = useRef<Moveable>(null);
   const selectedTargets = useEditorStore((state) => state.selected);
+  const selectedTool = useEditorStore((state) => state.selectedTool);
+
   const setSelectedTargets = useEditorStore((state) => state.setSelected);
   const addElement = useEditorStore((state) => state.addElement);
+  const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
 
   const tree = useEditorStore((state) => state.tree);
 
@@ -55,6 +58,10 @@ export default function Index() {
   };
 
   const selectEndMaker = (rect: Rect) => {
+    if (selectedTool === "select") {
+      return false;
+    }
+
     const containerRect = container.current!.getBoundingClientRect();
 
     const newElement = {
@@ -67,7 +74,9 @@ export default function Index() {
     };
 
     addElement(newElement);
-    setSelectedTargets([]);
+    setSelectedTargets([newElement.id]); //TODO select new element
+    setSelectedTool("select");
+    return true;
   };
 
   if (typeof document === "undefined") {
@@ -282,13 +291,11 @@ export default function Index() {
           if (isDragStart) {
             inputEvent.preventDefault();
           }
-          // if (selectEndMaker(rect)) {
-          //   return;
-          // }
 
-          console.log("rect", rect);
-
-          selectEndMaker(rect);
+          // create new element
+          if (selectEndMaker(rect)) {
+            return;
+          }
 
           console.log("selected", selected);
           const ids = getIdsFromElements(selected);
