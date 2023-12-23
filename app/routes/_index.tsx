@@ -19,6 +19,8 @@ import { LayersPanel } from "~/components/LayersPanel";
 import { useEditorStore } from "~/components/EditorStore";
 import { v4 as uuidv4 } from "uuid";
 import { Rect } from "selecto";
+import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
+import { FramePage } from "~/components/FramePage";
 
 export const meta: MetaFunction = () => {
   return [
@@ -26,8 +28,6 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
-
-export const DATA_SCENA_ELEMENT_ID = "data-scena-element-id";
 
 export default function Index() {
   const selecto = useRef<Selecto>(null);
@@ -39,8 +39,6 @@ export default function Index() {
   const setSelectedTargets = useEditorStore((state) => state.setSelected);
   const addElement = useEditorStore((state) => state.addElement);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
-
-  const tree = useEditorStore((state) => state.tree);
 
   const checkBlur = () => {
     const activeElement = document.activeElement;
@@ -103,45 +101,7 @@ export default function Index() {
       >
         <TopBar />
         <LayersPanel />
-        <div
-          ref={container}
-          className={cx(
-            "scena-viewer",
-            css({
-              w: 1200,
-              h: 630,
-              backgroundColor: "gray.300",
-              position: "relative",
-            })
-          )}
-        >
-          {tree?.chilren?.map((child) => {
-            const id = child.id;
-            return (
-              <div
-                key={id}
-                className={cx(
-                  "target",
-                  css({
-                    w: 70,
-                    h: 70,
-                    backgroundColor: "red.300",
-                    position: "absolute",
-                  })
-                )}
-                {...{
-                  [DATA_SCENA_ELEMENT_ID]: id,
-                }}
-                style={{
-                  left: child.x,
-                  top: child.y,
-                  width: child.width,
-                  height: child.height,
-                }}
-              />
-            );
-          })}
-        </div>
+        <FramePage ref={container} />
         <PropertiesPanel />
       </div>
 
