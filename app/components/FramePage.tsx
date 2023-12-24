@@ -12,42 +12,56 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
     return (
       <div
         className={cx(
-          "scena-viewer",
           css({
-            w: 1200,
-            h: 630,
-            backgroundColor: "gray.300",
-            position: "relative",
+            flex: 1,
+            padding: "var(--space-8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           })
         )}
-        ref={ref}
       >
-        {tree?.chilren?.map((child) => {
-          const id = child.id;
-          return (
-            <div
-              key={id}
-              className={cx(
-                "target",
-                css({
-                  w: 70,
-                  h: 70,
-                  backgroundColor: "red.300",
-                  position: "absolute",
-                })
-              )}
-              {...{
-                [DATA_SCENA_ELEMENT_ID]: id,
-              }}
-              style={{
-                left: child.x,
-                top: child.y,
-                width: child.width,
-                height: child.height,
-              }}
-            />
-          );
-        })}
+        <div
+          className={cx(
+            "scena-viewer",
+            css({
+              aspectRatio: "1.91/1",
+              backgroundColor: "gray.300",
+              position: "relative",
+              maxWidth: "1200px",
+              width: "100%",
+              marginX: "auto",
+            })
+          )}
+          ref={ref}
+        >
+          {tree?.chilren?.map((child) => {
+            const id = child.id;
+            return (
+              <div
+                key={id}
+                className={cx(
+                  "target",
+                  css({
+                    w: 70,
+                    h: 70,
+                    backgroundColor: "red.300",
+                    position: "absolute",
+                  })
+                )}
+                {...{
+                  [DATA_SCENA_ELEMENT_ID]: id,
+                }}
+                style={{
+                  left: child.x,
+                  top: child.y,
+                  width: child.width,
+                  height: child.height,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
     );
   }

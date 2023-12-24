@@ -18,10 +18,6 @@ export const PropertiesPanel = () => {
         borderColor: "var(--global-color-border, currentColor)",
         padding: "var(--space-3)",
         borderLeft: "1px solid var(--gray-a5)",
-        position: "absolute",
-        bottom: 0,
-        right: 0,
-        height: "calc(100vh - 58px)",
       })}
     >
       <PanelGroup title="Position">

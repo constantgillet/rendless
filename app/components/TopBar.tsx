@@ -28,7 +28,6 @@ export const TopBar = () => {
   return (
     <header
       className={css({
-        position: "absolute",
         top: 0,
         left: 0,
         height: "58px",

@@ -95,14 +95,22 @@ export default function Index() {
           lineHeight: "1.8",
           minHeight: "100vh",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          flexDirection: "column",
         }}
       >
         <TopBar />
-        <LayersPanel />
-        <FramePage ref={container} />
-        <PropertiesPanel />
+        <div
+          className={css({
+            flex: 1,
+            display: "flex",
+            overflow: "hidden",
+            position: "relative",
+          })}
+        >
+          <LayersPanel />
+          <FramePage ref={container} />
+          <PropertiesPanel />
+        </div>
       </div>
 
       <Moveable
