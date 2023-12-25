@@ -21,6 +21,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Rect } from "selecto";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { FramePage } from "~/components/FramePage";
+import { EditorHotKeys } from "~/components/EditorHotKeys";
 
 export const meta: MetaFunction = () => {
   return [
@@ -278,6 +279,7 @@ export default function Index() {
           // });
         }}
       />
+      <EditorHotKeys />
     </>
   );
 }
