@@ -2,11 +2,13 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import type {} from "@redux-devtools/extension"; // required for devtools typing
 
-export type Tool = "select" | "text";
+export type Tool = "select" | "text" | "rect";
 
-type Tree = {
+export type ObjectType = "page" | "rect" | "text";
+
+export type Tree = {
   id: string;
-  type: string;
+  type: ObjectType;
   chilren?: Tree[];
   x: number;
   y: number;
@@ -38,7 +40,7 @@ export const useEditorStore = create<EditorState>()(
       chilren: [
         {
           id: "2",
-          type: "div",
+          type: "rect",
           x: 0,
           y: 0,
           width: 74,
@@ -46,7 +48,7 @@ export const useEditorStore = create<EditorState>()(
         },
         {
           id: "4",
-          type: "shape",
+          type: "rect",
           x: 200,
           y: 200,
           width: 74,

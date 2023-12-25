@@ -16,7 +16,7 @@ import {
 import { PropertiesPanel } from "~/components/PropertiesPanel";
 import { TopBar } from "~/components/TopBar";
 import { LayersPanel } from "~/components/LayersPanel";
-import { useEditorStore } from "~/components/EditorStore";
+import { Tree, useEditorStore } from "~/components/EditorStore";
 import { v4 as uuidv4 } from "uuid";
 import { Rect } from "selecto";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
@@ -62,9 +62,9 @@ export default function Index() {
 
     const containerRect = container.current!.getBoundingClientRect();
 
-    const newElement = {
+    const newElement: Tree = {
       id: uuidv4(),
-      type: "div",
+      type: selectedTool,
       x: rect.left - containerRect.left,
       y: rect.top - containerRect.top,
       width: rect.width,
@@ -234,7 +234,7 @@ export default function Index() {
           const target = inputEvent.target;
 
           checkBlur();
-          // if (selectedMenu === "Text" && target.isContentEditable) {
+          // if (target.isContentEditable) {
           //   const contentElement = getContentElement(target);
 
           //   if (
@@ -242,7 +242,8 @@ export default function Index() {
           //     contentElement.hasAttribute(DATA_SCENA_ELEMENT_ID)
           //   ) {
           //     e.stop();
-          //     this.setSelectedTargets([contentElement]);
+          //     const id = contentElement.getAttribute(DATA_SCENA_ELEMENT_ID)!;
+          //     setSelectedTargets([id]);
           //   }
           // }
           if (
@@ -284,3 +285,13 @@ export default function Index() {
 const getIdsFromElements = (targets: (HTMLElement | SVGElement)[]) => {
   return targets.map((t) => t.getAttribute(DATA_SCENA_ELEMENT_ID)!);
 };
+
+function getContentElement(el: HTMLElement): HTMLElement | null {
+  if (el.contentEditable === "inherit") {
+    return getContentElement(el.parentElement!);
+  }
+  if (el.contentEditable === "true") {
+    return el;
+  }
+  return null;
+}

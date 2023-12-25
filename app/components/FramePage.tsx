@@ -40,6 +40,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
             return (
               <div
                 key={id}
+                contentEditable={child.type === "text"}
                 className={cx(
                   "target",
                   css({
