@@ -17,6 +17,7 @@ import {
 } from "react-konva";
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
+import { RectConfig } from "konva/lib/shapes/Rect";
 
 type Props = HTMLProps<HTMLDivElement>;
 
@@ -39,7 +40,7 @@ const initialRectangles = [
   },
 ];
 
-const Rectangle = ({ shapeProps, onChange }) => {
+const Rectangle = ({ shapeProps, onChange }: { shapeProps: RectConfig }) => {
   const shapeRef = useRef<Konva.Rect>();
 
   return (
@@ -83,6 +84,7 @@ const Rectangle = ({ shapeProps, onChange }) => {
 export const FramePage = forwardRef<HTMLButtonElement, Props>(
   function FramePage(props, ref) {
     const tree = useEditorStore((state) => state.tree);
+    const selectedTool = useEditorStore((state) => state.selectedTool);
 
     const [stageWidth, setStageWidth] = useState(1);
     const [stageHeight, setStageHeight] = useState(1);
@@ -158,7 +160,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
       node.getLayer()?.batchDraw();
     };
 
-    const onMouseDown = (e) => {
+    const onMouseDownSelectMode = (e: KonvaEventObject<MouseEvent>) => {
       const isElement = e.target.findAncestor(".elements-container");
       const isTransformer = e.target.findAncestor("Transformer");
       if (isElement || isTransformer) {
@@ -166,6 +168,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
       }
 
       const pos = e.target.getStage().getPointerPosition();
+
       selection.current.visible = true;
       selection.current.x1 = pos.x;
       selection.current.y1 = pos.y;
@@ -173,6 +176,8 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
       selection.current.y2 = pos.y;
       updateSelectionRect();
     };
+
+    const onMouseDownDrawMode = (e: KonvaEventObject<MouseEvent>) => {};
 
     const onMouseMove = (e) => {
       if (!selection.current.visible) {
@@ -268,7 +273,11 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
         <Stage
           width={stageWidth}
           height={stageHeight}
-          onMouseDown={onMouseDown}
+          onMouseDown={
+            selectedTool === "select"
+              ? onMouseDownSelectMode
+              : onMouseDownDrawMode
+          }
           onMouseUp={onMouseUp}
           onMouseMove={onMouseMove}
           onTouchStart={checkDeselect}
