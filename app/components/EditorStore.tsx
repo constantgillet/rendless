@@ -26,7 +26,6 @@ interface EditorState {
   addElement: (element: Tree) => void;
   deleteElements: (elemenentIds: string[]) => void;
   setSelectedTool: (tool: Tool) => void;
-  updateElement: (element: Tree) => void;
 }
 
 export const useEditorStore = create<EditorState>()(
@@ -77,15 +76,5 @@ export const useEditorStore = create<EditorState>()(
       }));
     },
     setSelectedTool: (selectedTool) => set({ selectedTool }),
-    updateElement: (element) => {
-      set((state) => ({
-        tree: {
-          ...state.tree,
-          chilren: state.tree.chilren?.map((child) =>
-            child.id === element.id ? element : child
-          ),
-        },
-      }));
-    },
   }))
 );
