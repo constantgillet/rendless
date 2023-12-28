@@ -18,7 +18,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
             flex: 1,
             padding: "42px",
             overflow: "scroll",
-            maxH: "calc(100vh - 57px)",
+            maxH: "calc(100vh - 59px)",
           })
         )}
       >
