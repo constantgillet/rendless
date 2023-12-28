@@ -41,6 +41,7 @@ export default function Index() {
 
   const setSelectedTargets = useEditorStore((state) => state.setSelected);
   const addElement = useEditorStore((state) => state.addElement);
+  const updateElement = useEditorStore((state) => state.updateElement);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
 
   const checkBlur = () => {
@@ -134,9 +135,15 @@ export default function Index() {
         /* draggable */
         draggable={true}
         throttleDrag={0}
-        onDragStart={({ target, clientX, clientY }) => {
-          console.log("onDragStart", target);
-        }}
+        // onDragStart={({ target, clientX, clientY }) => {
+        //   console.log("onDragStart", target);
+
+        //   const containerRect = container.current!.getBoundingClientRect();
+
+        //   //Set x and y with scale factor
+        //   const x = (clientX - containerRect.left) / scale;
+        //   const y = (clientY - containerRect.top) / scale;
+        // }}
         // dragContainer={container.current}
         onDrag={({
           target,
@@ -152,14 +159,25 @@ export default function Index() {
           clientX,
           clientY,
         }: OnDrag) => {
-          console.log("onDrag left, top", left, top);
-          // target!.style.left = `${left}px`;
-          // target!.style.top = `${top}px`;
-          console.log("onDrag translate", dist);
           target!.style.transform = transform;
         }}
-        onDragEnd={({ target, isDrag, clientX, clientY }) => {
-          console.log("onDragEnd", target, isDrag);
+        onDragEnd={({ target }) => {
+          const containerRect = container.current!.getBoundingClientRect();
+          const targetRect = target!.getBoundingClientRect();
+
+          //Set x and y with scale factor
+          const x = (targetRect.x - containerRect.x) / scale;
+          const y = (targetRect.y - containerRect.y) / scale;
+
+          console.log({ x, y });
+
+          const element = {
+            id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+            x: x,
+            y: y,
+          };
+
+          updateElement(element as Tree);
         }}
         /* When resize or scale, keeps a ratio of the width, height. */
         // keepRatio={true}
@@ -167,9 +185,9 @@ export default function Index() {
         /* Only one of resizable, scalable, warpable can be used. */
         resizable={true}
         throttleResize={0}
-        onResizeStart={({ target, clientX, clientY }) => {
-          console.log("onResizeStart", target);
-        }}
+        // onResizeStart={({ target, clientX, clientY }) => {
+        //   console.log("onResizeStart", target);
+        // }}
         onResize={({
           target,
           width,
@@ -180,12 +198,21 @@ export default function Index() {
           clientX,
           clientY,
         }: OnResize) => {
-          console.log("onResize", target);
           delta[0] && (target!.style.width = `${width}px`);
           delta[1] && (target!.style.height = `${height}px`);
         }}
         onResizeEnd={({ target, isDrag, clientX, clientY }) => {
           console.log("onResizeEnd", target, isDrag);
+
+          const targetRect = target!.getBoundingClientRect();
+
+          const element = {
+            id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+            width: targetRect.width / scale,
+            height: targetRect.height / scale,
+          };
+
+          updateElement(element as Tree);
         }}
         /* scalable */
         /* Only one of resizable, scalable, warpable can be used. */
