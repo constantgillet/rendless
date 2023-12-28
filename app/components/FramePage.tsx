@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { css, cx } from "styled-system/css";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
-import { useEditorStore } from "./EditorStore";
+import { Tree, useEditorStore } from "./EditorStore";
 import {
   Stage,
   Layer,
@@ -18,27 +18,9 @@ import {
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { RectConfig } from "konva/lib/shapes/Rect";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = HTMLProps<HTMLDivElement>;
-
-const initialRectangles = [
-  {
-    x: 10,
-    y: 10,
-    width: 100,
-    height: 100,
-    fill: "blue",
-    id: "rect1",
-  },
-  {
-    x: 150,
-    y: 150,
-    width: 100,
-    height: 100,
-    fill: "green",
-    id: "rect2",
-  },
-];
 
 const Rectangle = ({ shapeProps, onChange }: { shapeProps: RectConfig }) => {
   const shapeRef = useRef<Konva.Rect>();
@@ -84,14 +66,14 @@ const Rectangle = ({ shapeProps, onChange }: { shapeProps: RectConfig }) => {
 export const FramePage = forwardRef<HTMLButtonElement, Props>(
   function FramePage(props, ref) {
     const tree = useEditorStore((state) => state.tree);
+    const updateElement = useEditorStore((state) => state.updateElement);
+    const addElement = useEditorStore((state) => state.addElement);
     const selectedTool = useEditorStore((state) => state.selectedTool);
 
     const [stageWidth, setStageWidth] = useState(1);
     const [stageHeight, setStageHeight] = useState(1);
     const stageContainer = useRef<HTMLDivElement>(null);
     const [selectedIds, selectShapes] = useState([]);
-
-    const [rectangles, setRectangles] = useState(initialRectangles);
 
     const trRef = useRef<Konva.Transformer>(null);
     const layerRef = useRef<Konva.Layer>(null);
@@ -177,9 +159,26 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
       updateSelectionRect();
     };
 
-    const onMouseDownDrawMode = (e: KonvaEventObject<MouseEvent>) => {};
+    const onMouseDownDrawMode = (e: KonvaEventObject<MouseEvent>) => {
+      const rect = e.target.getStage()?.getPointerPosition();
 
-    const onMouseMove = (e) => {
+      if (selectedTool === "select" || !rect) {
+        return;
+      }
+
+      const newElement: Tree = {
+        id: uuidv4(),
+        type: selectedTool,
+        x: rect.x,
+        y: rect.y,
+        width: 74,
+        height: 74,
+      };
+
+      addElement(newElement);
+    };
+
+    const onMouseMove = (e: KonvaEventObject<MouseEvent>) => {
       if (!selection.current.visible) {
         return;
       }
@@ -285,16 +284,30 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
           onTap={onClickTap}
         >
           <Layer ref={layerRef}>
-            {rectangles.map((rect, i) => {
+            {tree?.chilren?.map((node) => {
               return (
                 <Rectangle
-                  key={i}
-                  getKey={i}
-                  shapeProps={rect}
+                  key={node.id}
+                  getKey={node.id}
+                  shapeProps={{
+                    x: node.x,
+                    y: node.y,
+                    width: node.width,
+                    height: node.height,
+                    fill: "blue",
+                    id: node.id,
+                  }}
                   onChange={(newAttrs) => {
-                    const rects = rectangles.slice();
-                    rects[i] = newAttrs;
-                    setRectangles(rects);
+                    //Update node in tree
+                    const newElement: Tree = {
+                      ...node,
+                      ...newAttrs,
+                    };
+                    updateElement(newElement);
+
+                    // const rects = rectangles.slice();
+                    // rects[node.id] = newAttrs;
+                    // setRectangles(rects);
                   }}
                 />
               );
