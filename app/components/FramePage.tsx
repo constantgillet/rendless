@@ -10,6 +10,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
   function FramePage(props, ref) {
     const tree = useEditorStore((state) => state.tree);
     const scale = useScaleStore((state) => state.scale);
+    const selectedTool = useEditorStore((state) => state.selectedTool);
 
     return (
       <div
@@ -45,6 +46,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
             style={{
               width: 1200 * scale,
               height: 630 * scale,
+              cursor: selectedTool === "select" ? "auto" : "crosshair",
             }}
             ref={ref}
           >
@@ -65,8 +67,9 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
                     [DATA_SCENA_ELEMENT_ID]: id,
                   }}
                   style={{
-                    left: child.x * scale,
-                    top: child.y * scale,
+                    transform: `translate(${child.x * scale}px, ${
+                      child.y * scale
+                    }px)`,
                     width: child.width * scale,
                     height: child.height * scale,
                   }}

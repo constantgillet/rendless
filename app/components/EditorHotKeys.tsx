@@ -10,7 +10,7 @@ export const EditorHotKeys = () => {
   const scale = useScaleStore((state) => state.scale);
   const increaseScale = useScaleStore((state) => state.increase);
   const decreaseScale = useScaleStore((state) => state.decrease);
-  console.log(scale);
+  const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
 
   //Delete
   useHotkeys(
@@ -52,6 +52,21 @@ export const EditorHotKeys = () => {
       window.removeEventListener("wheel", () => {});
     };
   }, []);
+
+  //Select text tool
+  useHotkeys("t", () => {
+    setSelectedTool("text");
+  });
+
+  //Select select tool
+  useHotkeys("v", () => {
+    setSelectedTool("select");
+  });
+
+  //Select rectangle tool
+  useHotkeys("r", () => {
+    setSelectedTool("rect");
+  });
 
   return <></>;
 };

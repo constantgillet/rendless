@@ -7,17 +7,17 @@ const toolsData = [
   {
     name: "select",
     icon: "cursor",
-    tooltipText: "Select frame elements",
+    tooltipText: "Select frame elements (V)",
   },
   {
     name: "text",
     icon: "text",
-    tooltipText: "Add a text",
+    tooltipText: "Add a text box (T)",
   },
   {
-    name: "shape",
+    name: "rect",
     icon: "shape",
-    tooltipText: "Add a shape",
+    tooltipText: "Add a shape (R)",
   },
 ];
 
