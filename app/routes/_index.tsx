@@ -22,6 +22,7 @@ import { Rect } from "selecto";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { FramePage } from "~/components/FramePage";
 import { EditorHotKeys } from "~/components/EditorHotKeys";
+import { useScaleStore } from "~/components/ScaleStore";
 
 export const meta: MetaFunction = () => {
   return [
@@ -36,6 +37,7 @@ export default function Index() {
   const moveableManager = useRef<Moveable>(null);
   const selectedTargets = useEditorStore((state) => state.selected);
   const selectedTool = useEditorStore((state) => state.selectedTool);
+  const scale = useScaleStore((state) => state.scale);
 
   const setSelectedTargets = useEditorStore((state) => state.setSelected);
   const addElement = useEditorStore((state) => state.addElement);
@@ -63,13 +65,20 @@ export default function Index() {
 
     const containerRect = container.current!.getBoundingClientRect();
 
+    //Set x and y with scale factor
+    const x = (rect.left - containerRect.left) / scale;
+    const y = (rect.top - containerRect.top) / scale;
+
+    const width = rect.width / scale;
+    const height = rect.height / scale;
+
     const newElement: Tree = {
       id: uuidv4(),
       type: selectedTool,
-      x: rect.left - containerRect.left,
-      y: rect.top - containerRect.top,
-      width: rect.width,
-      height: rect.height,
+      x: x,
+      y: y,
+      width: width,
+      height: height,
     };
 
     addElement(newElement);

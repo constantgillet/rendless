@@ -42,6 +42,8 @@ export const EditorHotKeys = () => {
         if (e.ctrlKey && e.deltaY > 0) {
           decreaseScale(0.02);
         }
+
+        setSelectedTarget([]);
       },
       {
         passive: false,
