@@ -179,6 +179,13 @@ export default function Index() {
 
           updateElement(element as Tree);
         }}
+        onDragGroup={({ targets, events }) => {
+          for (let i = 0; i < targets.length; ++i) {
+            const target = targets[i];
+            const event = events[i];
+            target.style.transform = event.transform;
+          }
+        }}
         /* When resize or scale, keeps a ratio of the width, height. */
         // keepRatio={true}
         /* resizable*/
