@@ -1,6 +1,6 @@
 import { useHotkeys } from "react-hotkeys-hook";
 import { useEditorStore } from "./EditorStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useScaleStore } from "./ScaleStore";
 
 export const EditorHotKeys = () => {
@@ -76,7 +76,7 @@ export const EditorHotKeys = () => {
 
   //Up
   useHotkeys(
-    "up",
+    ["up", "Shift+up"],
     (e) => {
       e.preventDefault();
 
@@ -93,7 +93,7 @@ export const EditorHotKeys = () => {
 
   //Down
   useHotkeys(
-    "down",
+    ["down", "Shift+down"],
     (e) => {
       e.preventDefault();
 
@@ -110,7 +110,7 @@ export const EditorHotKeys = () => {
 
   //Left
   useHotkeys(
-    "left",
+    ["left", "Shift+left"],
     (e) => {
       e.preventDefault();
 
@@ -127,7 +127,7 @@ export const EditorHotKeys = () => {
 
   //Right
   useHotkeys(
-    "right",
+    ["right", "Shift+right"],
     (e) => {
       e.preventDefault();
 
