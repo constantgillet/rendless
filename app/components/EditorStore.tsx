@@ -26,7 +26,10 @@ interface EditorState {
   addElement: (element: Tree) => void;
   deleteElements: (elemenentIds: string[]) => void;
   setSelectedTool: (tool: Tool) => void;
-  updateElement: (element: Tree) => void;
+  increaseX: (elementIds: string[], by: number) => void;
+  decreaseX: (elementIds: string[], by: number) => void;
+  increateY: (elementIds: string[], by: number) => void;
+  decreaseY: (elementIds: string[], by: number) => void;
 }
 
 export const useEditorStore = create<EditorState>()(
@@ -87,5 +90,53 @@ export const useEditorStore = create<EditorState>()(
       }));
     },
     setSelectedTool: (selectedTool) => set({ selectedTool }),
+    increaseX: (elementIds, by) => {
+      set((state) => ({
+        tree: {
+          ...state.tree,
+          chilren: state.tree.chilren?.map((child) =>
+            elementIds.includes(child.id)
+              ? { ...child, x: child.x + by }
+              : child
+          ),
+        },
+      }));
+    },
+    decreaseX: (elementIds, by) => {
+      set((state) => ({
+        tree: {
+          ...state.tree,
+          chilren: state.tree.chilren?.map((child) =>
+            elementIds.includes(child.id)
+              ? { ...child, x: child.x - by }
+              : child
+          ),
+        },
+      }));
+    },
+    increateY: (elementIds, by) => {
+      set((state) => ({
+        tree: {
+          ...state.tree,
+          chilren: state.tree.chilren?.map((child) =>
+            elementIds.includes(child.id)
+              ? { ...child, y: child.y + by }
+              : child
+          ),
+        },
+      }));
+    },
+    decreaseY: (elementIds, by) => {
+      set((state) => ({
+        tree: {
+          ...state.tree,
+          chilren: state.tree.chilren?.map((child) =>
+            elementIds.includes(child.id)
+              ? { ...child, y: child.y - by }
+              : child
+          ),
+        },
+      }));
+    },
   }))
 );

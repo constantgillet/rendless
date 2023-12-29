@@ -11,6 +11,10 @@ export const EditorHotKeys = () => {
   const increaseScale = useScaleStore((state) => state.increase);
   const decreaseScale = useScaleStore((state) => state.decrease);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
+  const increaseX = useEditorStore((state) => state.increaseX);
+  const decreaseX = useEditorStore((state) => state.decreaseX);
+  const increaseY = useEditorStore((state) => state.increateY);
+  const decreaseY = useEditorStore((state) => state.decreaseY);
 
   //Delete
   useHotkeys(
@@ -69,6 +73,74 @@ export const EditorHotKeys = () => {
   useHotkeys("r", () => {
     setSelectedTool("rect");
   });
+
+  //Up
+  useHotkeys(
+    "up",
+    (e) => {
+      e.preventDefault();
+
+      if (e.shiftKey) {
+        decreaseY(selectedTargets, 10);
+      } else {
+        decreaseY(selectedTargets, 1);
+      }
+    },
+    {
+      enabled: selectedTargets.length > 0,
+    }
+  );
+
+  //Down
+  useHotkeys(
+    "down",
+    (e) => {
+      e.preventDefault();
+
+      if (e.shiftKey) {
+        increaseY(selectedTargets, 10);
+      } else {
+        increaseY(selectedTargets, 1);
+      }
+    },
+    {
+      enabled: selectedTargets.length > 0,
+    }
+  );
+
+  //Left
+  useHotkeys(
+    "left",
+    (e) => {
+      e.preventDefault();
+
+      if (e.shiftKey) {
+        decreaseX(selectedTargets, 10);
+      } else {
+        decreaseX(selectedTargets, 1);
+      }
+    },
+    {
+      enabled: selectedTargets.length > 0,
+    }
+  );
+
+  //Right
+  useHotkeys(
+    "right",
+    (e) => {
+      e.preventDefault();
+
+      if (e.shiftKey) {
+        increaseX(selectedTargets, 10);
+      } else {
+        increaseX(selectedTargets, 1);
+      }
+    },
+    {
+      enabled: selectedTargets.length > 0,
+    }
+  );
 
   return <></>;
 };
