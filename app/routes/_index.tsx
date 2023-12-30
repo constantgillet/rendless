@@ -2,7 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 import { css, cx } from "styled-system/css";
 import Moveable, { OnDrag, OnResize, OnScale } from "react-moveable";
 import Selecto from "react-selecto";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -43,6 +43,11 @@ export default function Index() {
   const addElement = useEditorStore((state) => state.addElement);
   const updateElement = useEditorStore((state) => state.updateElement);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
+  const tree = useEditorStore((state) => state.tree);
+
+  useEffect(() => {
+    moveableManager.current!.updateRect();
+  }, [tree.chilren]);
 
   const checkBlur = () => {
     const activeElement = document.activeElement;
