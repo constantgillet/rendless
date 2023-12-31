@@ -12,6 +12,11 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
     const scale = useScaleStore((state) => state.scale);
     const selectedTool = useEditorStore((state) => state.selectedTool);
 
+    const handleClick = (event: React.MouseEventHandler<HTMLDivElement>) => {
+      if (event.detail === 2) {
+        console.log("double click");
+      }
+    };
     return (
       <div
         className={cx(
@@ -53,15 +58,46 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
             {tree?.chilren?.map((child) => {
               const id = child.id;
 
-              return (
+              return child.type === "text" ? (
+                <textarea
+                  key={id}
+                  className={cx(
+                    "target",
+                    css({
+                      position: "absolute",
+                      _hover: {
+                        outline: "1px solid #4af",
+                        outlineOffset: "-1px",
+                      },
+                    })
+                  )}
+                  {...{
+                    [DATA_SCENA_ELEMENT_ID]: id,
+                  }}
+                  style={{
+                    transform: `translate(${child.x * scale}px, ${
+                      child.y * scale
+                    }px)`,
+                    width: child.width * scale,
+                    height: child.height * scale,
+                    fontSize: 18 * scale,
+                    background: "transparent",
+                    color: "black",
+                  }}
+                  onClick={handleClick}
+                ></textarea>
+              ) : (
                 <div
                   key={id}
-                  contentEditable={child.type === "text"}
                   className={cx(
                     "target",
                     css({
                       backgroundColor: "red.300",
                       position: "absolute",
+                      _hover: {
+                        outline: "1px solid #4af",
+                        outlineOffset: "-1px",
+                      },
                     })
                   )}
                   {...{
