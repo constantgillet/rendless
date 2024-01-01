@@ -5,9 +5,17 @@ import {
   Text,
   Grid,
   Flex,
-  Separator,
+  Separator as RadixSeparator,
 } from "@radix-ui/themes";
 import { css } from "styled-system/css";
+
+const Separator = () => {
+  return (
+    <RadixSeparator
+      className={css({ w: "100%!important", marginY: "20px", mx: "-16px" })}
+    />
+  );
+};
 
 export const PropertiesPanel = () => {
   return (
@@ -60,9 +68,48 @@ export const PropertiesPanel = () => {
           </Grid>
         </Flex>
       </PanelGroup>
-      <Separator
-        className={css({ w: "100%!important", marginY: "20px", mx: "-16px" })}
-      />
+      <Separator />
+      <PanelGroup title="Radius">
+        <Grid columns="2" gap="4" width="auto">
+          <Box>
+            <TextField.Root>
+              <TextField.Slot
+                className={css({
+                  color: "var(--color-text-muted)",
+                  display: "flex",
+                  alignItems: "center",
+                })}
+              >
+                <div>x</div>
+              </TextField.Slot>
+              <TextField.Input placeholder="Horizontal" />
+            </TextField.Root>
+          </Box>
+          <Box>
+            <TextField.Root>
+              <TextField.Slot>y</TextField.Slot>
+              <TextField.Input placeholder="Vertical" />
+            </TextField.Root>
+          </Box>
+        </Grid>
+        <Flex gap="4">
+          <Grid columns="2" gap="4" width="auto">
+            <Box>
+              <TextField.Root>
+                <TextField.Slot>w</TextField.Slot>
+                <TextField.Input placeholder="width" />
+              </TextField.Root>
+            </Box>
+            <Box>
+              <TextField.Root>
+                <TextField.Slot>h</TextField.Slot>
+                <TextField.Input placeholder="height" />
+              </TextField.Root>
+            </Box>
+          </Grid>
+        </Flex>
+      </PanelGroup>
+      <Separator />
       <PanelGroup title="Background">
         <Grid columns="2" gap="4" width="auto">
           <Box>
@@ -79,9 +126,7 @@ export const PropertiesPanel = () => {
           </Box>
         </Grid>
       </PanelGroup>
-      <Separator
-        className={css({ w: "100%!important", marginY: "20px", mx: "-16px" })}
-      />
+      <Separator />
       <PanelGroup title="Borders">
         <Grid columns="2" gap="4" width="auto">
           <Box>
@@ -98,9 +143,7 @@ export const PropertiesPanel = () => {
           </Box>
         </Grid>
       </PanelGroup>
-      <Separator
-        className={css({ w: "100%!important", marginY: "20px", mx: "-16px" })}
-      />
+      <Separator />
     </aside>
   );
 };
