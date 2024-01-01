@@ -8,6 +8,7 @@ import {
   Separator as RadixSeparator,
 } from "@radix-ui/themes";
 import { css } from "styled-system/css";
+import { Icon } from "./Icon";
 
 const Separator = () => {
   return (
@@ -73,16 +74,10 @@ export const PropertiesPanel = () => {
         <Grid columns="2" gap="4" width="auto">
           <Box>
             <TextField.Root>
-              <TextField.Slot
-                className={css({
-                  color: "var(--color-text-muted)",
-                  display: "flex",
-                  alignItems: "center",
-                })}
-              >
-                <div>x</div>
+              <TextField.Slot>
+                <Icon name="corner-top-left" strokeWidth={2} />
               </TextField.Slot>
-              <TextField.Input placeholder="Horizontal" />
+              <TextField.Input placeholder="Top left" />
             </TextField.Root>
           </Box>
           <Box>

@@ -1,7 +1,12 @@
 import { RecipeVariantProps, css, cva, cx } from "styled-system/css";
 import { SVGProps } from "react";
 
-export type IconName = "text" | "shape" | "cursor" | "lock-open";
+export type IconName =
+  | "text"
+  | "shape"
+  | "cursor"
+  | "lock-open"
+  | "corner-top-left";
 
 export const iconStyle = cva({
   base: {
