@@ -12,7 +12,7 @@ import { css } from "styled-system/css";
 const Separator = () => {
   return (
     <RadixSeparator
-      className={css({ w: "100%!important", marginY: "20px", mx: "-16px" })}
+      className={css({ w: "auto!important", marginY: "20px", mx: "-16px" })}
     />
   );
 };
