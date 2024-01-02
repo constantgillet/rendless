@@ -6,7 +6,10 @@ export type IconName =
   | "shape"
   | "cursor"
   | "lock-open"
-  | "corner-top-left";
+  | "corner-top-left"
+  | "corner-top-right"
+  | "corner-bottom-left"
+  | "corner-bottom-right";
 
 export const iconStyle = cva({
   base: {
