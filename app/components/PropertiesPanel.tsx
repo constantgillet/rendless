@@ -85,7 +85,7 @@ export const PropertiesPanel = () => {
               <TextField.Slot>
                 <Icon name="corner-top-right" strokeWidth={2} />
               </TextField.Slot>
-              <TextField.Input placeholder="Vertical" />
+              <TextField.Input placeholder="Top right" />
             </TextField.Root>
           </Box>
         </Grid>
@@ -96,7 +96,7 @@ export const PropertiesPanel = () => {
                 <TextField.Slot>
                   <Icon name="corner-bottom-left" strokeWidth={2} />
                 </TextField.Slot>
-                <TextField.Input placeholder="width" />
+                <TextField.Input placeholder="Bottom left" />
               </TextField.Root>
             </Box>
             <Box>
@@ -104,7 +104,7 @@ export const PropertiesPanel = () => {
                 <TextField.Slot>
                   <Icon name="corner-bottom-right" strokeWidth={2} />
                 </TextField.Slot>
-                <TextField.Input placeholder="height" />
+                <TextField.Input placeholder="Bottom right" />
               </TextField.Root>
             </Box>
           </Grid>
