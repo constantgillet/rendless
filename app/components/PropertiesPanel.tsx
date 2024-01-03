@@ -19,7 +19,19 @@ const Separator = () => {
   );
 };
 
-const PositionAndSizeProperties = () => {
+type ValuesType = {
+  propertyName: string;
+  values: {
+    elementId: string;
+    value: string;
+  };
+};
+
+type PositionAndSizePropertiesProps = {
+  values: ValuesType[];
+};
+
+const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
   return (
     <PanelGroup title="Position & size">
       <Grid columns="2" gap="4" width="auto">
@@ -119,12 +131,45 @@ const propertiesList = {
       key: "radius",
       component: RadiusProperties,
     },
+    {
+      key: "background",
+      component: RadiusProperties,
+    },
+    {
+      key: "border",
+      component: RadiusProperties,
+    },
   ],
 };
 
 export const PropertiesPanel = () => {
   const selected = useEditorStore((state) => state.selected);
   const tree = useEditorStore((state) => state.tree);
+
+  const selectedNodes = tree.chilren?.filter((node) => node.id === selected);
+
+  const getProperties = (selectedNodes: Tree[]): ValuesType[] => {
+    const properties = [];
+
+    for (const node of selectedNodes) {
+      const nodeProperties = node.properties;
+
+      for (const property in nodeProperties) {
+        const propertyValue = nodeProperties[property];
+
+        properties.push({
+          propertyName: property,
+          values: {
+            elementId: node.id,
+            value: propertyValue,
+          },
+        });
+      }
+    }
+  };
+
+  //Get the properties list of the selected node
+  const properties = getProperties(selectedNodes);
 
   return (
     <aside
