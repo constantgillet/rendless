@@ -20,23 +20,22 @@ const Separator = () => {
 };
 
 type GroupedPropertiesType = {
-  [key: string]: Array<{
-    nodeId: string;
-    propertyName: string;
-    value: any;
-  }>;
+  [key: string]: Array<ValueType>;
 };
 
-type ValuesType = {
+type ValueType = {
+  nodeId: string;
   propertyName: string;
-  values: {
-    elementId: string;
-    value: string;
-  };
+  value: any;
 };
 
 type PositionAndSizePropertiesProps = {
-  values: ValuesType[];
+  properties: {
+    x: ValueType[];
+    y: ValueType[];
+    width: ValueType[];
+    height: ValueType[];
+  };
 };
 
 const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
@@ -209,46 +208,19 @@ export const PropertiesPanel = () => {
         borderLeft: "1px solid var(--gray-a5)",
       })}
     >
-      <PanelGroup title="Position & size">
-        <Grid columns="2" gap="4" width="auto">
-          <Box>
-            <TextField.Root>
-              <TextField.Slot
-                className={css({
-                  color: "var(--color-text-muted)",
-                  display: "flex",
-                  alignItems: "center",
-                })}
-              >
-                <div>x</div>
-              </TextField.Slot>
-              <TextField.Input placeholder="Horizontal" />
-            </TextField.Root>
-          </Box>
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>y</TextField.Slot>
-              <TextField.Input placeholder="Vertical" />
-            </TextField.Root>
-          </Box>
-        </Grid>
-        <Flex gap="4">
-          <Grid columns="2" gap="4" width="auto">
-            <Box>
-              <TextField.Root>
-                <TextField.Slot>w</TextField.Slot>
-                <TextField.Input placeholder="width" />
-              </TextField.Root>
-            </Box>
-            <Box>
-              <TextField.Root>
-                <TextField.Slot>h</TextField.Slot>
-                <TextField.Input placeholder="height" />
-              </TextField.Root>
-            </Box>
-          </Grid>
-        </Flex>
-      </PanelGroup>
+      {properties["x"] &&
+        properties["y"] &&
+        properties["width"] &&
+        properties["height"] && (
+          <PositionAndSizeProperties
+            properties={{
+              x: properties["x"],
+              y: properties["y"],
+              width: properties["width"],
+              height: properties["height"],
+            }}
+          />
+        )}
       <Separator />
       <PanelGroup title="Radius">
         <Grid columns="2" gap="4" width="auto">
