@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/themes";
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
-import { Tree, useEditorStore } from "./EditorStore";
+import { ElementType, Tree, useEditorStore } from "./EditorStore";
 
 const Separator = () => {
   return (
@@ -17,6 +17,14 @@ const Separator = () => {
       className={css({ w: "auto!important", marginY: "20px", mx: "-16px" })}
     />
   );
+};
+
+type GroupedPropertiesType = {
+  [key: string]: Array<{
+    nodeId: string;
+    propertyName: string;
+    value: any;
+  }>;
 };
 
 type ValuesType = {
@@ -142,34 +150,54 @@ const propertiesList = {
   ],
 };
 
+const GroupProperties = (nodes: ElementType[]) => {
+  const propertieFlatList: Array<{
+    nodeId: string;
+    propertyName: string;
+    value: any;
+  }> = [];
+
+  for (const node of nodes) {
+    Object.entries(node).forEach(([key, value]) => {
+      propertieFlatList.push({
+        nodeId: node.id,
+        propertyName: key,
+        value: value,
+      });
+    });
+  }
+
+  //group by property by name
+  const groupedProperties = propertieFlatList.reduce(
+    (acc: GroupedPropertiesType, property) => {
+      const propertyName = property.propertyName;
+
+      if (!acc[propertyName]) {
+        acc[propertyName] = [];
+      }
+
+      acc[propertyName].push(property);
+
+      return acc;
+    },
+    {}
+  );
+
+  return groupedProperties;
+};
+
 export const PropertiesPanel = () => {
   const selected = useEditorStore((state) => state.selected);
   const tree = useEditorStore((state) => state.tree);
 
-  const selectedNodes = tree.chilren?.filter((node) => node.id === selected);
-
-  const getProperties = (selectedNodes: Tree[]): ValuesType[] => {
-    const properties = [];
-
-    for (const node of selectedNodes) {
-      const nodeProperties = node.properties;
-
-      for (const property in nodeProperties) {
-        const propertyValue = nodeProperties[property];
-
-        properties.push({
-          propertyName: property,
-          values: {
-            elementId: node.id,
-            value: propertyValue,
-          },
-        });
-      }
-    }
-  };
+  const selectedNodes = tree.chilren.filter((node) =>
+    selected.includes(node.id)
+  );
 
   //Get the properties list of the selected node
-  const properties = getProperties(selectedNodes);
+  const properties = GroupProperties(selectedNodes);
+
+  console.log(properties);
 
   return (
     <aside

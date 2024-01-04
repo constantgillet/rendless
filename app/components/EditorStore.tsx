@@ -9,12 +9,46 @@ export type ObjectType = "page" | "rect" | "text";
 export type Tree = {
   id: string;
   type: ObjectType;
-  chilren?: Tree[];
+  chilren: ElementType[];
   x: number;
   y: number;
   width: number;
   height: number;
 };
+
+interface Element<T extends ObjectType> {
+  id: string;
+  type: T;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export type ElementRect = Element<"rect"> & {
+  backgroundColor: string;
+  borderRadius: number;
+  borderWidth: number;
+  borderColor: string;
+  borderStyle: string;
+};
+
+export type ElementText = Element<"text"> & {
+  content: string;
+  fontSize: number;
+  color: string;
+  fontFamily: string;
+  fontWeight: string;
+  textAlign: string;
+  lineHeight: number;
+  backgroundColor: string;
+};
+
+export type ElementPage = Element<"page"> & {
+  backgroundColor: string;
+};
+
+export type ElementType = ElementText | ElementRect;
 
 interface EditorState {
   bears: number;
@@ -23,13 +57,14 @@ interface EditorState {
   selectedTool: Tool;
   increase: (by: number) => void;
   setSelected: (selected: string[]) => void;
-  addElement: (element: Tree) => void;
+  addElement: (element: ElementType) => void;
   deleteElements: (elemenentIds: string[]) => void;
   setSelectedTool: (tool: Tool) => void;
   increaseX: (elementIds: string[], by: number) => void;
   decreaseX: (elementIds: string[], by: number) => void;
   increateY: (elementIds: string[], by: number) => void;
   decreaseY: (elementIds: string[], by: number) => void;
+  updateElement: (element: ElementType) => void;
 }
 
 export const useEditorStore = create<EditorState>()(
@@ -44,20 +79,30 @@ export const useEditorStore = create<EditorState>()(
       y: 0,
       chilren: [
         {
-          id: "2",
+          id: "1",
           type: "rect",
-          x: 0,
-          y: 0,
+          x: 100,
+          y: 100,
           width: 74,
           height: 74,
+          backgroundColor: "red",
+          borderRadius: 0,
+          borderWidth: 0,
+          borderColor: "red",
+          borderStyle: "solid",
         },
         {
-          id: "4",
+          id: "2",
           type: "rect",
-          x: 200,
-          y: 200,
-          width: 74,
-          height: 74,
+          x: 300,
+          y: 100,
+          width: 120,
+          height: 60,
+          backgroundColor: "red",
+          borderRadius: 0,
+          borderWidth: 0,
+          borderColor: "red",
+          borderStyle: "solid",
         },
       ],
     },
@@ -65,7 +110,7 @@ export const useEditorStore = create<EditorState>()(
     selectedTool: "select",
     increase: (by) => set((state) => ({ bears: state.bears + by })),
     setSelected: (selected) => set({ selected }),
-    addElement: (element: Tree) =>
+    addElement: (element: ElementType) =>
       set((state) => ({
         tree: { ...state.tree, chilren: [...state.tree.chilren, element] },
       })),
