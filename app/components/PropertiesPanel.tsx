@@ -107,11 +107,23 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
   const onChangeX = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newX = e.target.value;
     setX(newX);
+  };
+
+  const onBlurX = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newX = e.target.value;
+    setX(newX);
+
+    //Check if the value is a number
+    if (isNaN(Number(newX))) {
+      return;
+    }
+
+    const x = Number(newX);
 
     props.properties.x.forEach((property) => {
       updateElement({
         id: property.nodeId,
-        x: newX as number,
+        x: x,
       });
     });
   };
@@ -134,6 +146,7 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
               placeholder="Horizontal"
               value={xValue}
               onChange={onChangeX}
+              onBlur={onBlurX}
             />
           </TextField.Root>
         </Box>

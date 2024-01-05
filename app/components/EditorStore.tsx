@@ -50,6 +50,9 @@ export type ElementPage = Element<"page"> & {
 
 export type ElementType = ElementText | ElementRect;
 
+//Update element param is the same as the element type but with optional properties, only the id is required
+export type UpdateElementParam = Partial<ElementType> & { id: string };
+
 interface EditorState {
   bears: number;
   selected: string[];
@@ -64,7 +67,7 @@ interface EditorState {
   decreaseX: (elementIds: string[], by: number) => void;
   increateY: (elementIds: string[], by: number) => void;
   decreaseY: (elementIds: string[], by: number) => void;
-  updateElement: (element: ElementType) => void;
+  updateElement: (element: UpdateElementParam) => void;
 }
 
 export const useEditorStore = create<EditorState>()(
