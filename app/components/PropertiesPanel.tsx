@@ -10,6 +10,7 @@ import {
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
 import { ElementType, Tree, useEditorStore } from "./EditorStore";
+import { useEffect, useState } from "react";
 
 const Separator = () => {
   return (
@@ -38,7 +39,83 @@ type PositionAndSizePropertiesProps = {
   };
 };
 
+const arePropertiesTheSame = (properties: ValueType[]) => {
+  return properties.every((property) => {
+    return property.value === properties[0].value;
+  });
+};
+
 const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
+  const updateElement = useEditorStore((state) => state.updateElement);
+
+  const [xValue, setX] = useState(
+    arePropertiesTheSame(props.properties.x)
+      ? props.properties.x[0].value
+      : "Mixed"
+  );
+
+  const [y, setY] = useState(
+    arePropertiesTheSame(props.properties.y)
+      ? props.properties.y[0].value
+      : "Mixed"
+  );
+
+  const [width, setWidth] = useState(
+    arePropertiesTheSame(props.properties.width)
+      ? props.properties.width[0].value
+      : "Mixed"
+  );
+
+  const [height, setHeight] = useState(
+    arePropertiesTheSame(props.properties.height)
+      ? props.properties.height[0].value
+      : "Mixed"
+  );
+
+  useEffect(() => {
+    setX(
+      arePropertiesTheSame(props.properties.x)
+        ? props.properties.x[0].value
+        : "Mixed"
+    );
+  }, [props.properties.x]);
+
+  useEffect(() => {
+    setY(
+      arePropertiesTheSame(props.properties.y)
+        ? props.properties.y[0].value
+        : "Mixed"
+    );
+  }, [props.properties.y]);
+
+  useEffect(() => {
+    setWidth(
+      arePropertiesTheSame(props.properties.width)
+        ? props.properties.width[0].value
+        : "Mixed"
+    );
+  }, [props.properties.width]);
+
+  useEffect(() => {
+    setHeight(
+      arePropertiesTheSame(props.properties.height)
+        ? props.properties.height[0].value
+        : "Mixed"
+    );
+  }, [props.properties.height]);
+
+  const onChangeX = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newX = e.target.value;
+    setX(newX);
+
+    props.properties.x.forEach((property) => {
+      updateElement({
+        id: property.nodeId,
+        x: newX as number,
+      });
+    });
+  };
+
   return (
     <PanelGroup title="Position & size">
       <Grid columns="2" gap="4" width="auto">
@@ -53,13 +130,17 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
             >
               <div>x</div>
             </TextField.Slot>
-            <TextField.Input placeholder="Horizontal" />
+            <TextField.Input
+              placeholder="Horizontal"
+              value={xValue}
+              onChange={onChangeX}
+            />
           </TextField.Root>
         </Box>
         <Box>
           <TextField.Root>
             <TextField.Slot>y</TextField.Slot>
-            <TextField.Input placeholder="Vertical" />
+            <TextField.Input placeholder="Vertical" value={y} />
           </TextField.Root>
         </Box>
       </Grid>
@@ -68,13 +149,13 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
           <Box>
             <TextField.Root>
               <TextField.Slot>w</TextField.Slot>
-              <TextField.Input placeholder="width" />
+              <TextField.Input placeholder="width" value={width} />
             </TextField.Root>
           </Box>
           <Box>
             <TextField.Root>
               <TextField.Slot>h</TextField.Slot>
-              <TextField.Input placeholder="height" />
+              <TextField.Input placeholder="height" value={height} />
             </TextField.Root>
           </Box>
         </Grid>
