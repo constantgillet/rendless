@@ -104,28 +104,35 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
     );
   }, [props.properties.height]);
 
-  const onChangeX = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newX = e.target.value;
-    setX(newX);
-  };
+  const applyProperty = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    property: keyof PositionAndSizePropertiesProps["properties"]
+  ) => {
+    const newValue = event.target.value;
 
-  const onBlurX = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newX = e.target.value;
-    setX(newX);
-
-    //Check if the value is a number
-    if (isNaN(Number(newX))) {
+    if (isNaN(Number(newValue))) {
       return;
     }
 
-    const x = Number(newX);
+    const value = Number(newValue);
 
-    props.properties.x.forEach((property) => {
+    props.properties[property].forEach((property) => {
       updateElement({
         id: property.nodeId,
-        x: x,
+        [property.propertyName]: value,
       });
     });
+
+    event.target.blur();
+  };
+
+  const onKeyUp = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    property: keyof PositionAndSizePropertiesProps["properties"]
+  ) => {
+    if (e.key == "Enter") {
+      applyProperty(e, property);
+    }
   };
 
   return (
@@ -145,15 +152,22 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
             <TextField.Input
               placeholder="Horizontal"
               value={xValue}
-              onChange={onChangeX}
-              onBlur={onBlurX}
+              onChange={(e) => setX(e.target.value)}
+              onBlur={(e) => applyProperty(e, "x")}
+              onKeyUp={(e) => onKeyUp(e, "x")}
             />
           </TextField.Root>
         </Box>
         <Box>
           <TextField.Root>
             <TextField.Slot>y</TextField.Slot>
-            <TextField.Input placeholder="Vertical" value={y} />
+            <TextField.Input
+              placeholder="Vertical"
+              value={y}
+              onChange={(e) => setY(e.target.value)}
+              onBlur={(e) => applyProperty(e, "y")}
+              onKeyUp={(e) => onKeyUp(e, "y")}
+            />
           </TextField.Root>
         </Box>
       </Grid>
@@ -162,13 +176,25 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
           <Box>
             <TextField.Root>
               <TextField.Slot>w</TextField.Slot>
-              <TextField.Input placeholder="width" value={width} />
+              <TextField.Input
+                placeholder="width"
+                value={width}
+                onChange={(e) => setWidth(e.target.value)}
+                onBlur={(e) => applyProperty(e, "width")}
+                onKeyUp={(e) => onKeyUp(e, "width")}
+              />
             </TextField.Root>
           </Box>
           <Box>
             <TextField.Root>
               <TextField.Slot>h</TextField.Slot>
-              <TextField.Input placeholder="height" value={height} />
+              <TextField.Input
+                placeholder="height"
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+                onBlur={(e) => applyProperty(e, "height")}
+                onKeyUp={(e) => onKeyUp(e, "height")}
+              />
             </TextField.Root>
           </Box>
         </Grid>
@@ -222,27 +248,6 @@ const RadiusProperties = () => {
   );
 };
 
-const propertiesList = {
-  shape: [
-    {
-      key: "positionsAndSize",
-      component: PositionAndSizeProperties,
-    },
-    {
-      key: "radius",
-      component: RadiusProperties,
-    },
-    {
-      key: "background",
-      component: RadiusProperties,
-    },
-    {
-      key: "border",
-      component: RadiusProperties,
-    },
-  ],
-};
-
 const GroupProperties = (nodes: ElementType[]) => {
   const propertieFlatList: Array<{
     nodeId: string;
@@ -289,8 +294,6 @@ export const PropertiesPanel = () => {
 
   //Get the properties list of the selected node
   const properties = GroupProperties(selectedNodes);
-
-  console.log(properties);
 
   return (
     <aside
