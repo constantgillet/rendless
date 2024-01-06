@@ -39,6 +39,7 @@ export const BackgroundColorProperties = (
           <SelectPicker.SketchPicker
             className={css({
               background: "var(--colors-background)!important",
+              shadow: "none!important",
             })}
             color={colorValue}
             onChange={(color) => applyColor(color.hex)}
