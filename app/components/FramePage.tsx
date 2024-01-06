@@ -62,7 +62,6 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
                   className={cx(
                     "target",
                     css({
-                      backgroundColor: "red.300",
                       position: "absolute",
                       _hover: {
                         outline: "1px solid #4af",
@@ -79,6 +78,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
                     }px)`,
                     width: child.width * scale,
                     height: child.height * scale,
+                    backgroundColor: child.backgroundColor,
                   }}
                 />
               );
