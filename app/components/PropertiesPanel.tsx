@@ -11,6 +11,7 @@ import { css } from "styled-system/css";
 import { Icon } from "./Icon";
 import { ElementType, Tree, useEditorStore } from "./EditorStore";
 import { useEffect, useState } from "react";
+import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 
 const Separator = () => {
   return (
@@ -24,7 +25,7 @@ type GroupedPropertiesType = {
   [key: string]: Array<ValueType>;
 };
 
-type ValueType = {
+export type ValueType = {
   nodeId: string;
   propertyName: string;
   value: any;
@@ -37,12 +38,6 @@ type PositionAndSizePropertiesProps = {
     width: ValueType[];
     height: ValueType[];
   };
-};
-
-const arePropertiesTheSame = (properties: ValueType[]) => {
-  return properties.every((property) => {
-    return property.value === properties[0].value;
-  });
 };
 
 const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
@@ -403,7 +398,7 @@ type PanelGroupProps = {
   children: React.ReactNode;
 };
 
-const PanelGroup = (props: PanelGroupProps) => {
+export const PanelGroup = (props: PanelGroupProps) => {
   return (
     <div
       className={css({
