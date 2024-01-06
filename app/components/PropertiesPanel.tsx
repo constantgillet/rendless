@@ -12,6 +12,7 @@ import { Icon } from "./Icon";
 import { ElementType, Tree, useEditorStore } from "./EditorStore";
 import { useEffect, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
+import { BackgroundColorProperties } from "./BackgroundColorProperties";
 
 const Separator = () => {
   return (
@@ -304,16 +305,28 @@ export const PropertiesPanel = () => {
         properties["y"] &&
         properties["width"] &&
         properties["height"] && (
-          <PositionAndSizeProperties
+          <>
+            <PositionAndSizeProperties
+              properties={{
+                x: properties["x"],
+                y: properties["y"],
+                width: properties["width"],
+                height: properties["height"],
+              }}
+            />
+            <Separator />
+          </>
+        )}
+      {properties["backgroundColor"] && (
+        <>
+          <BackgroundColorProperties
             properties={{
-              x: properties["x"],
-              y: properties["y"],
-              width: properties["width"],
-              height: properties["height"],
+              backgroundColor: properties["backgroundColor"],
             }}
           />
-        )}
-      <Separator />
+          <Separator />
+        </>
+      )}
       <PanelGroup title="Radius">
         <Grid columns="2" gap="4" width="auto">
           <Box>
