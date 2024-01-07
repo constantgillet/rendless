@@ -86,6 +86,7 @@ export default function Index() {
       width: width,
       height: height,
       backgroundColor: selectedTool === "rect" ? "#9b9b9b" : undefined,
+      content: selectedTool === "text" ? "" : undefined,
     };
 
     addElement(newElement);
