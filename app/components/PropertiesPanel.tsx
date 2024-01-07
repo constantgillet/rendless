@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { BackgroundColorProperties } from "./BackgroundColorProperties";
 import { TextColorProperties } from "./TextColorProperties";
+import { TextProperties } from "./TextProperties";
 
 const Separator = () => {
   return (
@@ -333,6 +334,16 @@ export const PropertiesPanel = () => {
           <TextColorProperties
             properties={{
               color: properties["color"],
+            }}
+          />
+          <Separator />
+        </>
+      )}
+      {properties["fontSize"] && (
+        <>
+          <TextProperties
+            properties={{
+              fontSize: properties["fontSize"],
             }}
           />
           <Separator />

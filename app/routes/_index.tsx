@@ -88,6 +88,7 @@ export default function Index() {
       backgroundColor: selectedTool === "rect" ? "#9b9b9b" : undefined,
       content: selectedTool === "text" ? "" : undefined,
       color: selectedTool === "text" ? "#000000" : undefined,
+      fontSize: selectedTool === "text" ? 18 : undefined,
     };
 
     addElement(newElement);
