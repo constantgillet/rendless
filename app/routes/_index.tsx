@@ -16,7 +16,7 @@ import {
 import { PropertiesPanel } from "~/components/PropertiesPanel";
 import { TopBar } from "~/components/TopBar";
 import { LayersPanel } from "~/components/LayersPanel";
-import { Tree, useEditorStore } from "~/components/EditorStore";
+import { ElementType, Tree, useEditorStore } from "~/components/EditorStore";
 import { v4 as uuidv4 } from "uuid";
 import { Rect } from "selecto";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
@@ -78,13 +78,14 @@ export default function Index() {
     const width = rect.width / scale;
     const height = rect.height / scale;
 
-    const newElement: Tree = {
+    const newElement: ElementType = {
       id: uuidv4(),
       type: selectedTool,
       x: x,
       y: y,
       width: width,
       height: height,
+      backgroundColor: selectedTool === "rect" ? "#9b9b9b" : undefined,
     };
 
     addElement(newElement);
