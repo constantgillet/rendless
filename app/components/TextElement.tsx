@@ -15,6 +15,7 @@ export const TextElement = (props: TextElementProps) => {
   const scale = useScaleStore((state) => state.scale);
   const textElementRef = useRef<HTMLTextAreaElement>(null);
   const [isEditingContent, setIsEditingContent] = useState(false);
+  const [val, setVal] = useState("");
 
   const handleClick = (event: React.MouseEventHandler<HTMLTextAreaElement>) => {
     if (event.detail === 2) {
@@ -50,9 +51,21 @@ export const TextElement = (props: TextElementProps) => {
     };
   }, []);
 
+  const resizeTextArea = () => {
+    if (!textElementRef.current) return;
+
+    textElementRef.current.style.height = "auto";
+    textElementRef.current.style.height =
+      textElementRef.current.scrollHeight + "px";
+  };
+
+  useEffect(resizeTextArea, [val]);
+
   return (
     <textarea
       ref={textElementRef}
+      value={val}
+      onChange={(e) => setVal(e.target.value)}
       className={cx(
         "target",
         css({
