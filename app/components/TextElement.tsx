@@ -93,7 +93,7 @@ export const TextElement = (props: TextElementProps) => {
         height: props.height * scale,
         fontSize: 18 * scale,
         background: "transparent",
-        color: "black",
+        color: props.color,
         cursor: isEditingContent ? "text" : "default",
       }}
       onClick={handleClick}

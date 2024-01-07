@@ -13,6 +13,7 @@ import { ElementType, Tree, useEditorStore } from "./EditorStore";
 import { useEffect, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { BackgroundColorProperties } from "./BackgroundColorProperties";
+import { TextColorProperties } from "./TextColorProperties";
 
 const Separator = () => {
   return (
@@ -322,6 +323,16 @@ export const PropertiesPanel = () => {
           <BackgroundColorProperties
             properties={{
               backgroundColor: properties["backgroundColor"],
+            }}
+          />
+          <Separator />
+        </>
+      )}
+      {properties["color"] && (
+        <>
+          <TextColorProperties
+            properties={{
+              color: properties["color"],
             }}
           />
           <Separator />

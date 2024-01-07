@@ -15,36 +15,34 @@ import * as SelectPicker from "react-color";
 import * as PopoverRadix from "@radix-ui/react-popover";
 import { groupBySameValue } from "~/utils/groupBySameValue";
 
-type BackgroundColorPropertiesProps = {
+type TextColorPropertiesProps = {
   properties: {
-    backgroundColor: ValueType[];
+    color: ValueType[];
   };
 };
 
-export const BackgroundColorProperties = (
-  props: BackgroundColorPropertiesProps
-) => {
+export const TextColorProperties = (props: TextColorPropertiesProps) => {
   const updateElement = useEditorStore((state) => state.updateElement);
 
   const [colorValues, setColorValues] = useState(
-    groupBySameValue(props.properties.backgroundColor)
+    groupBySameValue(props.properties.color)
   );
 
   useEffect(() => {
-    setColorValues(groupBySameValue(props.properties.backgroundColor));
-  }, [props.properties.backgroundColor]);
+    setColorValues(groupBySameValue(props.properties.color));
+  }, [props.properties.color]);
 
   const applyColor = (color: string, elementIds: string[]) => {
     elementIds.forEach((elementId) => {
       updateElement({
         id: elementId,
-        backgroundColor: color,
+        color: color,
       });
     });
   };
 
   return (
-    <PanelGroup title="Background color">
+    <PanelGroup title="Text color">
       <Flex direction="column" gap={"2"}>
         {colorValues.map((color, index) => (
           <Popover.Root key={index}>
