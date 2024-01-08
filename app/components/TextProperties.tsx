@@ -25,7 +25,20 @@ export const TextProperties = (props: TextPropertiesProps) => {
   return (
     <PanelGroup title="Text">
       <div>
-        <Select.Root defaultValue="8">
+        <TextField.Root>
+          <TextField.Slot></TextField.Slot>
+        </TextField.Root>
+        <Select.Root
+          defaultValue="8"
+          onValueChange={(newVal) => {
+            console.log(newVal);
+
+            updateElement({
+              id: props.properties.fontSize[0].nodeId,
+              fontSize: parseInt(newVal),
+            });
+          }}
+        >
           <Select.Trigger />
           <Select.Content position="popper">
             <div

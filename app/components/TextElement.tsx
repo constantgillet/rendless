@@ -91,7 +91,7 @@ export const TextElement = (props: TextElementProps) => {
         transform: `translate(${props.x * scale}px, ${props.y * scale}px)`,
         width: props.width * scale,
         height: props.height * scale,
-        fontSize: 18 * scale,
+        fontSize: props.fontSize * scale,
         background: "transparent",
         color: props.color,
         cursor: isEditingContent ? "text" : "default",
