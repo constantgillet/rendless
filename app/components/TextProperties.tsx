@@ -4,6 +4,7 @@ import {
   Flex,
   Grid,
   Popover,
+  Select,
   TextField,
   TextFieldInput,
 } from "@radix-ui/themes";
@@ -11,9 +12,6 @@ import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { useEffect, useState } from "react";
 import { useEditorStore } from "./EditorStore";
 import { css } from "styled-system/css";
-import * as SelectPicker from "react-color";
-import * as PopoverRadix from "@radix-ui/react-popover";
-import { groupBySameValue } from "~/utils/groupBySameValue";
 
 type TextPropertiesProps = {
   properties: {
@@ -24,5 +22,27 @@ type TextPropertiesProps = {
 export const TextProperties = (props: TextPropertiesProps) => {
   const updateElement = useEditorStore((state) => state.updateElement);
 
-  return <PanelGroup title="Text"></PanelGroup>;
+  return (
+    <PanelGroup title="Text">
+      <div>
+        <Select.Root defaultValue="8">
+          <Select.Trigger />
+          <Select.Content position="popper">
+            <div
+              className={css({
+                maxHeight: 200,
+                height: 200,
+              })}
+            >
+              {Array.from(Array(65), (_, i) => i + 4).map((i) => (
+                <Select.Item key={i} value={i.toString()}>
+                  {i}px
+                </Select.Item>
+              ))}
+            </div>
+          </Select.Content>
+        </Select.Root>
+      </div>
+    </PanelGroup>
+  );
 };
