@@ -25,9 +25,26 @@ export const TextProperties = (props: TextPropertiesProps) => {
   return (
     <PanelGroup title="Text">
       <div>
-        <TextField.Root>
-          <TextField.Slot></TextField.Slot>
-        </TextField.Root>
+        <Select.Root>
+          <TextField.Root>
+            <TextFieldInput value="16" type="number" />
+            <TextField.Slot></TextField.Slot>
+          </TextField.Root>
+          <Select.Content position="popper">
+            <div
+              className={css({
+                maxHeight: 200,
+                height: 200,
+              })}
+            >
+              {Array.from(Array(65), (_, i) => i + 4).map((i) => (
+                <Select.Item key={i} value={i.toString()}>
+                  {i}px
+                </Select.Item>
+              ))}
+            </div>
+          </Select.Content>
+        </Select.Root>
         <Select.Root
           defaultValue="8"
           onValueChange={(newVal) => {
@@ -40,7 +57,7 @@ export const TextProperties = (props: TextPropertiesProps) => {
           }}
         >
           <Select.Trigger />
-          <Select.Content position="popper">
+          <Select.Content position="popper" align="end">
             <div
               className={css({
                 maxHeight: 200,

@@ -390,40 +390,6 @@ export const PropertiesPanel = () => {
         </Flex>
       </PanelGroup>
       <Separator />
-      <PanelGroup title="Background">
-        <Grid columns="2" gap="4" width="auto">
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>x</TextField.Slot>
-              <TextField.Input placeholder="Horizontal" />
-            </TextField.Root>
-          </Box>
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>y</TextField.Slot>
-              <TextField.Input placeholder="Vertical" />
-            </TextField.Root>
-          </Box>
-        </Grid>
-      </PanelGroup>
-      <Separator />
-      <PanelGroup title="Borders">
-        <Grid columns="2" gap="4" width="auto">
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>x</TextField.Slot>
-              <TextField.Input placeholder="Horizontal" />
-            </TextField.Root>
-          </Box>
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>y</TextField.Slot>
-              <TextField.Input placeholder="Vertical" />
-            </TextField.Root>
-          </Box>
-        </Grid>
-      </PanelGroup>
-      <Separator />
     </aside>
   );
 };
