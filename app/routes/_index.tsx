@@ -174,8 +174,6 @@ export default function Index() {
           clientY,
         }: OnDrag) => {
           target!.style.transform = transform;
-        }}
-        onDragEnd={({ target }) => {
           const containerRect = container.current!.getBoundingClientRect();
           const targetRect = target!.getBoundingClientRect();
 
@@ -193,6 +191,24 @@ export default function Index() {
 
           updateElement(element);
         }}
+        // onDragEnd={({ target }) => {
+        //   const containerRect = container.current!.getBoundingClientRect();
+        //   const targetRect = target!.getBoundingClientRect();
+
+        //   //Set x and y with scale factor
+        //   const x = (targetRect.x - containerRect.x) / scale;
+        //   const y = (targetRect.y - containerRect.y) / scale;
+
+        //   console.log({ x, y });
+
+        //   const element = {
+        //     id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+        //     x: x,
+        //     y: y,
+        //   };
+
+        //   updateElement(element);
+        // }}
         onDragGroup={({ targets, events }) => {
           for (let i = 0; i < targets.length; ++i) {
             const target = targets[i];
@@ -221,9 +237,6 @@ export default function Index() {
         }: OnResize) => {
           delta[0] && (target!.style.width = `${width}px`);
           delta[1] && (target!.style.height = `${height}px`);
-        }}
-        onResizeEnd={({ target, isDrag, clientX, clientY }) => {
-          console.log("onResizeEnd", target, isDrag);
 
           const targetRect = target!.getBoundingClientRect();
 
@@ -233,8 +246,21 @@ export default function Index() {
             height: targetRect.height / scale,
           };
 
-          updateElement(element as Tree);
+          updateElement(element);
         }}
+        // onResizeEnd={({ target, isDrag, clientX, clientY }) => {
+        //   console.log("onResizeEnd", target, isDrag);
+
+        //   const targetRect = target!.getBoundingClientRect();
+
+        //   const element = {
+        //     id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+        //     width: targetRect.width / scale,
+        //     height: targetRect.height / scale,
+        //   };
+
+        //   updateElement(element as Tree);
+        // }}
         /* scalable */
         /* Only one of resizable, scalable, warpable can be used. */
         scalable={true}
