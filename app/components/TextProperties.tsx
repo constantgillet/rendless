@@ -9,9 +9,10 @@ import {
   TextFieldInput,
 } from "@radix-ui/themes";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useEditorStore } from "./EditorStore";
 import { css } from "styled-system/css";
+import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 
 type TextPropertiesProps = {
   properties: {
@@ -22,37 +23,25 @@ type TextPropertiesProps = {
 export const TextProperties = (props: TextPropertiesProps) => {
   const updateElement = useEditorStore((state) => state.updateElement);
 
+  const fontSizePropety = useMemo(
+    () =>
+      arePropertiesTheSame(props.properties.fontSize)
+        ? props.properties.fontSize[0].value.toString()
+        : "Mixed",
+    [props.properties.fontSize]
+  );
+
   return (
     <PanelGroup title="Text">
       <div>
-        <Select.Root>
-          <TextField.Root>
-            <TextFieldInput value="16" type="number" />
-            <TextField.Slot></TextField.Slot>
-          </TextField.Root>
-          <Select.Content position="popper">
-            <div
-              className={css({
-                maxHeight: 200,
-                height: 200,
-              })}
-            >
-              {Array.from(Array(65), (_, i) => i + 4).map((i) => (
-                <Select.Item key={i} value={i.toString()}>
-                  {i}px
-                </Select.Item>
-              ))}
-            </div>
-          </Select.Content>
-        </Select.Root>
         <Select.Root
-          defaultValue="8"
+          value={fontSizePropety}
           onValueChange={(newVal) => {
-            console.log(newVal);
-
-            updateElement({
-              id: props.properties.fontSize[0].nodeId,
-              fontSize: parseInt(newVal),
+            props.properties.fontSize.forEach((property) => {
+              updateElement({
+                id: property.nodeId,
+                [property.propertyName]: newVal,
+              });
             });
           }}
         >
@@ -64,7 +53,12 @@ export const TextProperties = (props: TextPropertiesProps) => {
                 height: 200,
               })}
             >
-              {Array.from(Array(65), (_, i) => i + 4).map((i) => (
+              {fontSizePropety === "Mixed" && (
+                <Select.Item value={"Mixed"} disabled>
+                  Mixed
+                </Select.Item>
+              )}
+              {Array.from(Array(125), (_, i) => i + 4).map((i) => (
                 <Select.Item key={i} value={i.toString()}>
                   {i}px
                 </Select.Item>
