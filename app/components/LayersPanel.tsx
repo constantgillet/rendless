@@ -62,7 +62,7 @@ export const LayersPanel = () => {
                     gap: "var(--space-2)",
                   })}
                 >
-                  <Icon name="shape" />
+                  <Icon name={child.type === "rect" ? "shape" : "text"} />
                   Layer {child.type}
                 </div>
                 {/* <Icon
