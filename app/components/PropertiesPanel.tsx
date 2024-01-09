@@ -44,37 +44,42 @@ type PositionAndSizePropertiesProps = {
   };
 };
 
+//keep only two decimals after the dot only if more than 2 decimals
+const formatValue = (value: number) => {
+  return value.toFixed(2).replace(/\.?0+$/, "");
+};
+
 const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
   const updateElement = useEditorStore((state) => state.updateElement);
 
   const [xValue, setX] = useState(
     arePropertiesTheSame(props.properties.x)
-      ? props.properties.x[0].value
+      ? formatValue(props.properties.x[0].value)
       : "Mixed"
   );
 
   const [y, setY] = useState(
     arePropertiesTheSame(props.properties.y)
-      ? props.properties.y[0].value
+      ? formatValue(props.properties.y[0].value)
       : "Mixed"
   );
 
   const [width, setWidth] = useState(
     arePropertiesTheSame(props.properties.width)
-      ? props.properties.width[0].value
+      ? formatValue(props.properties.width[0].value)
       : "Mixed"
   );
 
   const [height, setHeight] = useState(
     arePropertiesTheSame(props.properties.height)
-      ? props.properties.height[0].value
+      ? formatValue(props.properties.height[0].value)
       : "Mixed"
   );
 
   useEffect(() => {
     setX(
       arePropertiesTheSame(props.properties.x)
-        ? props.properties.x[0].value
+        ? formatValue(props.properties.x[0].value)
         : "Mixed"
     );
   }, [props.properties.x]);
@@ -82,7 +87,7 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
   useEffect(() => {
     setY(
       arePropertiesTheSame(props.properties.y)
-        ? props.properties.y[0].value
+        ? formatValue(props.properties.y[0].value)
         : "Mixed"
     );
   }, [props.properties.y]);
@@ -90,7 +95,7 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
   useEffect(() => {
     setWidth(
       arePropertiesTheSame(props.properties.width)
-        ? props.properties.width[0].value
+        ? formatValue(props.properties.width[0].value)
         : "Mixed"
     );
   }, [props.properties.width]);
@@ -98,7 +103,7 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
   useEffect(() => {
     setHeight(
       arePropertiesTheSame(props.properties.height)
-        ? props.properties.height[0].value
+        ? formatValue(props.properties.height[0].value)
         : "Mixed"
     );
   }, [props.properties.height]);
