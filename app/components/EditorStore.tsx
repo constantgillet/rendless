@@ -41,7 +41,6 @@ export type ElementText = Element<"text"> & {
   fontWeight: string;
   textAlign: "left" | "center" | "right";
   lineHeight: number;
-  backgroundColor: string;
 };
 
 export type ElementPage = Element<"page"> & {

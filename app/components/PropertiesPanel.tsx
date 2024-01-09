@@ -255,6 +255,11 @@ const GroupProperties = (nodes: ElementType[]) => {
 
   for (const node of nodes) {
     Object.entries(node).forEach(([key, value]) => {
+      //ignore if value is undefined
+      if (value === undefined) {
+        return;
+      }
+
       propertieFlatList.push({
         nodeId: node.id,
         propertyName: key,
