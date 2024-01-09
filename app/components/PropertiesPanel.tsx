@@ -15,6 +15,7 @@ import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { BackgroundColorProperties } from "./BackgroundColorProperties";
 import { TextColorProperties } from "./TextColorProperties";
 import { TextProperties } from "./TextProperties";
+import { RadiusProperties } from "./RadiusProperties";
 
 const Separator = () => {
   return (
@@ -201,51 +202,6 @@ const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
   );
 };
 
-const RadiusProperties = () => {
-  return (
-    <PanelGroup title="Radius">
-      <Grid columns="2" gap="4" width="auto">
-        <Box>
-          <TextField.Root>
-            <TextField.Slot>
-              <Icon name="corner-top-left" strokeWidth={2} />
-            </TextField.Slot>
-            <TextField.Input placeholder="Top left" />
-          </TextField.Root>
-        </Box>
-        <Box>
-          <TextField.Root>
-            <TextField.Slot>
-              <Icon name="corner-top-right" strokeWidth={2} />
-            </TextField.Slot>
-            <TextField.Input placeholder="Top right" />
-          </TextField.Root>
-        </Box>
-      </Grid>
-      <Flex gap="4">
-        <Grid columns="2" gap="4" width="auto">
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>
-                <Icon name="corner-bottom-left" strokeWidth={2} />
-              </TextField.Slot>
-              <TextField.Input placeholder="Bottom left" />
-            </TextField.Root>
-          </Box>
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>
-                <Icon name="corner-bottom-right" strokeWidth={2} />
-              </TextField.Slot>
-              <TextField.Input placeholder="Bottom right" />
-            </TextField.Root>
-          </Box>
-        </Grid>
-      </Flex>
-    </PanelGroup>
-  );
-};
-
 const GroupProperties = (nodes: ElementType[]) => {
   const propertieFlatList: Array<{
     nodeId: string;
@@ -355,47 +311,22 @@ export const PropertiesPanel = () => {
           <Separator />
         </>
       )}
-      <PanelGroup title="Radius">
-        <Grid columns="2" gap="4" width="auto">
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>
-                <Icon name="corner-top-left" strokeWidth={2} />
-              </TextField.Slot>
-              <TextField.Input placeholder="Top left" />
-            </TextField.Root>
-          </Box>
-          <Box>
-            <TextField.Root>
-              <TextField.Slot>
-                <Icon name="corner-top-right" strokeWidth={2} />
-              </TextField.Slot>
-              <TextField.Input placeholder="Top right" />
-            </TextField.Root>
-          </Box>
-        </Grid>
-        <Flex gap="4">
-          <Grid columns="2" gap="4" width="auto">
-            <Box>
-              <TextField.Root>
-                <TextField.Slot>
-                  <Icon name="corner-bottom-left" strokeWidth={2} />
-                </TextField.Slot>
-                <TextField.Input placeholder="Bottom left" />
-              </TextField.Root>
-            </Box>
-            <Box>
-              <TextField.Root>
-                <TextField.Slot>
-                  <Icon name="corner-bottom-right" strokeWidth={2} />
-                </TextField.Slot>
-                <TextField.Input placeholder="Bottom right" />
-              </TextField.Root>
-            </Box>
-          </Grid>
-        </Flex>
-      </PanelGroup>
-      <Separator />
+      {properties["borderTopLeftRadius"] &&
+        properties["borderTopRightRadius"] &&
+        properties["borderBottomLeftRadius"] &&
+        properties["borderBottomRightRadius"] && (
+          <>
+            <RadiusProperties
+              properties={{
+                borderTopLeftRadius: properties["borderTopLeftRadius"],
+                borderTopRightRadius: properties["borderTopRightRadius"],
+                borderBottomLeftRadius: properties["borderBottomLeftRadius"],
+                borderBottomRightRadius: properties["borderBottomRightRadius"],
+              }}
+            />
+            <Separator />
+          </>
+        )}
     </aside>
   );
 };

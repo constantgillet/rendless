@@ -27,10 +27,13 @@ interface Element<T extends ObjectType> {
 
 export type ElementRect = Element<"rect"> & {
   backgroundColor: string;
-  borderRadius: number;
   borderWidth: number;
   borderColor: string;
   borderStyle: string;
+  borderTopLeftRadius: number;
+  borderTopRightRadius: number;
+  borderBottomLeftRadius: number;
+  borderBottomRightRadius: number;
 };
 
 export type ElementText = Element<"text"> & {
@@ -88,7 +91,10 @@ export const useEditorStore = create<EditorState>()(
           width: 74,
           height: 74,
           backgroundColor: "#1bc529",
-          borderRadius: 0,
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
           borderWidth: 0,
           borderColor: "red",
           borderStyle: "solid",
@@ -101,7 +107,10 @@ export const useEditorStore = create<EditorState>()(
           width: 120,
           height: 60,
           backgroundColor: "#d42f2f",
-          borderRadius: 0,
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
           borderWidth: 0,
           borderColor: "red",
           borderStyle: "solid",

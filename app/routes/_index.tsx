@@ -90,6 +90,10 @@ export default function Index() {
       color: selectedTool === "text" ? "#000000" : undefined,
       fontSize: selectedTool === "text" ? 18 : undefined,
       textAlign: selectedTool === "text" ? "left" : undefined,
+      borderTopLeftRadius: selectedTool === "rect" ? 0 : undefined,
+      borderTopRightRadius: selectedTool === "rect" ? 0 : undefined,
+      borderBottomLeftRadius: selectedTool === "rect" ? 0 : undefined,
+      borderBottomRightRadius: selectedTool === "rect" ? 0 : undefined,
     };
 
     addElement(newElement);

@@ -103,6 +103,10 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
                     width: child.width * scale,
                     height: child.height * scale,
                     backgroundColor: child.backgroundColor,
+                    borderTopLeftRadius: child.borderTopLeftRadius,
+                    borderTopRightRadius: child.borderTopRightRadius,
+                    borderBottomLeftRadius: child.borderBottomLeftRadius,
+                    borderBottomRightRadius: child.borderBottomRightRadius,
                   }}
                 />
               );
