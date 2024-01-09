@@ -339,11 +339,12 @@ export const PropertiesPanel = () => {
           <Separator />
         </>
       )}
-      {properties["fontSize"] && (
+      {properties["fontSize"] && properties["textAlign"] && (
         <>
           <TextProperties
             properties={{
               fontSize: properties["fontSize"],
+              textAlign: properties["textAlign"],
             }}
           />
           <Separator />

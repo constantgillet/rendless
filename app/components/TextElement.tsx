@@ -95,6 +95,7 @@ export const TextElement = (props: TextElementProps) => {
         background: "transparent",
         color: props.color,
         cursor: isEditingContent ? "text" : "default",
+        textAlign: props.textAlign,
       }}
       onClick={handleClick}
     ></textarea>

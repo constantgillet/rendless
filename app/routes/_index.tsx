@@ -89,6 +89,7 @@ export default function Index() {
       content: selectedTool === "text" ? "" : undefined,
       color: selectedTool === "text" ? "#000000" : undefined,
       fontSize: selectedTool === "text" ? 18 : undefined,
+      textAlign: selectedTool === "text" ? "left" : undefined,
     };
 
     addElement(newElement);

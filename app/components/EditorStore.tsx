@@ -39,7 +39,7 @@ export type ElementText = Element<"text"> & {
   color: string;
   fontFamily: string;
   fontWeight: string;
-  textAlign: string;
+  textAlign: "left" | "center" | "right";
   lineHeight: number;
   backgroundColor: string;
 };

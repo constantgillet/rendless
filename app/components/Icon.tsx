@@ -9,7 +9,10 @@ export type IconName =
   | "corner-top-left"
   | "corner-top-right"
   | "corner-bottom-left"
-  | "corner-bottom-right";
+  | "corner-bottom-right"
+  | "text-align-center"
+  | "text-align-left"
+  | "text-align-right";
 
 export const iconStyle = cva({
   base: {

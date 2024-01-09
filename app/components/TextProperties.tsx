@@ -3,20 +3,24 @@ import {
   Button,
   Flex,
   Grid,
+  IconButton,
   Popover,
   Select,
   TextField,
   TextFieldInput,
+  Tooltip,
 } from "@radix-ui/themes";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { useMemo } from "react";
 import { useEditorStore } from "./EditorStore";
 import { css } from "styled-system/css";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
+import { Icon } from "./Icon";
 
 type TextPropertiesProps = {
   properties: {
     fontSize: ValueType[];
+    textAlign: ValueType[];
   };
 };
 
@@ -31,42 +35,90 @@ export const TextProperties = (props: TextPropertiesProps) => {
     [props.properties.fontSize]
   );
 
+  const textAlignProperty = useMemo(
+    () =>
+      arePropertiesTheSame(props.properties.textAlign)
+        ? props.properties.textAlign[0].value.toString()
+        : "Mixed",
+    [props.properties.textAlign]
+  );
+
+  const onClickTextAlign = (textAlign: "left" | "center" | "right") => {
+    props.properties.textAlign.forEach((element) => {
+      updateElement({
+        id: element.nodeId,
+        textAlign: textAlign,
+      });
+    });
+  };
+
   return (
     <PanelGroup title="Text">
-      <div>
-        <Select.Root
-          value={fontSizePropety}
-          onValueChange={(newVal) => {
-            props.properties.fontSize.forEach((property) => {
-              updateElement({
-                id: property.nodeId,
-                [property.propertyName]: newVal,
+      <Flex direction="column" gap="1">
+        <div>
+          <Select.Root
+            value={fontSizePropety}
+            onValueChange={(newVal) => {
+              props.properties.fontSize.forEach((property) => {
+                updateElement({
+                  id: property.nodeId,
+                  [property.propertyName]: newVal,
+                });
               });
-            });
-          }}
-        >
-          <Select.Trigger />
-          <Select.Content position="popper" align="end">
-            <div
-              className={css({
-                maxHeight: 200,
-                height: 200,
-              })}
+            }}
+          >
+            <Select.Trigger />
+            <Select.Content position="popper" align="end">
+              <div
+                className={css({
+                  maxHeight: 200,
+                  height: 200,
+                })}
+              >
+                {fontSizePropety === "Mixed" && (
+                  <Select.Item value={"Mixed"} disabled>
+                    Mixed
+                  </Select.Item>
+                )}
+                {Array.from(Array(125), (_, i) => i + 4).map((i) => (
+                  <Select.Item key={i} value={i.toString()}>
+                    {i}px
+                  </Select.Item>
+                ))}
+              </div>
+            </Select.Content>
+          </Select.Root>
+        </div>
+        <Flex gap="1">
+          <Tooltip content={"Text align left"}>
+            <IconButton
+              size="2"
+              variant={textAlignProperty === "left" ? "solid" : "outline"}
+              onClick={() => onClickTextAlign("left")}
             >
-              {fontSizePropety === "Mixed" && (
-                <Select.Item value={"Mixed"} disabled>
-                  Mixed
-                </Select.Item>
-              )}
-              {Array.from(Array(125), (_, i) => i + 4).map((i) => (
-                <Select.Item key={i} value={i.toString()}>
-                  {i}px
-                </Select.Item>
-              ))}
-            </div>
-          </Select.Content>
-        </Select.Root>
-      </div>
+              <Icon name="text-align-left" aria-checked />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={"Text align center"}>
+            <IconButton
+              size="2"
+              variant={textAlignProperty === "center" ? "solid" : "outline"}
+              onClick={() => onClickTextAlign("center")}
+            >
+              <Icon name="text-align-center" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={"Text align right"}>
+            <IconButton
+              size="2"
+              variant={textAlignProperty === "right" ? "solid" : "outline"}
+              onClick={() => onClickTextAlign("right")}
+            >
+              <Icon name="text-align-right" />
+            </IconButton>
+          </Tooltip>
+        </Flex>
+      </Flex>
     </PanelGroup>
   );
 };
