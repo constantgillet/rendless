@@ -191,7 +191,7 @@ export default function Index() {
             y: y,
           };
 
-          updateElement(element as Tree);
+          updateElement(element);
         }}
         onDragGroup={({ targets, events }) => {
           for (let i = 0; i < targets.length; ++i) {
