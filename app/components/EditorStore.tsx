@@ -14,7 +14,7 @@ export type Tree = {
   y: number;
   width: number;
   height: number;
-};
+} & ElementPage;
 
 interface Element<T extends ObjectType> {
   id: string;
@@ -80,11 +80,12 @@ export const useEditorStore = create<EditorState>()(
       type: "page",
       width: 1200,
       height: 630,
+      backgroundColor: "#d1d5db",
       x: 0,
       y: 0,
       chilren: [
         {
-          id: "1",
+          id: "qzdqzdqzd",
           type: "rect",
           x: 100,
           y: 100,
@@ -100,7 +101,7 @@ export const useEditorStore = create<EditorState>()(
           borderStyle: "solid",
         },
         {
-          id: "2",
+          id: "2vvvvv",
           type: "rect",
           x: 300,
           y: 100,
@@ -136,15 +137,38 @@ export const useEditorStore = create<EditorState>()(
       }));
     },
     updateElement: (element) => {
-      set((state) => ({
-        tree: {
-          ...state.tree,
-          chilren: state.tree.chilren?.map((child) =>
-            child.id === element.id ? { ...child, ...element } : child
-          ),
-        },
-      }));
+      //Todo in the future make a recursive function to update the element and its children
+
+      set((state) => {
+        if (state.tree.id === element.id) {
+          return {
+            tree: {
+              ...state.tree,
+              ...element,
+            },
+          };
+        }
+
+        return {
+          tree: {
+            ...state.tree,
+            chilren: state.tree.chilren?.map((child) =>
+              child.id === element.id ? { ...child, ...element } : child
+            ),
+          },
+        };
+      });
     },
+    // updateElement: (element) => {
+    //   set((state) => ({
+    //     tree: {
+    //       ...state.tree,
+    //       chilren: state.tree.chilren?.map((child) =>
+    //         child.id === element.id ? { ...child, ...element } : child
+    //       ),
+    //     },
+    //   }));
+    // },
     setSelectedTool: (selectedTool) => set({ selectedTool }),
     increaseX: (elementIds, by) => {
       set((state) => ({

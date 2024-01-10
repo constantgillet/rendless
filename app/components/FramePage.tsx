@@ -72,6 +72,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
               width: 1200 * scale,
               height: 630 * scale,
               cursor: selectedTool === "select" ? "auto" : "crosshair",
+              backgroundColor: tree.backgroundColor,
             }}
             ref={ref}
           >

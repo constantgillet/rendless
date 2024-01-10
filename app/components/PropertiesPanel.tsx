@@ -332,6 +332,25 @@ export const PropertiesPanel = () => {
             <Separator />
           </>
         )}
+      {
+        // If empty properties
+        !Object.keys(properties).length && (
+          <>
+            <BackgroundColorProperties
+              properties={{
+                backgroundColor: [
+                  {
+                    value: tree.backgroundColor,
+                    nodeId: "1",
+                    propertyName: "backgroundColor",
+                  },
+                ],
+              }}
+            />
+            <Separator />
+          </>
+        )
+      }
     </aside>
   );
 };
