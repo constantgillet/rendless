@@ -56,7 +56,12 @@ export const TextElement = (props: TextElementProps) => {
       textElementRef.current.scrollHeight + "px";
   };
 
-  useEffect(resizeTextArea, [props.content, props.fontSize, props.width]);
+  useEffect(resizeTextArea, [
+    props.content,
+    props.fontSize,
+    props.width,
+    scale,
+  ]);
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateElement({
