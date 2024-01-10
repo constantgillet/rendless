@@ -44,7 +44,13 @@ export const BackgroundColorProperties = (
   };
 
   return (
-    <PanelGroup title="Background color">
+    <PanelGroup
+      title={
+        props.properties.backgroundColor[0].nodeId === "1"
+          ? "Page background color"
+          : "Background color"
+      }
+    >
       <Flex direction="column" gap={"2"}>
         {colorValues.map((color, index) => (
           <Popover.Root key={index}>
