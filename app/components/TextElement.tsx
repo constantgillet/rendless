@@ -56,7 +56,7 @@ export const TextElement = (props: TextElementProps) => {
       textElementRef.current.scrollHeight + "px";
   };
 
-  useEffect(resizeTextArea, [props.content, props.width, props.height]);
+  useEffect(resizeTextArea, [props.content, props.fontSize, props.width]);
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateElement({
@@ -66,15 +66,11 @@ export const TextElement = (props: TextElementProps) => {
   };
 
   return (
-    <textarea
-      ref={textElementRef}
-      value={props.content}
-      onChange={(e) => onChange(e)}
+    <div
       className={cx(
         "target",
         css({
           position: "absolute",
-          resize: "none",
           _hover: {
             outline: "1px solid #4af",
             outlineOffset: "-1px",
@@ -84,20 +80,38 @@ export const TextElement = (props: TextElementProps) => {
           },
         })
       )}
-      {...{
-        [DATA_SCENA_ELEMENT_ID]: props.id,
-      }}
       style={{
         transform: `translate(${props.x * scale}px, ${props.y * scale}px)`,
         width: props.width * scale,
         height: props.height * scale,
-        fontSize: props.fontSize * scale,
-        background: "transparent",
-        color: props.color,
-        cursor: isEditingContent ? "text" : "default",
-        textAlign: props.textAlign,
       }}
-      onClick={handleClick}
-    ></textarea>
+      {...{
+        [DATA_SCENA_ELEMENT_ID]: props.id,
+      }}
+    >
+      <textarea
+        ref={textElementRef}
+        value={props.content}
+        onChange={(e) => onChange(e)}
+        className={cx(
+          css({
+            width: "100%",
+            minHeight: "100%",
+            resize: "none",
+            _focusVisible: {
+              outline: "none",
+            },
+          })
+        )}
+        style={{
+          fontSize: props.fontSize * scale,
+          background: "transparent",
+          color: props.color,
+          cursor: isEditingContent ? "text" : "default",
+          textAlign: props.textAlign,
+        }}
+        onClick={handleClick}
+      ></textarea>
+    </div>
   );
 };
