@@ -72,11 +72,11 @@ export default function Index() {
     const containerRect = container.current!.getBoundingClientRect();
 
     //Set x and y with scale factor
-    const x = (rect.left - containerRect.left) / scale;
-    const y = (rect.top - containerRect.top) / scale;
+    const x = Math.round((rect.left - containerRect.left) / scale);
+    const y = Math.round((rect.top - containerRect.top) / scale);
 
-    const width = rect.width / scale;
-    const height = rect.height / scale;
+    const width = Math.round(rect.width / scale);
+    const height = Math.round(rect.height / scale);
 
     const newElement: ElementType = {
       id: uuidv4(),
@@ -178,10 +178,8 @@ export default function Index() {
           const targetRect = target!.getBoundingClientRect();
 
           //Set x and y with scale factor
-          const x = (targetRect.x - containerRect.x) / scale;
-          const y = (targetRect.y - containerRect.y) / scale;
-
-          console.log({ x, y });
+          const x = Math.round((targetRect.x - containerRect.x) / scale);
+          const y = Math.round((targetRect.y - containerRect.y) / scale);
 
           const element = {
             id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
@@ -235,15 +233,15 @@ export default function Index() {
           clientX,
           clientY,
         }: OnResize) => {
-          delta[0] && (target!.style.width = `${width}px`);
-          delta[1] && (target!.style.height = `${height}px`);
+          delta[0] && (target!.style.width = `${Math.round(width)}px`);
+          delta[1] && (target!.style.height = `${Math.round(height)}px`);
 
           const targetRect = target!.getBoundingClientRect();
 
           const element = {
             id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-            width: targetRect.width / scale,
-            height: targetRect.height / scale,
+            width: Math.round(targetRect.width / scale),
+            height: Math.round(targetRect.height / scale),
           };
 
           updateElement(element);

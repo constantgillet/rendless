@@ -46,7 +46,7 @@ type PositionAndSizePropertiesProps = {
 
 //keep only two decimals after the dot only if more than 2 decimals
 const formatValue = (value: number) => {
-  return value.toFixed(2).replace(/\.?0+$/, "");
+  return value.toFixed(1).replace(/\.?0+$/, "");
 };
 
 const PositionAndSizeProperties = (props: PositionAndSizePropertiesProps) => {
