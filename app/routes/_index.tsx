@@ -23,6 +23,7 @@ import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { FramePage } from "~/components/FramePage";
 import { EditorHotKeys } from "~/components/EditorHotKeys";
 import { useScaleStore } from "~/components/ScaleStore";
+import "../contents/fontInfo.json";
 
 export const meta: MetaFunction = () => {
   return [

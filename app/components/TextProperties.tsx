@@ -16,6 +16,8 @@ import { useEditorStore } from "./EditorStore";
 import { css } from "styled-system/css";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { Icon } from "./Icon";
+import { FontPicker } from "./FontPicker";
+import { FontSizePicker } from "./FontSizePicker";
 
 type TextPropertiesProps = {
   properties: {
@@ -56,7 +58,10 @@ export const TextProperties = (props: TextPropertiesProps) => {
     <PanelGroup title="Text">
       <Flex direction="column" gap="1">
         <div>
-          <Select.Root
+          <FontPicker />
+        </div>
+        <div>
+          <FontSizePicker
             value={fontSizePropety}
             onValueChange={(newVal) => {
               props.properties.fontSize.forEach((property) => {
@@ -66,28 +71,7 @@ export const TextProperties = (props: TextPropertiesProps) => {
                 });
               });
             }}
-          >
-            <Select.Trigger />
-            <Select.Content position="popper" align="end">
-              <div
-                className={css({
-                  maxHeight: 200,
-                  height: 200,
-                })}
-              >
-                {fontSizePropety === "Mixed" && (
-                  <Select.Item value={"Mixed"} disabled>
-                    Mixed
-                  </Select.Item>
-                )}
-                {Array.from(Array(125), (_, i) => i + 4).map((i) => (
-                  <Select.Item key={i} value={i.toString()}>
-                    {i}px
-                  </Select.Item>
-                ))}
-              </div>
-            </Select.Content>
-          </Select.Root>
+          />
         </div>
         <Flex gap="1">
           <Tooltip content={"Text align left"}>
