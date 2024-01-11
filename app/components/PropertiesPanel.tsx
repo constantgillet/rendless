@@ -309,6 +309,7 @@ export const PropertiesPanel = () => {
         <>
           <TextProperties
             properties={{
+              fontFamily: properties["fontFamily"],
               fontSize: properties["fontSize"],
               textAlign: properties["textAlign"],
             }}

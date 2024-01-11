@@ -109,6 +109,7 @@ export const TextElement = (props: TextElementProps) => {
           })
         )}
         style={{
+          fontFamily: props.fontFamily,
           fontSize: props.fontSize * scale,
           background: "transparent",
           color: props.color,

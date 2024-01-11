@@ -5,7 +5,10 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { Icon } from "./Icon";
 import { useCallback } from "react";
 
-type FontPickerProps = {};
+type FontPickerProps = {
+  value: string;
+  onValueChange?: (value: string) => void;
+};
 
 export interface Font {
   category: string;
@@ -133,6 +136,7 @@ export const FontPicker = (props: FontPickerProps) => {
         const font = fontContent.find((f) => f.name === value);
         if (font) {
           autoLoadFont(font);
+          props.onValueChange?.(value);
         }
       }}
     >

@@ -21,6 +21,7 @@ import { FontSizePicker } from "./FontSizePicker";
 
 type TextPropertiesProps = {
   properties: {
+    fontFamily: ValueType[];
     fontSize: ValueType[];
     textAlign: ValueType[];
   };
@@ -58,7 +59,16 @@ export const TextProperties = (props: TextPropertiesProps) => {
     <PanelGroup title="Text">
       <Flex direction="column" gap="1">
         <div>
-          <FontPicker />
+          <FontPicker
+            onValueChange={(value) => {
+              props.properties.fontFamily.forEach((property) => {
+                updateElement({
+                  id: property.nodeId,
+                  [property.propertyName]: value,
+                });
+              });
+            }}
+          />
         </div>
         <div>
           <FontSizePicker

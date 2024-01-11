@@ -90,6 +90,7 @@ export default function Index() {
       content: selectedTool === "text" ? "" : undefined,
       color: selectedTool === "text" ? "#000000" : undefined,
       fontSize: selectedTool === "text" ? 18 : undefined,
+      fontFamily: selectedTool === "text" ? "Inter" : undefined,
       textAlign: selectedTool === "text" ? "left" : undefined,
       borderTopLeftRadius: selectedTool === "rect" ? 0 : undefined,
       borderTopRightRadius: selectedTool === "rect" ? 0 : undefined,
