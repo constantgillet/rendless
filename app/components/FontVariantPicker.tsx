@@ -8,10 +8,14 @@ type FontWeightPickerProps = {
   fontFamily: string;
   fontWeightValue: number;
   fontStyleValue: "normal" | "italic";
-  onValueChange?: (value: number) => void;
+  onValuesChange?: ({
+    fontWeightValue,
+    fontStyleValue,
+  }: {
+    fontWeightValue: number;
+    fontStyleValue: "normal" | "italic";
+  }) => void;
 };
-
-const fontSizeList = Array.from(Array(125), (_, i) => i + 4);
 
 const variantsValueMap = {
   "0,100": {
@@ -105,13 +109,30 @@ export const FontVariantPicker = (props: FontWeightPickerProps) => {
     return [];
   }, [props.fontFamily]);
 
+  const variantName = useMemo(() => {
+    const variantValue =
+      variantsValueMap[
+        props.fontStyleValue === "italic"
+          ? `1,${props.fontWeightValue}`
+          : `0,${props.fontWeightValue}`
+      ];
+    return variantValue?.name || "";
+  }, [props.fontStyleValue, props.fontWeightValue]);
+
   const disabled = props.fontFamily === "Mixed";
 
   return (
-    <Select.Root onValueChange={() => {}}>
+    <Select.Root
+      onValueChange={(val) => {
+        props.onValuesChange?.({
+          fontWeightValue: variantsValueMap[val].value,
+          fontStyleValue: variantsValueMap[val].style,
+        });
+      }}
+    >
       <SelectPrimitive.Trigger disabled={disabled}>
         <Button variant="surface" size={"2"} color="gray" disabled={disabled}>
-          {disabled ? "Mixed" : "Regular"}
+          {disabled ? "Mixed" : variantName}
           <Icon name="chevron-down" />
         </Button>
       </SelectPrimitive.Trigger>
@@ -119,7 +140,7 @@ export const FontVariantPicker = (props: FontWeightPickerProps) => {
         {fontVariants.map((variant) => {
           const variantValue = variantsValueMap[variant];
           return (
-            <Select.Item key={variant} value={variantValue.value.toString()}>
+            <Select.Item key={variant} value={variant}>
               {variantValue.name}
             </Select.Item>
           );

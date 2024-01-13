@@ -111,6 +111,8 @@ export const TextElement = (props: TextElementProps) => {
         style={{
           fontFamily: props.fontFamily,
           fontSize: props.fontSize * scale,
+          fontWeight: props.fontWeight,
+          fontStyle: props.fontStyle,
           background: "transparent",
           color: props.color,
           cursor: isEditingContent ? "text" : "default",

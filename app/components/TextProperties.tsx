@@ -93,6 +93,7 @@ export const TextProperties = (props: TextPropertiesProps) => {
                 updateElement({
                   id: property.nodeId,
                   [property.propertyName]: value,
+                  fontWeight: 400,
                 });
               });
             }}
@@ -103,6 +104,15 @@ export const TextProperties = (props: TextPropertiesProps) => {
             fontFamily={fontFamilyProperty}
             fontWeightValue={fontWeightProperty}
             fontStyleValue={fontStyleProperty}
+            onValuesChange={({ fontStyleValue, fontWeightValue }) => {
+              props.properties.fontWeight.forEach((property) => {
+                updateElement({
+                  id: property.nodeId,
+                  fontWeight: fontWeightValue,
+                  fontStyle: fontStyleValue,
+                });
+              });
+            }}
           />
         </div>
         <div>
