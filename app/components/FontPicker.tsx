@@ -19,7 +19,7 @@ export const FontPicker = (props: FontPickerProps) => {
     >
       <SelectPrimitive.Trigger>
         <Button variant="surface" size={"2"} color="gray">
-          Font <Icon name="chevron-down" />
+          {props.value} <Icon name="chevron-down" />
         </Button>
       </SelectPrimitive.Trigger>
       <Select.Content position="popper" align="end">

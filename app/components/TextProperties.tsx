@@ -38,6 +38,14 @@ export const TextProperties = (props: TextPropertiesProps) => {
     [props.properties.fontSize]
   );
 
+  const fontFamilyProperty = useMemo(
+    () =>
+      arePropertiesTheSame(props.properties.fontFamily)
+        ? props.properties.fontFamily[0].value.toString()
+        : "Mixed",
+    [props.properties.fontFamily]
+  );
+
   const textAlignProperty = useMemo(
     () =>
       arePropertiesTheSame(props.properties.textAlign)
@@ -60,6 +68,7 @@ export const TextProperties = (props: TextPropertiesProps) => {
       <Flex direction="column" gap="1">
         <div>
           <FontPicker
+            value={fontFamilyProperty}
             onValueChange={(value) => {
               props.properties.fontFamily.forEach((property) => {
                 updateElement({
