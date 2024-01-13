@@ -252,7 +252,7 @@ export const PropertiesPanel = () => {
   const selected = useEditorStore((state) => state.selected);
   const tree = useEditorStore((state) => state.tree);
 
-  const selectedNodes = tree.chilren.filter((node) =>
+  const selectedNodes = tree.children.filter((node) =>
     selected.includes(node.id)
   );
 

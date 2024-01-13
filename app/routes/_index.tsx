@@ -24,6 +24,7 @@ import { FramePage } from "~/components/FramePage";
 import { EditorHotKeys } from "~/components/EditorHotKeys";
 import { useScaleStore } from "~/components/ScaleStore";
 import "../contents/fontInfo.json";
+import { FontLoader } from "~/components/FontLoader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -48,7 +49,7 @@ export default function Index() {
 
   useEffect(() => {
     moveableManager.current!.updateRect();
-  }, [tree.chilren]);
+  }, [tree.children]);
 
   const checkBlur = () => {
     const activeElement = document.activeElement;
@@ -364,6 +365,7 @@ export default function Index() {
         }}
       />
       <EditorHotKeys />
+      <FontLoader />
     </>
   );
 }

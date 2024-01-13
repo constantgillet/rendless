@@ -28,7 +28,7 @@ export const LayersPanel = () => {
           paddingX: "var(--space-2)",
         })}
       >
-        {tree?.chilren?.map((child) => {
+        {tree?.children?.map((child) => {
           const id = child.id;
           const isSelected = selectedItems.includes(id);
 

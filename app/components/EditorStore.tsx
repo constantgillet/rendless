@@ -9,7 +9,7 @@ export type ObjectType = "page" | "rect" | "text";
 export type Tree = {
   id: string;
   type: ObjectType;
-  chilren: ElementType[];
+  children: ElementType[];
   x: number;
   y: number;
   width: number;
@@ -83,7 +83,7 @@ export const useEditorStore = create<EditorState>()(
       backgroundColor: "#d1d5db",
       x: 0,
       y: 0,
-      chilren: [
+      children: [
         {
           id: "qzdqzdqzd",
           type: "rect",
@@ -124,13 +124,13 @@ export const useEditorStore = create<EditorState>()(
     setSelected: (selected) => set({ selected }),
     addElement: (element: ElementType) =>
       set((state) => ({
-        tree: { ...state.tree, chilren: [...state.tree.chilren, element] },
+        tree: { ...state.tree, children: [...state.tree.children, element] },
       })),
     deleteElements: (elementIds) => {
       set((state) => ({
         tree: {
           ...state.tree,
-          chilren: state.tree.chilren?.filter(
+          children: state.tree.children?.filter(
             (child) => !elementIds.includes(child.id)
           ),
         },
@@ -152,7 +152,7 @@ export const useEditorStore = create<EditorState>()(
         return {
           tree: {
             ...state.tree,
-            chilren: state.tree.chilren?.map((child) =>
+            children: state.tree.children?.map((child) =>
               child.id === element.id ? { ...child, ...element } : child
             ),
           },
@@ -163,7 +163,7 @@ export const useEditorStore = create<EditorState>()(
     //   set((state) => ({
     //     tree: {
     //       ...state.tree,
-    //       chilren: state.tree.chilren?.map((child) =>
+    //       children: state.tree.children?.map((child) =>
     //         child.id === element.id ? { ...child, ...element } : child
     //       ),
     //     },
@@ -174,7 +174,7 @@ export const useEditorStore = create<EditorState>()(
       set((state) => ({
         tree: {
           ...state.tree,
-          chilren: state.tree.chilren?.map((child) =>
+          children: state.tree.children?.map((child) =>
             elementIds.includes(child.id)
               ? { ...child, x: child.x + by }
               : child
@@ -186,7 +186,7 @@ export const useEditorStore = create<EditorState>()(
       set((state) => ({
         tree: {
           ...state.tree,
-          chilren: state.tree.chilren?.map((child) =>
+          children: state.tree.children?.map((child) =>
             elementIds.includes(child.id)
               ? { ...child, x: child.x - by }
               : child
@@ -198,7 +198,7 @@ export const useEditorStore = create<EditorState>()(
       set((state) => ({
         tree: {
           ...state.tree,
-          chilren: state.tree.chilren?.map((child) =>
+          children: state.tree.children?.map((child) =>
             elementIds.includes(child.id)
               ? { ...child, y: child.y + by }
               : child
@@ -210,7 +210,7 @@ export const useEditorStore = create<EditorState>()(
       set((state) => ({
         tree: {
           ...state.tree,
-          chilren: state.tree.chilren?.map((child) =>
+          children: state.tree.children?.map((child) =>
             elementIds.includes(child.id)
               ? { ...child, y: child.y - by }
               : child

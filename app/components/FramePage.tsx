@@ -76,7 +76,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
             }}
             ref={ref}
           >
-            {tree?.chilren?.map((child) => {
+            {tree?.children?.map((child) => {
               const id = child.id;
 
               return child.type === "text" ? (
