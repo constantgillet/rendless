@@ -19,10 +19,6 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
     const decreaseScale = useScaleStore((state) => state.decrease);
 
     const onWheel = (e: WheelEvent) => {
-      if (e.ctrlKey) {
-        e.preventDefault();
-      }
-
       //Zoom in
       if (e.ctrlKey && e.deltaY < 0) {
         increaseScale(0.02);
