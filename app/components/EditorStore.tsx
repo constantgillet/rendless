@@ -41,7 +41,8 @@ export type ElementText = Element<"text"> & {
   fontSize: number;
   color: string;
   fontFamily: string;
-  fontWeight: string;
+  fontWeight: number;
+  fontStyle: "normal" | "italic";
   textAlign: "left" | "center" | "right";
   lineHeight: number;
 };

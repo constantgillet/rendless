@@ -305,18 +305,23 @@ export const PropertiesPanel = () => {
           <Separator />
         </>
       )}
-      {properties["fontSize"] && properties["textAlign"] && (
-        <>
-          <TextProperties
-            properties={{
-              fontFamily: properties["fontFamily"],
-              fontSize: properties["fontSize"],
-              textAlign: properties["textAlign"],
-            }}
-          />
-          <Separator />
-        </>
-      )}
+      {properties["fontSize"] &&
+        properties["textAlign"] &&
+        properties["fontWeight"] &&
+        properties["fontStyle"] && (
+          <>
+            <TextProperties
+              properties={{
+                fontFamily: properties["fontFamily"],
+                fontSize: properties["fontSize"],
+                textAlign: properties["textAlign"],
+                fontWeight: properties["fontWeight"],
+                fontStyle: properties["fontStyle"],
+              }}
+            />
+            <Separator />
+          </>
+        )}
       {properties["borderTopLeftRadius"] &&
         properties["borderTopRightRadius"] &&
         properties["borderBottomLeftRadius"] &&

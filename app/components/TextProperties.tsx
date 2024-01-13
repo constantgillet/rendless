@@ -18,12 +18,15 @@ import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { Icon } from "./Icon";
 import { FontPicker } from "./FontPicker";
 import { FontSizePicker } from "./FontSizePicker";
+import { FontVariantPicker } from "./FontVariantPicker";
 
 type TextPropertiesProps = {
   properties: {
     fontFamily: ValueType[];
     fontSize: ValueType[];
     textAlign: ValueType[];
+    fontWeight: ValueType[];
+    fontStyle: ValueType[];
   };
 };
 
@@ -36,6 +39,22 @@ export const TextProperties = (props: TextPropertiesProps) => {
         ? props.properties.fontSize[0].value.toString()
         : "Mixed",
     [props.properties.fontSize]
+  );
+
+  const fontWeightProperty = useMemo(
+    () =>
+      arePropertiesTheSame(props.properties.fontWeight)
+        ? props.properties.fontWeight[0].value.toString()
+        : "Mixed",
+    [props.properties.fontWeight]
+  );
+
+  const fontStyleProperty = useMemo(
+    () =>
+      arePropertiesTheSame(props.properties.fontStyle)
+        ? props.properties.fontStyle[0].value.toString()
+        : "Mixed",
+    [props.properties.fontStyle]
   );
 
   const fontFamilyProperty = useMemo(
@@ -77,6 +96,13 @@ export const TextProperties = (props: TextPropertiesProps) => {
                 });
               });
             }}
+          />
+        </div>
+        <div>
+          <FontVariantPicker
+            fontFamily={fontFamilyProperty}
+            fontWeightValue={fontWeightProperty}
+            fontStyleValue={fontStyleProperty}
           />
         </div>
         <div>
