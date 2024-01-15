@@ -49,7 +49,7 @@ export default function Index() {
 
   useEffect(() => {
     moveableManager.current!.updateRect();
-  }, [tree.children]);
+  }, [tree.children, scale]);
 
   const checkBlur = () => {
     const activeElement = document.activeElement;

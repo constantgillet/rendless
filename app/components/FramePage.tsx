@@ -13,8 +13,6 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
     const scale = useScaleStore((state) => state.scale);
     const selectedTool = useEditorStore((state) => state.selectedTool);
 
-    const setSelectedTarget = useEditorStore((state) => state.setSelected);
-
     const increaseScale = useScaleStore((state) => state.increase);
     const decreaseScale = useScaleStore((state) => state.decrease);
 
@@ -28,8 +26,6 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
       if (e.ctrlKey && e.deltaY > 0) {
         decreaseScale(0.02);
       }
-
-      setSelectedTarget([]);
     };
 
     return (

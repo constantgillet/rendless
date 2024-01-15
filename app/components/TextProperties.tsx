@@ -19,6 +19,7 @@ import { Icon } from "./Icon";
 import { FontPicker } from "./FontPicker";
 import { FontSizePicker } from "./FontSizePicker";
 import { FontVariantPicker } from "./FontVariantPicker";
+import fontsContent from "../contents/fontInfo.json";
 
 type TextPropertiesProps = {
   properties: {
@@ -89,11 +90,23 @@ export const TextProperties = (props: TextPropertiesProps) => {
           <FontPicker
             value={fontFamilyProperty}
             onValueChange={(value) => {
+              //Check if the font has the variant we want
+              const fontFound = fontsContent.find(
+                (font) =>
+                  font.name === value &&
+                  font.variants.includes(
+                    `${
+                      fontStyleProperty === "normal" ? 0 : 1
+                    },${fontWeightProperty}`
+                  )
+              );
+
               props.properties.fontFamily.forEach((property) => {
                 updateElement({
                   id: property.nodeId,
                   [property.propertyName]: value,
-                  fontWeight: 400,
+                  fontWeight: fontFound ? fontWeightProperty : 400,
+                  fontStyle: fontFound ? fontStyleProperty : "normal",
                 });
               });
             }}
