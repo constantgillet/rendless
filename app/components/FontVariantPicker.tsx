@@ -98,11 +98,21 @@ const variantsValueMap = {
     value: 700,
     style: "italic",
   },
+  "1,800": {
+    name: "extra-bold italic",
+    value: 800,
+    style: "italic",
+  },
+  "1,900": {
+    name: "black italic",
+    value: 900,
+    style: "italic",
+  },
 };
 
 export const FontVariantPicker = (props: FontWeightPickerProps) => {
   const fontVariants = useMemo(() => {
-    const font = fontContent.find((font) => font.name === props.fontFamily);
+    const font = fontContent.find((font) => font?.name === props.fontFamily);
     if (font) {
       return font.variants;
     }
@@ -141,7 +151,7 @@ export const FontVariantPicker = (props: FontWeightPickerProps) => {
           const variantValue = variantsValueMap[variant];
           return (
             <Select.Item key={variant} value={variant}>
-              {variantValue.name}
+              {variantValue?.name}
             </Select.Item>
           );
         })}
