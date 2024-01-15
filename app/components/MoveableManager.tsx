@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { ElementType, useEditorStore } from "./EditorStore";
 import { useScaleStore } from "./ScaleStore";
-import Moveable from "react-moveable";
+import Moveable, { OnDrag, OnResize, OnScale } from "react-moveable";
 import Selecto from "react-selecto";
 import { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
@@ -92,12 +92,15 @@ export const MoveableManager = (props: MoveableManagerProps) => {
     )
   );
 
+  const moveableContainer = useRef<HTMLDivElement>(null);
+
   return (
     <>
+      <div ref={moveableContainer}></div>
       <Moveable
         ref={moveableManager}
         targets={selectedTargetsElements}
-        container={null}
+        container={moveableContainer.current}
         origin={true}
         /* Resize event edges */
         edge={false}
