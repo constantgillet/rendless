@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import type {} from "@redux-devtools/extension"; // required for devtools typing
+import { v4 as uuidv4 } from "uuid";
 
 export type Tool = "select" | "text" | "rect";
 
@@ -56,12 +57,16 @@ export type ElementType = ElementText | ElementRect;
 //Update element param is the same as the element type but with optional properties, only the id is required
 export type UpdateElementParam = Partial<ElementType> & { id: string };
 
+type HistoryState = {
+  id: string;
+  value: Tree;
+  createdAt: string;
+};
+
 interface EditorState {
-  bears: number;
   selected: string[];
   tree: Tree;
   selectedTool: Tool;
-  increase: (by: number) => void;
   setSelected: (selected: string[]) => void;
   addElement: (element: ElementType) => void;
   deleteElements: (elemenentIds: string[]) => void;
@@ -71,11 +76,14 @@ interface EditorState {
   increateY: (elementIds: string[], by: number) => void;
   decreaseY: (elementIds: string[], by: number) => void;
   updateElement: (element: UpdateElementParam) => void;
+  history: HistoryState[];
+  currentHistoryId: string | null;
+  undo: () => void;
+  redo: () => void;
 }
 
 export const useEditorStore = create<EditorState>()(
   devtools((set) => ({
-    bears: 0,
     tree: {
       id: "1",
       type: "page",
@@ -121,12 +129,23 @@ export const useEditorStore = create<EditorState>()(
     },
     selected: [],
     selectedTool: "select",
-    increase: (by) => set((state) => ({ bears: state.bears + by })),
     setSelected: (selected) => set({ selected }),
     addElement: (element: ElementType) =>
-      set((state) => ({
-        tree: { ...state.tree, children: [...state.tree.children, element] },
-      })),
+      set((state) => {
+        return {
+          tree: { ...state.tree, children: [...state.tree.children, element] },
+          history: [
+            ...state.history,
+            {
+              id: uuidv4(),
+              value: {
+                ...state.tree,
+              },
+              createdAt: new Date().toISOString(),
+            },
+          ],
+        };
+      }),
     deleteElements: (elementIds) => {
       set((state) => ({
         tree: {
@@ -218,6 +237,52 @@ export const useEditorStore = create<EditorState>()(
           ),
         },
       }));
+    },
+    history: [],
+    currentHistoryId: null,
+    undo: () => {
+      set((state) => {
+        const history = [...state.history];
+
+        const currentHistoryIndex = history.findIndex(
+          (history) => history.id === state.currentHistoryId
+        );
+
+        //If we are at the last history, we undo to the last one
+        if (currentHistoryIndex === -1) {
+          return {
+            currentHistoryId: history[history.length - 1].id,
+            tree: history[history.length - 1].value,
+          };
+        }
+
+        return {
+          currentHistoryId: history[currentHistoryIndex - 1].id,
+          tree: history[currentHistoryIndex - 1].value,
+        };
+      });
+    },
+    redo: () => {
+      set((state) => {
+        const history = [...state.history];
+
+        //If we are at the last history
+        if (
+          state.currentHistoryId === history[history.length - 1].id ||
+          state.currentHistoryId === null
+        ) {
+          return {};
+        }
+
+        const currentHistoryIndex = history.findIndex(
+          (history) => history.id === state.currentHistoryId
+        );
+
+        return {
+          currentHistoryId: history[currentHistoryIndex + 1].id,
+          tree: history[currentHistoryIndex + 1].value,
+        };
+      });
     },
   }))
 );

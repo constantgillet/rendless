@@ -11,6 +11,8 @@ export const EditorHotKeys = () => {
   const decreaseX = useEditorStore((state) => state.decreaseX);
   const increaseY = useEditorStore((state) => state.increateY);
   const decreaseY = useEditorStore((state) => state.decreaseY);
+  const undo = useEditorStore((state) => state.undo);
+  const redo = useEditorStore((state) => state.redo);
 
   //Delete
   useHotkeys(
@@ -123,6 +125,20 @@ export const EditorHotKeys = () => {
       enabled: selectedTargets.length > 0,
     }
   );
+
+  //Undo
+  useHotkeys("mod+z", (e) => {
+    e.preventDefault();
+
+    undo();
+  });
+
+  //Redo
+  useHotkeys("mod+shift+z", (e) => {
+    e.preventDefault();
+
+    redo();
+  });
 
   return <></>;
 };
