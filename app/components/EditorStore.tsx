@@ -140,14 +140,7 @@ export const useEditorStore = create<EditorState>()(
           children: [...state.tree.children, element],
         };
 
-        const history = [
-          ...state.history,
-          {
-            id: uuidv4(),
-            value: newTree,
-            createdAt: new Date().toISOString(),
-          },
-        ];
+        const history = [...state.history];
 
         //If we are not at the last history, we remove all the history after the current one
         if (state.currentHistoryId !== null) {
@@ -158,7 +151,15 @@ export const useEditorStore = create<EditorState>()(
           history.splice(currentHistoryIndex + 1);
         }
 
+        //We add the new history item
+        history.push({
+          id: uuidv4(),
+          value: newTree,
+          createdAt: new Date().toISOString(),
+        });
+
         return {
+          currentHistoryId: null,
           tree: newTree,
           history: history,
         };
