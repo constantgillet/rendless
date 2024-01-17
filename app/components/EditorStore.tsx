@@ -165,14 +165,38 @@ export const useEditorStore = create<EditorState>()(
         };
       }),
     deleteElements: (elementIds) => {
-      set((state) => ({
-        tree: {
+      set((state) => {
+        const history = [...state.history];
+
+        //If we are not at the last history, we remove all the history after the current one
+        if (state.currentHistoryId !== null) {
+          const currentHistoryIndex = history.findIndex(
+            (history) => history.id === state.currentHistoryId
+          );
+
+          history.splice(currentHistoryIndex + 1);
+        }
+
+        const newTree = {
           ...state.tree,
           children: state.tree.children?.filter(
             (child) => !elementIds.includes(child.id)
           ),
-        },
-      }));
+        };
+
+        //We add the new history item
+        history.push({
+          id: uuidv4(),
+          value: newTree,
+          createdAt: new Date().toISOString(),
+        });
+
+        return {
+          tree: newTree,
+          history: history,
+          currentHistoryId: null,
+        };
+      });
     },
     updateElement: (element) => {
       //Todo in the future make a recursive function to update the element and its children
