@@ -82,68 +82,85 @@ interface EditorState {
   redo: () => void;
 }
 
-export const useEditorStore = create<EditorState>()(
-  devtools((set) => ({
-    tree: {
-      id: "1",
-      type: "page",
-      width: 1200,
-      height: 630,
-      backgroundColor: "#d1d5db",
-      x: 0,
-      y: 0,
-      children: [
-        {
-          id: "qzdqzdqzd",
-          type: "rect",
-          x: 100,
-          y: 100,
-          width: 74,
-          height: 74,
-          backgroundColor: "#1bc529",
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
-          borderWidth: 0,
-          borderColor: "red",
-          borderStyle: "solid",
-        },
-        {
-          id: "2vvvvv",
-          type: "rect",
-          x: 300,
-          y: 100,
-          width: 120,
-          height: 60,
-          backgroundColor: "#d42f2f",
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
-          borderWidth: 0,
-          borderColor: "red",
-          borderStyle: "solid",
-        },
-      ],
+const defaultTree: Tree = {
+  id: "1",
+  type: "page",
+  width: 1200,
+  height: 630,
+  backgroundColor: "#d1d5db",
+  x: 0,
+  y: 0,
+  children: [
+    {
+      id: "qzdqzdqzd",
+      type: "rect",
+      x: 100,
+      y: 100,
+      width: 74,
+      height: 74,
+      backgroundColor: "#1bc529",
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+      borderWidth: 0,
+      borderColor: "red",
+      borderStyle: "solid",
     },
+    {
+      id: "2vvvvv",
+      type: "rect",
+      x: 300,
+      y: 100,
+      width: 120,
+      height: 60,
+      backgroundColor: "#d42f2f",
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+      borderWidth: 0,
+      borderColor: "red",
+      borderStyle: "solid",
+    },
+  ],
+};
+
+export const useEditorStore = create<EditorState>()(
+  // @ts-ignore
+  devtools((set) => ({
+    tree: defaultTree,
     selected: [],
     selectedTool: "select",
     setSelected: (selected) => set({ selected }),
     addElement: (element: ElementType) =>
       set((state) => {
+        const newTree = {
+          ...state.tree,
+          children: [...state.tree.children, element],
+        };
+
+        const history = [
+          ...state.history,
+          {
+            id: uuidv4(),
+            value: newTree,
+            createdAt: new Date().toISOString(),
+          },
+        ];
+
+        //If we are not at the last history, we remove all the history after the current one
+        if (state.currentHistoryId !== null) {
+          const currentHistoryIndex = history.findIndex(
+            (history) => history.id === state.currentHistoryId
+          );
+
+          history.splice(currentHistoryIndex + 1);
+        }
+
         return {
-          tree: { ...state.tree, children: [...state.tree.children, element] },
-          history: [
-            ...state.history,
-            {
-              id: uuidv4(),
-              value: {
-                ...state.tree,
-              },
-              createdAt: new Date().toISOString(),
-            },
-          ],
+          tree: newTree,
+          history: history,
         };
       }),
     deleteElements: (elementIds) => {
@@ -238,7 +255,13 @@ export const useEditorStore = create<EditorState>()(
         },
       }));
     },
-    history: [],
+    history: [
+      {
+        id: uuidv4(),
+        value: defaultTree,
+        createdAt: new Date().toISOString(),
+      },
+    ],
     currentHistoryId: null,
     undo: () => {
       set((state) => {
@@ -248,11 +271,11 @@ export const useEditorStore = create<EditorState>()(
           (history) => history.id === state.currentHistoryId
         );
 
-        //If we are at the last history, we undo to the last one
+        //If we are at the last history, we undo to the last one (the one before the last one)
         if (currentHistoryIndex === -1) {
           return {
-            currentHistoryId: history[history.length - 1].id,
-            tree: history[history.length - 1].value,
+            currentHistoryId: history[history.length - 2].id,
+            tree: history[history.length - 2].value,
           };
         }
 
