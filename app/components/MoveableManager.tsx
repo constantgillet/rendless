@@ -24,6 +24,7 @@ export const MoveableManager = (props: MoveableManagerProps) => {
   const addElement = useEditorStore((state) => state.addElement);
   const updateElement = useEditorStore((state) => state.updateElement);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
+  const updateElements = useEditorStore((state) => state.updateElements);
   const tree = useEditorStore((state) => state.tree);
 
   useEffect(() => {
@@ -147,24 +148,22 @@ export const MoveableManager = (props: MoveableManagerProps) => {
 
           updateElement(element);
         }}
-        // onDragEnd={({ target }) => {
-        //   const containerRect = container.current!.getBoundingClientRect();
-        //   const targetRect = target!.getBoundingClientRect();
+        onDragEnd={({ target }) => {
+          const containerRect = container.current!.getBoundingClientRect();
+          const targetRect = target!.getBoundingClientRect();
 
-        //   //Set x and y with scale factor
-        //   const x = (targetRect.x - containerRect.x) / scale;
-        //   const y = (targetRect.y - containerRect.y) / scale;
+          //Set x and y with scale factor
+          const x = Math.round((targetRect.x - containerRect.x) / scale);
+          const y = Math.round((targetRect.y - containerRect.y) / scale);
 
-        //   console.log({ x, y });
+          const element = {
+            id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+            x: x,
+            y: y,
+          };
 
-        //   const element = {
-        //     id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-        //     x: x,
-        //     y: y,
-        //   };
-
-        //   updateElement(element);
-        // }}
+          updateElements([element], true);
+        }}
         onDragGroup={({ targets, events }) => {
           for (let i = 0; i < targets.length; ++i) {
             const target = targets[i];
@@ -203,6 +202,17 @@ export const MoveableManager = (props: MoveableManagerProps) => {
           };
 
           updateElement(element);
+        }}
+        onResizeEnd={({ target, isDrag, clientX, clientY }) => {
+          const targetRect = target!.getBoundingClientRect();
+
+          const element = {
+            id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+            width: Math.round(targetRect.width / scale),
+            height: Math.round(targetRect.height / scale),
+          };
+
+          updateElements([element], true);
         }}
         // onResizeEnd={({ target, isDrag, clientX, clientY }) => {
         //   console.log("onResizeEnd", target, isDrag);

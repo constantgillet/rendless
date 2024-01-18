@@ -76,6 +76,10 @@ interface EditorState {
   increateY: (elementIds: string[], by: number) => void;
   decreaseY: (elementIds: string[], by: number) => void;
   updateElement: (element: UpdateElementParam) => void;
+  updateElements: (
+    elements: UpdateElementParam[],
+    saveToHistory?: boolean
+  ) => void;
   history: HistoryState[];
   currentHistoryId: string | null;
   undo: () => void;
@@ -218,6 +222,55 @@ export const useEditorStore = create<EditorState>()(
               child.id === element.id ? { ...child, ...element } : child
             ),
           },
+        };
+      });
+    },
+    updateElements: (elements, saveToHistory = false) => {
+      set((state) => {
+        const newTree: Tree = {
+          ...state.tree,
+          children: state.tree.children?.map((child) => {
+            const element = elements.find((element) => element.id === child.id);
+
+            if (element) {
+              return {
+                ...child,
+                ...element,
+              };
+            }
+
+            return child;
+          }),
+        };
+
+        if (!saveToHistory) {
+          return {
+            tree: newTree,
+          };
+        }
+
+        const history = [...state.history];
+
+        //If we are not at the last history, we remove all the history after the current one
+        if (state.currentHistoryId !== null) {
+          const currentHistoryIndex = history.findIndex(
+            (history) => history.id === state.currentHistoryId
+          );
+
+          history.splice(currentHistoryIndex + 1);
+        }
+
+        //We add the new history item
+        history.push({
+          id: uuidv4(),
+          value: newTree,
+          createdAt: new Date().toISOString(),
+        });
+
+        return {
+          tree: newTree,
+          history: history,
+          currentHistoryId: null,
         };
       });
     },
