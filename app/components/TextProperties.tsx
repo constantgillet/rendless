@@ -32,7 +32,7 @@ type TextPropertiesProps = {
 };
 
 export const TextProperties = (props: TextPropertiesProps) => {
-  const updateElement = useEditorStore((state) => state.updateElement);
+  const updateElements = useEditorStore((state) => state.updateElements);
 
   const fontSizePropety = useMemo(
     () =>
@@ -75,12 +75,13 @@ export const TextProperties = (props: TextPropertiesProps) => {
   );
 
   const onClickTextAlign = (textAlign: "left" | "center" | "right") => {
-    props.properties.textAlign.forEach((element) => {
-      updateElement({
-        id: element.nodeId,
+    updateElements(
+      props.properties.textAlign.map((property) => ({
+        id: property.nodeId,
         textAlign: textAlign,
-      });
-    });
+      })),
+      true
+    );
   };
 
   return (
@@ -101,14 +102,15 @@ export const TextProperties = (props: TextPropertiesProps) => {
                   )
               );
 
-              props.properties.fontFamily.forEach((property) => {
-                updateElement({
+              updateElements(
+                props.properties.fontFamily.map((property) => ({
                   id: property.nodeId,
-                  [property.propertyName]: value,
+                  fontFamily: value,
                   fontWeight: fontFound ? fontWeightProperty : 400,
                   fontStyle: fontFound ? fontStyleProperty : "normal",
-                });
-              });
+                })),
+                true
+              );
             }}
           />
         </div>
@@ -118,13 +120,14 @@ export const TextProperties = (props: TextPropertiesProps) => {
             fontWeightValue={fontWeightProperty}
             fontStyleValue={fontStyleProperty}
             onValuesChange={({ fontStyleValue, fontWeightValue }) => {
-              props.properties.fontWeight.forEach((property) => {
-                updateElement({
+              updateElements(
+                props.properties.fontStyle.map((property) => ({
                   id: property.nodeId,
                   fontWeight: fontWeightValue,
                   fontStyle: fontStyleValue,
-                });
-              });
+                })),
+                true
+              );
             }}
           />
         </div>
@@ -132,12 +135,13 @@ export const TextProperties = (props: TextPropertiesProps) => {
           <FontSizePicker
             value={fontSizePropety}
             onValueChange={(newVal) => {
-              props.properties.fontSize.forEach((property) => {
-                updateElement({
+              updateElements(
+                props.properties.fontSize.map((property) => ({
                   id: property.nodeId,
                   [property.propertyName]: newVal,
-                });
-              });
+                })),
+                true
+              );
             }}
           />
         </div>
