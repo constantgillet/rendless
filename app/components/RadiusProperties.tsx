@@ -1,7 +1,7 @@
 import { Box, Flex, Grid, TextField } from "@radix-ui/themes";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { Icon } from "./Icon";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { useEditorStore } from "./EditorStore";
 
@@ -15,7 +15,7 @@ type RadiusPropertiesProps = {
 };
 
 export const RadiusProperties = (props: RadiusPropertiesProps) => {
-  const updateElement = useEditorStore((state) => state.updateElement);
+  const updateElements = useEditorStore((state) => state.updateElements);
 
   const [borderTopLeftRadiusValue, setBorderTopLeftRadius] = useState(
     arePropertiesTheSame(props.properties.borderTopLeftRadius)
@@ -85,12 +85,13 @@ export const RadiusProperties = (props: RadiusPropertiesProps) => {
 
     const value = Number(newValue);
 
-    props.properties[property].forEach((property) => {
-      updateElement({
+    updateElements(
+      props.properties[property].map((property) => ({
         id: property.nodeId,
         [property.propertyName]: value,
-      });
-    });
+      })),
+      true
+    );
 
     event.target.blur();
   };

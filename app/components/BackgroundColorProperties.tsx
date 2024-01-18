@@ -24,7 +24,7 @@ type BackgroundColorPropertiesProps = {
 export const BackgroundColorProperties = (
   props: BackgroundColorPropertiesProps
 ) => {
-  const updateElement = useEditorStore((state) => state.updateElement);
+  const updateElements = useEditorStore((state) => state.updateElements);
 
   const [colorValues, setColorValues] = useState(
     groupBySameValue(props.properties.backgroundColor)
@@ -34,13 +34,18 @@ export const BackgroundColorProperties = (
     setColorValues(groupBySameValue(props.properties.backgroundColor));
   }, [props.properties.backgroundColor]);
 
-  const applyColor = (color: string, elementIds: string[]) => {
-    elementIds.forEach((elementId) => {
-      updateElement({
+  const applyColor = (
+    color: string,
+    elementIds: string[],
+    saveToHistory = false
+  ) => {
+    updateElements(
+      elementIds.map((elementId) => ({
         id: elementId,
         backgroundColor: color,
-      });
-    });
+      })),
+      saveToHistory
+    );
   };
 
   return (
@@ -107,6 +112,10 @@ export const BackgroundColorProperties = (
                   onChange={(newColor) =>
                     applyColor(newColor.hex, color.elementIds)
                   }
+                  onChangeComplete={(newColor) => {
+                    console.log("onChangeComplete", newColor);
+                    applyColor(newColor.hex, color.elementIds, true);
+                  }}
                 />
               </Popover.Content>
             </>
