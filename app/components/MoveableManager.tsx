@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { ElementType, useEditorStore } from "../stores/EditorStore";
-import { useScaleStore } from "./ScaleStore";
+import { useScaleStore } from "../stores/ScaleStore";
 import Moveable, {
   OnDrag,
   OnDragEnd,

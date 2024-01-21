@@ -2,7 +2,7 @@ import React, { HTMLProps, forwardRef } from "react";
 import { css, cx } from "styled-system/css";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { useEditorStore } from "../stores/EditorStore";
-import { useScaleStore } from "./ScaleStore";
+import { useScaleStore } from "../stores/ScaleStore";
 import { TextElement } from "./TextElement";
 
 type Props = HTMLProps<HTMLDivElement>;
