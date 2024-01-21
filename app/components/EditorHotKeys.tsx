@@ -1,6 +1,7 @@
 import { useHotkeys } from "react-hotkeys-hook";
 import { useEditorStore } from "../stores/EditorStore";
 import { useEffect, useState } from "react";
+import { useKeepRatioStore } from "~/stores/KeepRatioStore";
 
 export const EditorHotKeys = () => {
   const selectedTargets = useEditorStore((state) => state.selected);
@@ -13,6 +14,7 @@ export const EditorHotKeys = () => {
   const decreaseY = useEditorStore((state) => state.decreaseY);
   const undo = useEditorStore((state) => state.undo);
   const redo = useEditorStore((state) => state.redo);
+  const setKeepRatio = useKeepRatioStore((state) => state.setKeepRatio);
 
   //Delete
   useHotkeys(
@@ -139,6 +141,31 @@ export const EditorHotKeys = () => {
 
     redo();
   });
+
+  //Keep ratio
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      //If pressed shift
+      if (e.shiftKey) {
+        setKeepRatio(true);
+      }
+    };
+
+    const onKeyup = (e: KeyboardEvent) => {
+      //If released shift
+      if (!e.shiftKey) {
+        setKeepRatio(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeydown);
+    window.addEventListener("keyup", onKeyup);
+
+    return () => {
+      window.removeEventListener("keydown", onKeydown);
+      window.removeEventListener("keyup", onKeyup);
+    };
+  }, []);
 
   return <></>;
 };

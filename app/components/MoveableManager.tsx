@@ -13,6 +13,7 @@ import Moveable, {
 import Selecto from "react-selecto";
 import { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
+import { useKeepRatioStore } from "~/stores/KeepRatioStore";
 
 type MoveableManagerProps = {
   container: React.RefObject<HTMLDivElement>;
@@ -33,6 +34,7 @@ export const MoveableManager = (props: MoveableManagerProps) => {
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
   const updateElements = useEditorStore((state) => state.updateElements);
   const tree = useEditorStore((state) => state.tree);
+  const keepRatio = useKeepRatioStore((state) => state.keepRatio);
 
   useEffect(() => {
     moveableManager.current!.updateRect();
@@ -195,7 +197,7 @@ export const MoveableManager = (props: MoveableManagerProps) => {
         onDragGroup={(e) => onDragGroup(e, false)}
         onDragGroupEnd={(e) => onDragGroup(e, true)}
         /* When resize or scale, keeps a ratio of the width, height. */
-        // keepRatio={true}
+        keepRatio={keepRatio}
         /* resizable*/
         /* Only one of resizable, scalable, warpable can be used. */
         resizable={true}
