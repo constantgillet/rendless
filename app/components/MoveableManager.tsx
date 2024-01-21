@@ -2,7 +2,14 @@ import { useEffect, useRef } from "react";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { ElementType, useEditorStore } from "./EditorStore";
 import { useScaleStore } from "./ScaleStore";
-import Moveable, { OnDrag, OnResize, OnScale } from "react-moveable";
+import Moveable, {
+  OnDrag,
+  OnDragEnd,
+  OnDragGroup,
+  OnDragGroupEnd,
+  OnResize,
+  OnScale,
+} from "react-moveable";
 import Selecto from "react-selecto";
 import { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
@@ -95,6 +102,81 @@ export const MoveableManager = (props: MoveableManagerProps) => {
 
   const moveableContainer = useRef<HTMLDivElement>(null);
 
+  const onDragGroup = (
+    dragEvent: OnDragGroup | OnDragGroupEnd,
+    isEnd = false
+  ) => {
+    const { targets, events } = dragEvent;
+
+    const elements = [];
+    const containerRect = container.current!.getBoundingClientRect();
+
+    for (let i = 0; i < targets.length; ++i) {
+      const target = targets[i];
+
+      const targetRect = target!.getBoundingClientRect();
+
+      const event = events[i];
+
+      if (event.transform && typeof event?.transform !== "undefined") {
+        target.style.transform = event.transform;
+      }
+
+      //Set x and y with scale factor
+      const x = Math.round((targetRect.x - containerRect.x) / scale);
+      const y = Math.round((targetRect.y - containerRect.y) / scale);
+
+      const element = {
+        id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+        x: x,
+        y: y,
+      };
+
+      elements.push(element);
+    }
+    updateElements(elements, isEnd ? true : false);
+  };
+
+  const onDrag = (dragEvent: OnDrag | OnDragEnd, isEnd = false) => {
+    const { target } = dragEvent;
+
+    if (dragEvent.transform) {
+      target!.style.transform = dragEvent.transform;
+    }
+
+    const containerRect = container.current!.getBoundingClientRect();
+    const targetRect = target!.getBoundingClientRect();
+
+    //Set x and y with scale factor
+    const x = Math.round((targetRect.x - containerRect.x) / scale);
+    const y = Math.round((targetRect.y - containerRect.y) / scale);
+
+    const element = {
+      id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+      x: x,
+      y: y,
+    };
+
+    updateElements([element], isEnd ? true : false);
+  };
+
+  const onResize = (resizeEvent: OnResize, isEnd = false) => {
+    const { target, width, height, delta } = resizeEvent;
+
+    delta[0] && (target!.style.width = `${Math.round(width)}px`);
+    delta[1] && (target!.style.height = `${Math.round(height)}px`);
+
+    const targetRect = target!.getBoundingClientRect();
+
+    const element = {
+      id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+      width: Math.round(targetRect.width / scale),
+      height: Math.round(targetRect.height / scale),
+    };
+
+    updateElements([element], isEnd ? true : false);
+  };
+
   return (
     <>
       <div ref={moveableContainer}></div>
@@ -108,101 +190,17 @@ export const MoveableManager = (props: MoveableManagerProps) => {
         /* draggable */
         draggable={true}
         throttleDrag={0}
-        // onDragStart={({ target, clientX, clientY }) => {
-        //   console.log("onDragStart", target);
-
-        //   const containerRect = container.current!.getBoundingClientRect();
-
-        //   //Set x and y with scale factor
-        //   const x = (clientX - containerRect.left) / scale;
-        //   const y = (clientY - containerRect.top) / scale;
-        // }}
-        // dragContainer={container.current}
-        onDrag={({
-          target,
-          beforeDelta,
-          beforeDist,
-          left,
-          top,
-          right,
-          bottom,
-          delta,
-          dist,
-          transform,
-          clientX,
-          clientY,
-        }: OnDrag) => {
-          target!.style.transform = transform;
-          const containerRect = container.current!.getBoundingClientRect();
-          const targetRect = target!.getBoundingClientRect();
-
-          //Set x and y with scale factor
-          const x = Math.round((targetRect.x - containerRect.x) / scale);
-          const y = Math.round((targetRect.y - containerRect.y) / scale);
-
-          const element = {
-            id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-            x: x,
-            y: y,
-          };
-
-          updateElement(element);
-        }}
-        onDragEnd={({ target }) => {
-          const containerRect = container.current!.getBoundingClientRect();
-          const targetRect = target!.getBoundingClientRect();
-
-          //Set x and y with scale factor
-          const x = Math.round((targetRect.x - containerRect.x) / scale);
-          const y = Math.round((targetRect.y - containerRect.y) / scale);
-
-          const element = {
-            id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-            x: x,
-            y: y,
-          };
-
-          updateElements([element], true);
-        }}
-        onDragGroup={({ targets, events }) => {
-          for (let i = 0; i < targets.length; ++i) {
-            const target = targets[i];
-            const event = events[i];
-            target.style.transform = event.transform;
-          }
-        }}
+        onDrag={(e) => onDrag(e, false)}
+        onDragEnd={(e) => onDrag(e, true)}
+        onDragGroup={(e) => onDragGroup(e, false)}
+        onDragGroupEnd={(e) => onDragGroup(e, true)}
         /* When resize or scale, keeps a ratio of the width, height. */
         // keepRatio={true}
         /* resizable*/
         /* Only one of resizable, scalable, warpable can be used. */
         resizable={true}
         throttleResize={0}
-        // onResizeStart={({ target, clientX, clientY }) => {
-        //   console.log("onResizeStart", target);
-        // }}
-        onResize={({
-          target,
-          width,
-          height,
-          dist,
-          delta,
-          direction,
-          clientX,
-          clientY,
-        }: OnResize) => {
-          delta[0] && (target!.style.width = `${Math.round(width)}px`);
-          delta[1] && (target!.style.height = `${Math.round(height)}px`);
-
-          const targetRect = target!.getBoundingClientRect();
-
-          const element = {
-            id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-            width: Math.round(targetRect.width / scale),
-            height: Math.round(targetRect.height / scale),
-          };
-
-          updateElement(element);
-        }}
+        onResize={(e) => onResize(e, false)}
         onResizeEnd={({ target, isDrag, clientX, clientY }) => {
           const targetRect = target!.getBoundingClientRect();
 
@@ -248,26 +246,6 @@ export const MoveableManager = (props: MoveableManagerProps) => {
         }}
         onScaleEnd={({ target, isDrag, clientX, clientY }) => {
           console.log("onScaleEnd", target, isDrag);
-        }}
-        /* rotatable */
-        throttleRotate={0}
-        onRotateStart={({ target, clientX, clientY }) => {
-          console.log("onRotateStart", target);
-        }}
-        // Enabling pinchable lets you use events that
-        // can be used in draggable, resizable, scalable, and rotateable.
-        pinchable={true}
-        onPinchStart={({ target, clientX, clientY, datas }) => {
-          // pinchStart event occur before dragStart, rotateStart, scaleStart, resizeStart
-          console.log("onPinchStart");
-        }}
-        onPinch={({ target, clientX, clientY, datas }) => {
-          // pinch event occur before drag, rotate, scale, resize
-          console.log("onPinch");
-        }}
-        onPinchEnd={({ isDrag, target, clientX, clientY, datas }) => {
-          // pinchEnd event occur before dragEnd, rotateEnd, scaleEnd, resizeEnd
-          console.log("onPinchEnd");
         }}
       />
       <Selecto
