@@ -3,7 +3,7 @@ import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { Icon } from "./Icon";
 import { useEffect, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
-import { useEditorStore } from "./EditorStore";
+import { useEditorStore } from "../stores/EditorStore";
 
 type RadiusPropertiesProps = {
   properties: {

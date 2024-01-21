@@ -1,5 +1,5 @@
 import { useHotkeys } from "react-hotkeys-hook";
-import { useEditorStore } from "./EditorStore";
+import { useEditorStore } from "../stores/EditorStore";
 import { useEffect, useState } from "react";
 
 export const EditorHotKeys = () => {

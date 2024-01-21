@@ -1,5 +1,5 @@
 import { css } from "styled-system/css";
-import { useEditorStore } from "./EditorStore";
+import { useEditorStore } from "../stores/EditorStore";
 import { Button } from "@radix-ui/themes";
 import { Icon } from "./Icon";
 

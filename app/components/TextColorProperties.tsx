@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/themes";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { useEffect, useState } from "react";
-import { useEditorStore } from "./EditorStore";
+import { useEditorStore } from "../stores/EditorStore";
 import { css } from "styled-system/css";
 import * as SelectPicker from "react-color";
 import * as PopoverRadix from "@radix-ui/react-popover";

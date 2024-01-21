@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/themes";
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
-import { ElementType, Tree, useEditorStore } from "./EditorStore";
+import { ElementType, Tree, useEditorStore } from "../stores/EditorStore";
 import { useEffect, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { BackgroundColorProperties } from "./BackgroundColorProperties";

@@ -1,7 +1,7 @@
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
 import { Button, IconButton, Tooltip } from "@radix-ui/themes";
-import { Tool, useEditorStore } from "./EditorStore";
+import { Tool, useEditorStore } from "../stores/EditorStore";
 
 const toolsData = [
   {

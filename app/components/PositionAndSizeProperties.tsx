@@ -3,7 +3,7 @@ import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { css } from "styled-system/css";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { useEffect, useState } from "react";
-import { useEditorStore } from "./EditorStore";
+import { useEditorStore } from "../stores/EditorStore";
 
 //keep only two decimals after the dot only if more than 2 decimals
 const formatValue = (value: number) => {

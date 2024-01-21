@@ -12,8 +12,7 @@ import {
 } from "@radix-ui/themes";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { useMemo } from "react";
-import { useEditorStore } from "./EditorStore";
-import { css } from "styled-system/css";
+import { useEditorStore } from "../stores/EditorStore";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { Icon } from "./Icon";
 import { FontPicker } from "./FontPicker";
