@@ -71,10 +71,6 @@ interface EditorState {
   addElement: (element: ElementType) => void;
   deleteElements: (elemenentIds: string[]) => void;
   setSelectedTool: (tool: Tool) => void;
-  increaseX: (elementIds: string[], by: number) => void;
-  decreaseX: (elementIds: string[], by: number) => void;
-  increateY: (elementIds: string[], by: number) => void;
-  decreaseY: (elementIds: string[], by: number) => void;
   updateElement: (element: UpdateElementParam) => void;
   updateElements: (
     elements: UpdateElementParam[],
@@ -84,6 +80,11 @@ interface EditorState {
   currentHistoryId: string | null;
   undo: () => void;
   redo: () => void;
+  moveElements: (
+    elementIds: string[],
+    orientation: "top" | "right" | "bottom" | "left",
+    value: number
+  ) => void;
 }
 
 const defaultTree: Tree = {
@@ -285,54 +286,6 @@ export const useEditorStore = create<EditorState>()(
     //   }));
     // },
     setSelectedTool: (selectedTool) => set({ selectedTool }),
-    increaseX: (elementIds, by) => {
-      set((state) => ({
-        tree: {
-          ...state.tree,
-          children: state.tree.children?.map((child) =>
-            elementIds.includes(child.id)
-              ? { ...child, x: child.x + by }
-              : child
-          ),
-        },
-      }));
-    },
-    decreaseX: (elementIds, by) => {
-      set((state) => ({
-        tree: {
-          ...state.tree,
-          children: state.tree.children?.map((child) =>
-            elementIds.includes(child.id)
-              ? { ...child, x: child.x - by }
-              : child
-          ),
-        },
-      }));
-    },
-    increateY: (elementIds, by) => {
-      set((state) => ({
-        tree: {
-          ...state.tree,
-          children: state.tree.children?.map((child) =>
-            elementIds.includes(child.id)
-              ? { ...child, y: child.y + by }
-              : child
-          ),
-        },
-      }));
-    },
-    decreaseY: (elementIds, by) => {
-      set((state) => ({
-        tree: {
-          ...state.tree,
-          children: state.tree.children?.map((child) =>
-            elementIds.includes(child.id)
-              ? { ...child, y: child.y - by }
-              : child
-          ),
-        },
-      }));
-    },
     history: [
       {
         id: uuidv4(),
@@ -382,6 +335,64 @@ export const useEditorStore = create<EditorState>()(
         return {
           currentHistoryId: history[currentHistoryIndex + 1].id,
           tree: history[currentHistoryIndex + 1].value,
+        };
+      });
+    },
+    moveElements: (elementIds, orientation, value) => {
+      set((state) => {
+        const newTree: Tree = {
+          ...state.tree,
+          children: state.tree.children?.map((child) => {
+            if (elementIds.includes(child.id)) {
+              switch (orientation) {
+                case "top":
+                  return {
+                    ...child,
+                    y: child.y - value,
+                  };
+                case "right":
+                  return {
+                    ...child,
+                    x: child.x + value,
+                  };
+                case "bottom":
+                  return {
+                    ...child,
+                    y: child.y + value,
+                  };
+                case "left":
+                  return {
+                    ...child,
+                    x: child.x - value,
+                  };
+              }
+            }
+
+            return child;
+          }),
+        };
+
+        const history = [...state.history];
+
+        //If we are not at the last history, we remove all the history after the current one
+        if (state.currentHistoryId !== null) {
+          const currentHistoryIndex = history.findIndex(
+            (history) => history.id === state.currentHistoryId
+          );
+
+          history.splice(currentHistoryIndex + 1);
+        }
+
+        //We add the new history item
+        history.push({
+          id: uuidv4(),
+          value: newTree,
+          createdAt: new Date().toISOString(),
+        });
+
+        return {
+          tree: newTree,
+          history: history,
         };
       });
     },

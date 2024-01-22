@@ -8,13 +8,10 @@ export const EditorHotKeys = () => {
   const deleteElements = useEditorStore((state) => state.deleteElements);
   const setSelectedTarget = useEditorStore((state) => state.setSelected);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
-  const increaseX = useEditorStore((state) => state.increaseX);
-  const decreaseX = useEditorStore((state) => state.decreaseX);
-  const increaseY = useEditorStore((state) => state.increateY);
-  const decreaseY = useEditorStore((state) => state.decreaseY);
   const undo = useEditorStore((state) => state.undo);
   const redo = useEditorStore((state) => state.redo);
   const setKeepRatio = useKeepRatioStore((state) => state.setKeepRatio);
+  const moveElements = useEditorStore((state) => state.moveElements);
 
   //Delete
   useHotkeys(
@@ -67,9 +64,9 @@ export const EditorHotKeys = () => {
       e.preventDefault();
 
       if (e.shiftKey) {
-        decreaseY(selectedTargets, 10);
+        moveElements(selectedTargets, "top", 10);
       } else {
-        decreaseY(selectedTargets, 1);
+        moveElements(selectedTargets, "top", 1);
       }
     },
     {
@@ -84,9 +81,9 @@ export const EditorHotKeys = () => {
       e.preventDefault();
 
       if (e.shiftKey) {
-        increaseY(selectedTargets, 10);
+        moveElements(selectedTargets, "bottom", 10);
       } else {
-        increaseY(selectedTargets, 1);
+        moveElements(selectedTargets, "bottom", 1);
       }
     },
     {
@@ -101,9 +98,9 @@ export const EditorHotKeys = () => {
       e.preventDefault();
 
       if (e.shiftKey) {
-        decreaseX(selectedTargets, 10);
+        moveElements(selectedTargets, "left", 10);
       } else {
-        decreaseX(selectedTargets, 1);
+        moveElements(selectedTargets, "left", 1);
       }
     },
     {
@@ -118,9 +115,9 @@ export const EditorHotKeys = () => {
       e.preventDefault();
 
       if (e.shiftKey) {
-        increaseX(selectedTargets, 10);
+        moveElements(selectedTargets, "right", 10);
       } else {
-        increaseX(selectedTargets, 1);
+        moveElements(selectedTargets, "right", 1);
       }
     },
     {
