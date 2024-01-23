@@ -34,7 +34,7 @@ export const MoveableManager = (props: MoveableManagerProps) => {
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
   const updateElements = useEditorStore((state) => state.updateElements);
   const tree = useEditorStore((state) => state.tree);
-  const keepRatio = useKeepRatioStore((state) => state.keepRatio);
+  const isPressingShift = useKeepRatioStore((state) => state.keepRatio);
 
   useEffect(() => {
     moveableManager.current!.updateRect();
@@ -139,25 +139,57 @@ export const MoveableManager = (props: MoveableManagerProps) => {
     updateElements(elements, isEnd ? true : false);
   };
 
-  const onDrag = (dragEvent: OnDrag | OnDragEnd, isEnd = false) => {
+  const onDrag = (
+    //dragEvent: OnDrag
+    dragEvent: OnDrag,
+    isEnd = false
+  ) => {
     const { target } = dragEvent;
-
-    if (dragEvent.transform) {
-      target!.style.transform = dragEvent.transform;
-    }
 
     const containerRect = container.current!.getBoundingClientRect();
     const targetRect = target!.getBoundingClientRect();
 
-    //Set x and y with scale factor
-    const x = Math.round((targetRect.x - containerRect.x) / scale);
-    const y = Math.round((targetRect.y - containerRect.y) / scale);
-
-    const element = {
+    let element: { id: string; x?: number; y?: number } = {
       id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-      x: x,
-      y: y,
     };
+    if (isPressingShift) {
+      const xDeltaAbs = Math.abs(dragEvent.delta[0]);
+      const yDelta = Math.abs(dragEvent.delta[1]);
+
+      //If xDeltaAbs is bigger than yDelta, we are moving horizontally
+      if (xDeltaAbs > yDelta) {
+        console.log("Horizontal");
+
+        element = {
+          ...element,
+          x: Math.round((targetRect.x - containerRect.x) / scale),
+        };
+
+        //Transform only the x axis
+        // target!.style.transform = `translate(${dragEvent.left}px, ${targetRect.top}px)`;
+      } else {
+        console.log("Vertical");
+
+        element = {
+          ...element,
+          y: Math.round((targetRect.y - containerRect.y) / scale),
+        };
+
+        //Transform only the y axis
+        // target!.style.transform = `translate(${targetRect.left}px, ${dragEvent.top}px)`;
+      }
+    } else {
+      const x = Math.round((targetRect.x - containerRect.x) / scale);
+      const y = Math.round((targetRect.y - containerRect.y) / scale);
+
+      target!.style.transform = dragEvent.transform;
+
+      element = {
+        ...element,
+        x: x,
+        y: y,
+      };
+    }
 
     updateElements([element], isEnd ? true : false);
   };
@@ -197,7 +229,7 @@ export const MoveableManager = (props: MoveableManagerProps) => {
         onDragGroup={(e) => onDragGroup(e, false)}
         onDragGroupEnd={(e) => onDragGroup(e, true)}
         /* When resize or scale, keeps a ratio of the width, height. */
-        keepRatio={keepRatio}
+        keepRatio={isPressingShift}
         /* resizable*/
         /* Only one of resizable, scalable, warpable can be used. */
         resizable={true}
