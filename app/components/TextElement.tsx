@@ -3,6 +3,7 @@ import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { useScaleStore } from "../stores/ScaleStore";
 import { useEffect, useRef, useState } from "react";
 import { ElementText, useEditorStore } from "../stores/EditorStore";
+import { useDebounce } from "~/hooks/useDebounce";
 
 type TextElementProps = ElementText;
 
@@ -10,9 +11,23 @@ export const TextElement = (props: TextElementProps) => {
   const scale = useScaleStore((state) => state.scale);
   const textElementRef = useRef<HTMLTextAreaElement>(null);
   const [isEditingContent, setIsEditingContent] = useState(false);
-  const [val, setVal] = useState("");
 
   const updateElement = useEditorStore((state) => state.updateElement);
+  const updateElements = useEditorStore((state) => state.updateElements);
+
+  const onChangeDebounce = useDebounce((content: string) => {
+    console.log("onChangeDebounce");
+
+    updateElements(
+      [
+        {
+          id: props.id,
+          content: content,
+        },
+      ],
+      true
+    );
+  }, 1000);
 
   const handleClick = (event: React.MouseEventHandler<HTMLTextAreaElement>) => {
     if (event.detail === 2) {
@@ -68,6 +83,8 @@ export const TextElement = (props: TextElementProps) => {
       id: props.id,
       content: event.target.value,
     });
+
+    onChangeDebounce(event.target.value);
   };
 
   return (
