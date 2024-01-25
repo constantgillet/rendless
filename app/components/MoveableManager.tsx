@@ -148,49 +148,16 @@ export const MoveableManager = (props: MoveableManagerProps) => {
 
     const containerRect = container.current!.getBoundingClientRect();
     const targetRect = target!.getBoundingClientRect();
+    const x = Math.round((targetRect.x - containerRect.x) / scale);
+    const y = Math.round((targetRect.y - containerRect.y) / scale);
 
-    let element: { id: string; x?: number; y?: number } = {
+    const element = {
       id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+      x: x,
+      y: y,
     };
-    if (isPressingShift) {
-      const xDeltaAbs = Math.abs(dragEvent.delta[0]);
-      const yDelta = Math.abs(dragEvent.delta[1]);
 
-      //If xDeltaAbs is bigger than yDelta, we are moving horizontally
-      if (xDeltaAbs > yDelta) {
-        console.log("Horizontal");
-
-        element = {
-          ...element,
-          x: Math.round((targetRect.x - containerRect.x) / scale),
-        };
-
-        //Transform only the x axis
-        // target!.style.transform = `translate(${dragEvent.left}px, ${targetRect.top}px)`;
-      } else {
-        console.log("Vertical");
-
-        element = {
-          ...element,
-          y: Math.round((targetRect.y - containerRect.y) / scale),
-        };
-
-        //Transform only the y axis
-        // target!.style.transform = `translate(${targetRect.left}px, ${dragEvent.top}px)`;
-      }
-    } else {
-      const x = Math.round((targetRect.x - containerRect.x) / scale);
-      const y = Math.round((targetRect.y - containerRect.y) / scale);
-
-      target!.style.transform = dragEvent.transform;
-
-      element = {
-        ...element,
-        x: x,
-        y: y,
-      };
-    }
-
+    target!.style.transform = dragEvent.transform;
     updateElements([element], isEnd ? true : false);
   };
 
