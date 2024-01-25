@@ -11,7 +11,7 @@ export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
 
   useEffect(() => {
     const handleContextMenu = (event: MouseEvent) => {
-      event.preventDefault;
+      event.preventDefault();
     };
 
     window.addEventListener("contextmenu", handleContextMenu);
