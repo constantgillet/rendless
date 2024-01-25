@@ -8,6 +8,7 @@ type CanvasContextMenuProps = {
 
 export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
   const selectedItems = useEditorStore((state) => state.selected);
+  const deleteElements = useEditorStore((state) => state.deleteElements);
 
   useEffect(() => {
     const handleContextMenu = (event: MouseEvent) => {
@@ -27,26 +28,19 @@ export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
         {props.children}
       </ContextMenu.Trigger>
       <ContextMenu.Content>
-        <ContextMenu.Item shortcut="⌘ E">Edit</ContextMenu.Item>
+        <ContextMenu.Item shortcut="⌘ C">Copy</ContextMenu.Item>
         <ContextMenu.Item shortcut="⌘ D">Duplicate</ContextMenu.Item>
         <ContextMenu.Separator />
-        <ContextMenu.Item shortcut="⌘ N">Archive</ContextMenu.Item>
-
-        <ContextMenu.Sub>
-          <ContextMenu.SubTrigger>More</ContextMenu.SubTrigger>
-          <ContextMenu.SubContent>
-            <ContextMenu.Item>Move to project…</ContextMenu.Item>
-            <ContextMenu.Item>Move to folder…</ContextMenu.Item>
-            <ContextMenu.Separator />
-            <ContextMenu.Item>Advanced options…</ContextMenu.Item>
-          </ContextMenu.SubContent>
-        </ContextMenu.Sub>
-
+        <ContextMenu.Item shortcut="]">Bring to front</ContextMenu.Item>
+        <ContextMenu.Item shortcut="[">Send to back</ContextMenu.Item>
         <ContextMenu.Separator />
-        <ContextMenu.Item>Share</ContextMenu.Item>
-        <ContextMenu.Item>Add to favorites</ContextMenu.Item>
-        <ContextMenu.Separator />
-        <ContextMenu.Item shortcut="⌘ ⌫" color="red">
+        <ContextMenu.Item
+          shortcut="suppr"
+          color="red"
+          onClick={() => {
+            deleteElements(selectedItems);
+          }}
+        >
           Delete
         </ContextMenu.Item>
       </ContextMenu.Content>

@@ -200,6 +200,7 @@ export const useEditorStore = create<EditorState>()(
           tree: newTree,
           history: history,
           currentHistoryId: null,
+          selected: [],
         };
       });
     },
