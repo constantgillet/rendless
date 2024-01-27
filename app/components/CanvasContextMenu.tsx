@@ -1,6 +1,7 @@
 import { ContextMenu } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { useEditorStore } from "~/stores/EditorStore";
+import { getElementsIndexPositions } from "~/utils/getElementsIndexPositions";
 
 type CanvasContextMenuProps = {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ type CanvasContextMenuProps = {
 export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
   const selectedItems = useEditorStore((state) => state.selected);
   const deleteElements = useEditorStore((state) => state.deleteElements);
+  const moveIndexPosition = useEditorStore((state) => state.moveIndexPosition);
 
   useEffect(() => {
     const handleContextMenu = (event: MouseEvent) => {
@@ -22,6 +24,39 @@ export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
     };
   }, []);
 
+  const onClickBringToFront = () => {
+    const indexPositions = getElementsIndexPositions(selectedItems);
+
+    //Get the highest index position
+    let highestIndexPosition = 0;
+
+    indexPositions.forEach((indexPosition) => {
+      if (indexPosition.position > highestIndexPosition) {
+        highestIndexPosition = indexPosition.position;
+      }
+    });
+
+    const newPosition = highestIndexPosition + 1;
+
+    moveIndexPosition(selectedItems, newPosition);
+  };
+
+  const onClickSendToBack = () => {
+    const indexPositions = getElementsIndexPositions(selectedItems);
+
+    //Get the lowest index position
+    let lowestIndexPosition = 0;
+
+    indexPositions.forEach((indexPosition) => {
+      if (indexPosition.position < lowestIndexPosition) {
+        lowestIndexPosition = indexPosition.position;
+      }
+    });
+
+    const newPosition = lowestIndexPosition - 1;
+    moveIndexPosition(selectedItems, newPosition);
+  };
+
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger disabled={selectedItems?.length === 0}>
@@ -31,8 +66,12 @@ export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
         <ContextMenu.Item shortcut="⌘ C">Copy</ContextMenu.Item>
         <ContextMenu.Item shortcut="⌘ D">Duplicate</ContextMenu.Item>
         <ContextMenu.Separator />
-        <ContextMenu.Item shortcut="]">Bring to front</ContextMenu.Item>
-        <ContextMenu.Item shortcut="[">Send to back</ContextMenu.Item>
+        <ContextMenu.Item shortcut="]" onClick={onClickBringToFront}>
+          Bring to front
+        </ContextMenu.Item>
+        <ContextMenu.Item shortcut="[" onClick={onClickSendToBack}>
+          Send to back
+        </ContextMenu.Item>
         <ContextMenu.Separator />
         <ContextMenu.Item
           shortcut="suppr"

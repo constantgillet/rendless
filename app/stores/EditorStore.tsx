@@ -85,6 +85,7 @@ interface EditorState {
     orientation: "top" | "right" | "bottom" | "left",
     value: number
   ) => void;
+  moveIndexPosition: (elementIds: string[], newPosition: number) => void;
 }
 
 const defaultTree: Tree = {
@@ -371,6 +372,51 @@ export const useEditorStore = create<EditorState>()(
 
             return child;
           }),
+        };
+
+        const history = [...state.history];
+
+        //If we are not at the last history, we remove all the history after the current one
+        if (state.currentHistoryId !== null) {
+          const currentHistoryIndex = history.findIndex(
+            (history) => history.id === state.currentHistoryId
+          );
+
+          history.splice(currentHistoryIndex + 1);
+        }
+
+        //We add the new history item
+        history.push({
+          id: uuidv4(),
+          value: newTree,
+          createdAt: new Date().toISOString(),
+        });
+
+        return {
+          tree: newTree,
+          history: history,
+        };
+      });
+    },
+    moveIndexPosition: (elementIds, newPosition) => {
+      set((state) => {
+        const newChildren = state.tree.children.filter((child) =>
+          elementIds.includes(child.id)
+        );
+
+        const otherChildren = state.tree.children.filter(
+          (child) => !elementIds.includes(child.id)
+        );
+
+        //Add the new children at the right position of newPosition
+
+        const newTree: Tree = {
+          ...state.tree,
+          children: [
+            ...otherChildren.slice(0, newPosition),
+            ...newChildren,
+            ...otherChildren.slice(newPosition),
+          ],
         };
 
         const history = [...state.history];
