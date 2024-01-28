@@ -2,6 +2,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { useEditorStore } from "../stores/EditorStore";
 import { useEffect, useState } from "react";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
+import { bringElementsToFront } from "~/stores/actions/bringElementsToFront";
+import { sendElementsToBack } from "~/stores/actions/sendElementsToBack";
 
 export const EditorHotKeys = () => {
   const selectedTargets = useEditorStore((state) => state.selected);
@@ -163,6 +165,32 @@ export const EditorHotKeys = () => {
       window.removeEventListener("keyup", onKeyup);
     };
   }, []);
+
+  //[ Bring to front
+  useHotkeys(
+    "]",
+    (e) => {
+      e.preventDefault();
+
+      bringElementsToFront();
+    },
+    {
+      enabled: selectedTargets.length > 0,
+    }
+  );
+
+  //] Send to back
+  useHotkeys(
+    "[",
+    (e) => {
+      e.preventDefault();
+
+      sendElementsToBack();
+    },
+    {
+      enabled: selectedTargets.length > 0,
+    }
+  );
 
   return <></>;
 };
