@@ -1,7 +1,8 @@
 import { ContextMenu } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { useEditorStore } from "~/stores/EditorStore";
-import { getElementsIndexPositions } from "~/utils/getElementsIndexPositions";
+import { bringElementsToFront } from "~/stores/actions/bringElementsToFront";
+import { sendElementsToBack } from "~/stores/actions/sendElementsToBack";
 
 type CanvasContextMenuProps = {
   children: React.ReactNode;
@@ -10,7 +11,6 @@ type CanvasContextMenuProps = {
 export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
   const selectedItems = useEditorStore((state) => state.selected);
   const deleteElements = useEditorStore((state) => state.deleteElements);
-  const moveIndexPosition = useEditorStore((state) => state.moveIndexPosition);
 
   useEffect(() => {
     const handleContextMenu = (event: MouseEvent) => {
@@ -25,36 +25,11 @@ export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
   }, []);
 
   const onClickBringToFront = () => {
-    const indexPositions = getElementsIndexPositions(selectedItems);
-
-    //Get the highest index position
-    let highestIndexPosition = 0;
-
-    indexPositions.forEach((indexPosition) => {
-      if (indexPosition.position > highestIndexPosition) {
-        highestIndexPosition = indexPosition.position;
-      }
-    });
-
-    const newPosition = highestIndexPosition + 1;
-
-    moveIndexPosition(selectedItems, newPosition);
+    bringElementsToFront();
   };
 
   const onClickSendToBack = () => {
-    const indexPositions = getElementsIndexPositions(selectedItems);
-
-    //Get the lowest index position
-    let lowestIndexPosition = 0;
-
-    indexPositions.forEach((indexPosition) => {
-      if (indexPosition.position < lowestIndexPosition) {
-        lowestIndexPosition = indexPosition.position;
-      }
-    });
-
-    const newPosition = lowestIndexPosition - 1;
-    moveIndexPosition(selectedItems, newPosition);
+    sendElementsToBack();
   };
 
   return (
