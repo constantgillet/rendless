@@ -2,17 +2,39 @@ import { css } from "styled-system/css";
 import { useEditorStore } from "../stores/EditorStore";
 import { Button } from "@radix-ui/themes";
 import { Icon } from "./Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const LayersPanel = () => {
   const tree = useEditorStore((state) => state.tree);
   const selectedItems = useEditorStore((state) => state.selected);
   const setSelected = useEditorStore((state) => state.setSelected);
+  const moveIndexPosition = useEditorStore((state) => state.moveIndexPosition);
 
-  const [dropzoneHovered, setDropzoneHovered] = useState(false);
+  const [dropzoneHovered, setDropzoneHovered] = useState<null | number>();
 
   //Reverse tree so that the first item is the topmost layer
   const reversedTree = [...tree.children].reverse();
+
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
+  useEffect(() => {
+    const handleMouseUp = () => {
+      setIsMouseDown(false);
+
+      console.log("dropzoneHovered", dropzoneHovered);
+      console.log("selectedItems", selectedItems);
+
+      if (dropzoneHovered) {
+        moveIndexPosition(selectedItems, dropzoneHovered);
+      }
+    };
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [dropzoneHovered, selectedItems, moveIndexPosition]);
+
+  console.log("hovered", dropzoneHovered);
 
   return (
     <aside
@@ -31,17 +53,31 @@ export const LayersPanel = () => {
           display: "flex",
           flexDirection: "column",
           gap: "var(--space-1)",
+          paddingY: "var(--space-1)",
         })}
       >
-        <Dropzone indexPosition={reversedTree.length} />
+        {/* <Dropzone
+          indexPosition={reversedTree.length}
+          hidden={!isMouseDown}
+          onMouseEnter={() => {
+            setDropzoneHovered(reversedTree.length);
+          }}
+          onMouseLeave={() => {
+            setDropzoneHovered(null);
+          }}
+        /> */}
         {reversedTree?.map((child, index) => {
           const id = child.id;
           const isSelected = selectedItems.includes(id);
 
           return (
-            <>
+            <div
+              key={id}
+              className={css({
+                position: "relative",
+              })}
+            >
               <button
-                key={id}
                 className={css({
                   fontSize: "var(--font-size-3)",
                   lineHeight: "var(--line-height-3)",
@@ -51,6 +87,7 @@ export const LayersPanel = () => {
                   borderRadius: "var(--radius-3)",
                   gap: "var(--space-2)",
                   display: "flex",
+                  width: "100%",
                   _hover: {
                     backgroundColor: "var(--gray-a3)",
                     cursor: "pointer",
@@ -65,7 +102,8 @@ export const LayersPanel = () => {
                     ? "1px dashed var(--gray-8)"
                     : "1px dashed transparent",
                 }}
-                onClick={(e) => {
+                onMouseDown={(e) => {
+                  setIsMouseDown(true);
                   if (e.shiftKey) {
                     if (isSelected) {
                       setSelected(selectedItems.filter((item) => item !== id));
@@ -81,9 +119,16 @@ export const LayersPanel = () => {
                 Layer {child.type}
               </button>
               <Dropzone
+                hidden={!isMouseDown}
                 indexPosition={index === 0 ? 0 : reversedTree.length - index}
+                onMouseEnter={() => {
+                  setDropzoneHovered(reversedTree.length - index - 1);
+                }}
+                onMouseLeave={() => {
+                  setDropzoneHovered(null);
+                }}
               />
-            </>
+            </div>
           );
         })}
       </div>
@@ -93,30 +138,39 @@ export const LayersPanel = () => {
 
 type DropzoneProps = {
   indexPosition: number;
-  onMouseEnter?: (e: React.MouseEventHandler<HTMLDivElement>) => void;
-  onMouseLeave?: () => void;
+  onMouseEnter?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onMouseLeave?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  hidden?: boolean;
 };
 
 const Dropzone = (props: DropzoneProps) => {
+  if (props.hidden) {
+    return null;
+  }
+
   return (
     <div
       className={css({
-        h: "32px",
+        position: "absolute",
+        h: "calc(100%)",
         w: "full",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         bg: "red",
-        my: "-24px",
-        position: "relative",
+        opacity: 0.6,
+        top: "0px",
       })}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
     >
       <div
         className={css({
-          borderTop: "2px solid var(--accent-9)",
+          height: "4px",
+          backgroundColor: "var(--accent-9)",
           w: "full",
+          bottom: "-4px",
+          position: "absolute",
         })}
       ></div>
     </div>
