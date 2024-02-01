@@ -400,8 +400,6 @@ export const useEditorStore = create<EditorState>()(
     },
     moveIndexPosition: (elementIds, newPosition) => {
       set((state) => {
-        console.log("newPosition", newPosition);
-
         const newChildren = state.tree.children.filter((child) =>
           elementIds.includes(child.id)
         );

@@ -31,8 +31,6 @@ export const LayersPanel = () => {
     };
   }, [dropzoneHovered, selectedItems, moveIndexPosition]);
 
-  console.log("hovered", dropzoneHovered);
-
   return (
     <aside
       className={css({
