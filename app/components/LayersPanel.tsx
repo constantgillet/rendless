@@ -1,4 +1,4 @@
-import { css } from "styled-system/css";
+import { css, cx } from "styled-system/css";
 import { useEditorStore } from "../stores/EditorStore";
 import { Button } from "@radix-ui/themes";
 import { Icon } from "./Icon";
@@ -162,29 +162,44 @@ const Dropzone = (props: DropzoneProps) => {
 
   return (
     <div
-      className={css({
-        position: "absolute",
-        h: "calc(100%)",
-        w: "full",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        bg: "red",
-        opacity: 0.6,
-        top: "0px",
-      })}
+      className={cx(
+        "group",
+        css({
+          position: "absolute",
+          h: "calc(100%)",
+          w: "full",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          // bg: "red",
+          opacity: 0.6,
+          top: "0px",
+        })
+      )}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
     >
       <div
         className={css({
           height: "4px",
-          backgroundColor: "var(--accent-9)",
           w: "full",
           top: "-4px",
           position: "absolute",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         })}
-      ></div>
+      >
+        <div
+          className={css({
+            h: "2px",
+            w: "full",
+            _groupHover: {
+              backgroundColor: "var(--accent-10)",
+            },
+          })}
+        ></div>
+      </div>
     </div>
   );
 };
