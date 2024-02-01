@@ -21,10 +21,7 @@ export const LayersPanel = () => {
     const handleMouseUp = () => {
       setIsMouseDown(false);
 
-      console.log("dropzoneHovered", dropzoneHovered);
-      console.log("selectedItems", selectedItems);
-
-      if (dropzoneHovered) {
+      if (dropzoneHovered !== null && dropzoneHovered !== undefined) {
         moveIndexPosition(selectedItems, dropzoneHovered);
       }
     };
@@ -131,6 +128,23 @@ export const LayersPanel = () => {
             </div>
           );
         })}
+        <div
+          className={css({
+            position: "relative",
+            height: "18px",
+          })}
+        >
+          <Dropzone
+            hidden={!isMouseDown}
+            indexPosition={0}
+            onMouseEnter={() => {
+              setDropzoneHovered(0);
+            }}
+            onMouseLeave={() => {
+              setDropzoneHovered(null);
+            }}
+          />
+        </div>
       </div>
     </aside>
   );
@@ -169,7 +183,7 @@ const Dropzone = (props: DropzoneProps) => {
           height: "4px",
           backgroundColor: "var(--accent-9)",
           w: "full",
-          bottom: "-4px",
+          top: "-4px",
           position: "absolute",
         })}
       ></div>
