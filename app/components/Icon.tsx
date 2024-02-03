@@ -13,7 +13,8 @@ export type IconName =
   | "text-align-center"
   | "text-align-left"
   | "text-align-right"
-  | "chevron-down";
+  | "chevron-down"
+  | "chevron-left";
 
 export const iconStyle = cva({
   base: {

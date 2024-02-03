@@ -46,7 +46,7 @@ export default function LoginPage() {
             fontSize: "md",
           })}
         >
-          Already have an account? <Link>Log in</Link>.
+          Already have an account? <Link href="/login">Log in</Link>.
         </p>
       </div>
       <ValidatedForm
