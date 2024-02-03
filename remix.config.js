@@ -6,5 +6,5 @@ export default {
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
-  serverDependenciesToBundle: ["@radix-ui/themes"],
+  serverDependenciesToBundle: ["@radix-ui/themes", "oslo"],
 };
