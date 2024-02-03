@@ -1,6 +1,17 @@
 import { Button, Link, TextArea, TextFieldInput } from "@radix-ui/themes";
 import { css } from "styled-system/css";
 
+export const validator = withZod(
+  z.object({
+    firstName: z.string().min(1, { message: "First name is required" }),
+    lastName: z.string().min(1, { message: "Last name is required" }),
+    email: z
+      .string()
+      .min(1, { message: "Email is required" })
+      .email("Must be a valid email"),
+  })
+);
+
 export default function LoginPage() {
   return (
     <div>
@@ -14,7 +25,7 @@ export default function LoginPage() {
         >
           <h1
             className={css({
-              fontSize: "4xl",
+              fontSize: "3xl",
               fontWeight: "bold",
               marginBottom: "var(--space-1)",
               color: "var(--gray-12)",
@@ -25,10 +36,10 @@ export default function LoginPage() {
           <p
             className={css({
               color: "var(--gray-11)",
-              fontSize: "lg",
+              fontSize: "md",
             })}
           >
-            Register and create your first image template in few seconds
+            Already have an account? <Link>Log in</Link>.
           </p>
         </div>
         <div
@@ -38,9 +49,9 @@ export default function LoginPage() {
             gap: "var(--space-2)",
           })}
         >
-          <TextFieldInput placeholder="Email" size={"3"} />
+          <TextFieldInput placeholder="Email" type="email" size={"3"} />
           <TextFieldInput placeholder="Username" size={"3"} />
-          <TextFieldInput placeholder="Password" size={"3"} />
+          <TextFieldInput placeholder="Password" type="password" size={"3"} />
         </div>
         <div
           className={css({
