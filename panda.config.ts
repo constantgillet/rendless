@@ -23,7 +23,32 @@ export default defineConfig({
       },
     },
   },
-
+  utilities: {
+    extend: {
+      spaceX: {
+        className: "space-x",
+        values: "spacing",
+        transform(value: string) {
+          return {
+            "& > :not([hidden]) ~ :not([hidden])": {
+              marginInlineStart: value,
+            },
+          };
+        },
+      },
+      spaceY: {
+        className: "space-y",
+        values: "spacing",
+        transform(value: string) {
+          return {
+            "& > :not([hidden]) ~ :not([hidden])": {
+              marginBlockStart: value,
+            },
+          };
+        },
+      },
+    },
+  },
   // The output directory for your css system
   outdir: "styled-system",
 });

@@ -28,6 +28,7 @@
     "react-virtuoso": "^4.6.2",
     "remix-validated-form": "^5.1.5",
     "uuid": "^9.0.1",
+    "zod": "^3.22.4",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
