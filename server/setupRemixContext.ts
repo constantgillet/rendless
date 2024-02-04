@@ -8,12 +8,7 @@ export async function setupRemixContext(
 ) {
   res.locals.name = "test3";
 
-  console.log(req.url);
-
-  if (!req.url.includes("/register")) {
-    const auth = await validateAuth(req, res);
-    console.log(auth);
-  }
+  const auth = await validateAuth(req, res);
 
   next();
 }
@@ -42,14 +37,14 @@ const validateAuth = async (req: Request, res: Response) => {
         sessionCookie.attributes
       );
     }
-    // if (!result.session) {
-    //   const sessionCookie = lucia.createBlankSessionCookie();
-    //   res.cookie(
-    //     sessionCookie.name,
-    //     sessionCookie.value,
-    //     sessionCookie.attributes
-    //   );
-    // }
+    if (!result.session) {
+      const sessionCookie = lucia.createBlankSessionCookie();
+      res.cookie(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes
+      );
+    }
 
     return result;
   } catch (e) {
