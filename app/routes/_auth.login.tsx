@@ -1,12 +1,6 @@
 import { Link } from "@radix-ui/themes";
-import {
-  ActionFunctionArgs,
-  createCookie,
-  json,
-  redirect,
-} from "@remix-run/node";
+import { ActionFunctionArgs, createCookie, redirect } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
-import { generateId } from "lucia";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { css } from "styled-system/css";
 import { z } from "zod";
@@ -90,7 +84,7 @@ export default function LoginPage() {
             })}
             variant="classic"
           >
-            Register
+            Login
           </FormSubmitButton>
         </div>
       </ValidatedForm>
@@ -150,22 +144,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     password
   );
 
-  if (!validPassword) {
-    return validationError(
-      {
-        fieldErrors: {
-          email: "Wrong email or password",
-        },
-      },
-      result.data
-    );
-  }
-
   const session = await lucia.createSession(findUserByEmail.id, {});
+
+  console.log("login session created: ", session.id);
+
   const sessionCookie = lucia.createSessionCookie(session.id);
 
   const cookie = createCookie(sessionCookie.name, sessionCookie.attributes);
-  const serialized = await cookie.serialize(sessionCookie.value);
+
+  console.log("attribute: ", sessionCookie.attributes);
+
+  const serialized = await cookie.serialize("test");
+
+  console.log(serialized);
 
   return redirect("/", { headers: { "Set-Cookie": serialized } });
 };
