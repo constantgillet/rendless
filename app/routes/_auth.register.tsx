@@ -193,5 +193,5 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const cookie = createCookie(sessionCookie.name, sessionCookie.attributes);
   const serialized = await cookie.serialize(sessionCookie.value);
 
-  return redirect("/", { headers: { "Set-Cookie": serialized } });
+  return redirect("/register", { headers: { "Set-Cookie": serialized } });
 };

@@ -7,9 +7,9 @@ export default function AppLayout() {
 
 export async function loader({ context: { name } }: LoaderFunctionArgs) {
   // code here
-  console.log("loader _app");
+  // console.log("loader _app");
 
-  console.log("context: ", name);
+  // console.log("context: ", name);
 
   return { name };
 }

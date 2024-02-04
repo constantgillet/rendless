@@ -37,10 +37,3 @@ export default function App() {
     </html>
   );
 }
-
-export async function loader({ context: { name } }: LoaderFunctionArgs) {
-  // code here
-  console.log("loader root");
-
-  return { name };
-}

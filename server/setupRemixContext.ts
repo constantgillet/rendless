@@ -7,9 +7,13 @@ export async function setupRemixContext(
   next: NextFunction
 ) {
   res.locals.name = "test3";
-  const auth = await validateAuth(req, res);
 
-  console.log(auth?.user);
+  console.log(req.url);
+
+  if (!req.url.includes("/register")) {
+    const auth = await validateAuth(req, res);
+    console.log(auth);
+  }
 
   next();
 }
@@ -18,20 +22,26 @@ export async function setupRemixContext(
 const validateAuth = async (req: Request, res: Response) => {
   const sessionId = req.cookies[lucia.sessionCookieName];
 
-  console.log(sessionId);
+  if (!sessionId) {
+    console.log("no session id");
+
+    return { session: null, user: null };
+  }
+
+  const result = await lucia.validateSession(sessionId);
 
   // next.js throws when you attempt to set cookie when rendering page
   try {
-    const result = await lucia.validateSession(sessionId);
+    console.log("result", result);
 
-    // if (result.session && result.session.fresh) {
-    //   const sessionCookie = lucia.createSessionCookie(result.session.id);
-    //   res.cookie(
-    //     sessionCookie.name,
-    //     sessionCookie.value,
-    //     sessionCookie.attributes
-    //   );
-    // }
+    if (result.session && result.session.fresh) {
+      const sessionCookie = lucia.createSessionCookie(result.session.id);
+      res.cookie(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes
+      );
+    }
     // if (!result.session) {
     //   const sessionCookie = lucia.createBlankSessionCookie();
     //   res.cookie(
