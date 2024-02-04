@@ -4,7 +4,7 @@
     "**/*.ts",
     "**/*.tsx",
     "server.ts",
-    "server/setupRemixContext.js"
+    "server/setupRemixContext.ts"
   ],
   "compilerOptions": {
     "module": "esnext",
