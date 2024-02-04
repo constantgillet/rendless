@@ -1,5 +1,11 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "server.js"],
+  "include": [
+    "remix.env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "server.ts",
+    "server/setupRemixContext.js"
+  ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,

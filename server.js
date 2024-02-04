@@ -8,6 +8,7 @@ import compression from "compression";
 import express from "express";
 import morgan from "morgan";
 import sourceMapSupport from "source-map-support";
+import { setupRemixContext } from "./server/setupRemixContext.js";
 
 sourceMapSupport.install({
   retrieveSourceMap: function (source) {
@@ -36,13 +37,7 @@ const initialBuild = await reimportServer();
 const remixHandler =
   process.env.NODE_ENV === "development"
     ? await createDevRequestHandler(initialBuild)
-    : createRequestHandler({
-        build: initialBuild,
-        mode: initialBuild.mode,
-        getLoadContext() {
-          return addContext();
-        },
-      });
+    : createProdRequestHandler(initialBuild);
 
 const app = express();
 
@@ -63,7 +58,7 @@ app.use(express.static("public", { maxAge: "1h" }));
 
 app.use(morgan("tiny"));
 
-app.all("*", remixHandler);
+app.all("*", setupRemixContext, remixHandler);
 
 const port = process.env.PORT || 3000;
 app.listen(port, async () => {
@@ -112,7 +107,9 @@ async function createDevRequestHandler(initialBuild) {
         build,
         mode: "development",
         getLoadContext() {
-          return addContext();
+          return {
+            ...res.locals,
+          };
         },
       })(req, res, next);
     } catch (error) {
@@ -121,8 +118,20 @@ async function createDevRequestHandler(initialBuild) {
   };
 }
 
-const addContext = () => {
-  return {
-    name: "test",
+function createProdRequestHandler(initialBuild) {
+  return (req, res, next) => {
+    try {
+      return createRequestHandler({
+        build: initialBuild,
+        mode: initialBuild.mode,
+        getLoadContext() {
+          return {
+            ...res.locals,
+          };
+        },
+      })(req, res, next);
+    } catch (error) {
+      next(error);
+    }
   };
-};
+}
