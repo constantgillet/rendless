@@ -190,8 +190,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const session = await lucia.createSession(userId, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
 
-  const cookie = createCookie(sessionCookie.name, sessionCookie.attributes);
-  const serialized = await cookie.serialize(sessionCookie.value);
-
-  return redirect("/register", { headers: { "Set-Cookie": serialized } });
+  return redirect("/editor", {
+    headers: { "Set-Cookie": sessionCookie.serialize() },
+  });
 };

@@ -8,6 +8,7 @@ import { FormInput, FormSubmitButton } from "~/components/Form";
 import { lucia } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
 import { Argon2id } from "~/utils/olso";
+import cookie from "cookie";
 
 export const validator = withZod(
   z.object({
@@ -146,17 +147,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const session = await lucia.createSession(findUserByEmail.id, {});
 
-  console.log("login session created: ", session.id);
-
   const sessionCookie = lucia.createSessionCookie(session.id);
 
-  const cookie = createCookie(sessionCookie.name, sessionCookie.attributes);
-
-  console.log("attribute: ", sessionCookie.attributes);
-
-  const serialized = await cookie.serialize("test");
-
-  console.log(serialized);
-
-  return redirect("/", { headers: { "Set-Cookie": serialized } });
+  return redirect("/", {
+    headers: { "Set-Cookie": sessionCookie.serialize() },
+  });
 };
