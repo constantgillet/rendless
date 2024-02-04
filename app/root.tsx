@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -36,4 +36,11 @@ export default function App() {
       </body>
     </html>
   );
+}
+
+export async function loader({ context: { name } }: LoaderFunctionArgs) {
+  // code here
+  console.log("loader root");
+
+  return { name };
 }
