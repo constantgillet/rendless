@@ -39,6 +39,9 @@ const remixHandler =
     : createRequestHandler({
         build: initialBuild,
         mode: initialBuild.mode,
+        getLoadContext() {
+          return addContext();
+        },
       });
 
 const app = express();
@@ -108,9 +111,18 @@ async function createDevRequestHandler(initialBuild) {
       return createRequestHandler({
         build,
         mode: "development",
+        getLoadContext() {
+          return addContext();
+        },
       })(req, res, next);
     } catch (error) {
       next(error);
     }
   };
 }
+
+const addContext = () => {
+  return {
+    name: "test",
+  };
+};

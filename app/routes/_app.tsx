@@ -9,5 +9,7 @@ export async function loader({ context: { name } }: LoaderFunctionArgs) {
   // code here
   console.log("loader _app");
 
+  console.log("context: ", name);
+
   return { name };
 }
