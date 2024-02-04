@@ -9,6 +9,7 @@ import express from "express";
 import morgan from "morgan";
 import sourceMapSupport from "source-map-support";
 import { setupRemixContext } from "./server/setupRemixContext";
+import cookieParser from "cookie-parser";
 
 sourceMapSupport.install({
   retrieveSourceMap: function (source) {
@@ -57,6 +58,8 @@ app.use(
 app.use(express.static("public", { maxAge: "1h" }));
 
 app.use(morgan("tiny"));
+
+app.use(cookieParser());
 
 app.all("*", setupRemixContext, remixHandler);
 
