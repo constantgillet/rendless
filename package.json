@@ -5,10 +5,14 @@
   "type": "module",
   "scripts": {
     "prepare": "panda codegen",
-    "build": "remix build",
-    "dev": "remix dev --manual -c \"node --watch-path server.js --watch server.js\"",
+    "build": "npm run build:remix && npm run build:server",
+    "build:remix": "remix build",
+    "build:server": "esbuild --format=esm --platform=node --bundle ./server.ts --outfile=build/server.js --packages=external",
+    "dev": "concurrently --names SERVER,REMIX --prefix-colors bgGreen.gray.bold,bgBlue.gray.bold \"npm run dev:build\" \"npm run dev:remix\"",
+    "dev:build": "cross-env NODE_ENV=production npm run build:server -- --watch",
+    "dev:remix": "remix dev --manual -c \"node --watch-path ./build/server.js --watch ./build/server.js\"",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-    "start": "cross-env NODE_ENV=production node ./server.js",
+    "start": "cross-env NODE_ENV=production node ./build/server.js",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -47,6 +51,8 @@
     "@types/source-map-support": "^0.5.10",
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.6.1",
