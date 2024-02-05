@@ -41,6 +41,8 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@node-rs/argon2-darwin-arm64": "^1.7.2",
+    "@node-rs/bcrypt-darwin-arm64": "^1.9.2",
     "@pandacss/dev": "^0.22.0",
     "@remix-run/dev": "^2.4.0",
     "@types/compression": "^1.7.5",
