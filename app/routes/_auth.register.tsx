@@ -13,7 +13,7 @@ import { z } from "zod";
 import { FormInput, FormSubmitButton } from "~/components/Form";
 import { lucia } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
-import { Argon2id } from "~/utils/olso";
+import { Argon2id } from "~/libs/olso";
 
 export const validator = withZod(
   z.object({
