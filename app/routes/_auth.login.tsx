@@ -145,6 +145,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     password
   );
 
+  if (!validPassword) {
+    return validationError(
+      {
+        fieldErrors: {
+          email: "Wrong email or password",
+        },
+      },
+      result.data
+    );
+  }
+
   const session = await lucia.createSession(findUserByEmail.id, {});
 
   const sessionCookie = lucia.createSessionCookie(session.id);
