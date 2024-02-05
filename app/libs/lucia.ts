@@ -14,6 +14,12 @@ export const lucia = new Lucia(adapter, {
     },
   },
   sessionExpiresIn: new TimeSpan(2, "w"),
+  getUserAttributes: (attributes) => {
+    return {
+      username: attributes.username,
+      email: attributes.email,
+    };
+  },
 });
 
 // IMPORTANT!
@@ -26,4 +32,5 @@ declare module "lucia" {
 
 interface DatabaseUserAttributes {
   username: string;
+  email: true;
 }

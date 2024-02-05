@@ -1,16 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import { lucia } from "../app/libs/lucia";
-import { authCookie } from "../app/libs/cookies.server";
+
 export async function setupRemixContext(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  res.locals.name = "test3";
-
   const auth = await validateAuth(req, res);
 
-  console.log("auth", auth);
+  if (auth?.user) {
+    res.locals.user = {
+      username: auth.user.username,
+      email: auth.user.email as unknown as string,
+    };
+  } else {
+    res.locals.user = null;
+  }
 
   next();
 }

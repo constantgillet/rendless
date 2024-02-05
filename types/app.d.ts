@@ -1,7 +1,10 @@
 import "@remix-run/server-runtime";
 
 type Context = {
-  name: string;
+  user?: null | {
+    username: string;
+    email: string;
+  };
 };
 
 declare module "@remix-run/server-runtime" {
