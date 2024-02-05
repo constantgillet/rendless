@@ -49,6 +49,21 @@ export default defineConfig({
       },
     },
   },
+  patterns: {
+    extend: {
+      // Extend the default `container` pattern and change the max-width to 1150px
+      container: {
+        transform: (properties) => {
+          return {
+            ...properties,
+            maxWidth: "1150px",
+            marginX: "auto",
+            paddingX: "4",
+          };
+        },
+      },
+    },
+  },
   // The output directory for your css system
   outdir: "styled-system",
 });

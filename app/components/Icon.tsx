@@ -14,7 +14,12 @@ export type IconName =
   | "text-align-left"
   | "text-align-right"
   | "chevron-down"
-  | "chevron-left";
+  | "chevron-left"
+  | "settings"
+  | "home"
+  | "templates"
+  | "data-bar-horizontal"
+  | "settings";
 
 export const iconStyle = cva({
   base: {
