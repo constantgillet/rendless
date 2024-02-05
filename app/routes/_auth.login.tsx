@@ -159,7 +159,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const sessionCookie = lucia.createSessionCookie(session.id);
 
-  return redirect("/", {
+  return redirect("/app", {
     headers: { "Set-Cookie": sessionCookie.serialize() },
   });
 };

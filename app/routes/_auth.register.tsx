@@ -1,10 +1,5 @@
 import { Link } from "@radix-ui/themes";
-import {
-  ActionFunctionArgs,
-  createCookie,
-  json,
-  redirect,
-} from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { generateId } from "lucia";
 import { ValidatedForm, validationError } from "remix-validated-form";
@@ -190,7 +185,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const session = await lucia.createSession(userId, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
 
-  return redirect("/editor", {
+  return redirect("/app", {
     headers: { "Set-Cookie": sessionCookie.serialize() },
   });
 };
