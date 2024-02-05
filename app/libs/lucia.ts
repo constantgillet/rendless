@@ -1,6 +1,8 @@
 import { Lucia, TimeSpan } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { PrismaClient } from "@prisma/client";
+import { Context } from "types/app";
+import { redirect } from "@remix-run/node";
 
 const prisma = new PrismaClient();
 
@@ -34,3 +36,9 @@ interface DatabaseUserAttributes {
   username: string;
   email: true;
 }
+
+export const ensureAuthenticated = (user: Context["user"]) => {
+  if (!user) {
+    throw redirect("/login");
+  }
+};

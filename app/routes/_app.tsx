@@ -1,15 +1,13 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
+import { ensureAuthenticated } from "~/libs/lucia";
 
 export default function AppLayout() {
   return <Outlet />;
 }
 
-export async function loader({ context: { name } }: LoaderFunctionArgs) {
-  // code here
-  // console.log("loader _app");
+export async function loader({ context: { user } }: LoaderFunctionArgs) {
+  ensureAuthenticated(user);
 
-  // console.log("context: ", name);
-
-  return { name };
+  return { user };
 }
