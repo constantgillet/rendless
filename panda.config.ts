@@ -59,6 +59,7 @@ export default defineConfig({
             maxWidth: "1150px",
             marginX: "auto",
             paddingX: "4",
+            w: "100%",
           };
         },
       },
