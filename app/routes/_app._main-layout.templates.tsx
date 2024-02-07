@@ -20,7 +20,7 @@ export default function AppHome() {
           >
             You will discover here all your images templates
           </div>
-          <Button>Create a template</Button>
+          <Button variant="classic">Create a template</Button>
         </div>
         <div className={grid({ columns: 12, gap: 6 })}>
           <Card className={gridItem({ colSpan: 4, padding: 0 })}>
