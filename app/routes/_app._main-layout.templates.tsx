@@ -68,3 +68,7 @@ export default function AppHome() {
     </>
   );
 }
+
+export const handle = {
+  pageTitle: "templates",
+};

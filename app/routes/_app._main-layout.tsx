@@ -1,8 +1,9 @@
 import { Button, DropdownMenu, IconButton } from "@radix-ui/themes";
-import { Link, Outlet } from "@remix-run/react";
+import { Link, Outlet, useMatches } from "@remix-run/react";
 import { css, cx } from "styled-system/css";
 import { container } from "styled-system/patterns";
 import { Icon, IconName } from "~/components/Icon";
+import { useMatchPageTitle } from "~/hooks/useMatchPageTitle";
 
 const links: {
   label: string;
@@ -32,6 +33,8 @@ const links: {
 ];
 
 export default function MainLayout() {
+  const pageTitle = useMatchPageTitle();
+
   return (
     <div>
       <header
@@ -120,9 +123,10 @@ export default function MainLayout() {
               className={css({
                 fontSize: "2xl",
                 fontWeight: "semibold",
+                textTransform: "capitalize",
               })}
             >
-              Home
+              {pageTitle}
             </h1>
           </div>
 

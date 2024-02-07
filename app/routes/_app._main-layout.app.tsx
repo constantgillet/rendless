@@ -9,6 +9,10 @@ export default function AppHome() {
   );
 }
 
+export const handle = {
+  pageTitle: "home",
+};
+
 const OnboardingCard = () => {
   return (
     <Card
