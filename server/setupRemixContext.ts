@@ -10,6 +10,7 @@ export async function setupRemixContext(
 
   if (auth?.user && auth?.session) {
     res.locals.user = {
+      id: auth.user.id,
       username: auth.user.username,
       email: auth.user.email as unknown as string,
     };

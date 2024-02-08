@@ -2,6 +2,7 @@ import "@remix-run/server-runtime";
 
 type Context = {
   user?: null | {
+    id: string;
     username: string;
     email: string;
   };

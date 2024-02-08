@@ -1,8 +1,31 @@
 import { Button, Card, Inset } from "@radix-ui/themes";
+import { useFetcher } from "@remix-run/react";
 import { css } from "styled-system/css";
 import { grid, gridItem } from "styled-system/patterns";
 
 export default function AppHome() {
+  const createTemplateFetcher = useFetcher();
+
+  const createTemplate = async () => {
+    createTemplateFetcher.submit(
+      {},
+      {
+        action: "/api/create-template",
+        method: "POST",
+      }
+    );
+  };
+
+  const onClickCreateButton = () => {
+    if (
+      createTemplateFetcher.state === "loading" ||
+      createTemplateFetcher.state === "submitting"
+    )
+      return;
+
+    createTemplate();
+  };
+
   return (
     <>
       <div className={css({ spaceY: "4" })}>
@@ -20,7 +43,9 @@ export default function AppHome() {
           >
             You will discover here all your images templates
           </div>
-          <Button variant="classic">Create a template</Button>
+          <Button variant="classic" onClick={onClickCreateButton}>
+            Create a template
+          </Button>
         </div>
         <div className={grid({ columns: 12, gap: 6 })}>
           <Card className={gridItem({ colSpan: 4 })}>
