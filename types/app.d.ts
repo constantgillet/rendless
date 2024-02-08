@@ -5,6 +5,9 @@ type Context = {
     username: string;
     email: string;
   };
+  session?: null | {
+    id: string;
+  };
 };
 
 declare module "@remix-run/server-runtime" {

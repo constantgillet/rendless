@@ -8,13 +8,17 @@ export async function setupRemixContext(
 ) {
   const auth = await validateAuth(req, res);
 
-  if (auth?.user) {
+  if (auth?.user && auth?.session) {
     res.locals.user = {
       username: auth.user.username,
       email: auth.user.email as unknown as string,
     };
+    res.locals.session = {
+      id: auth.session.id,
+    };
   } else {
     res.locals.user = null;
+    res.locals.session = null;
   }
 
   next();

@@ -1,9 +1,10 @@
 import { Button, DropdownMenu, IconButton } from "@radix-ui/themes";
-import { Link, Outlet, useMatches } from "@remix-run/react";
+import { Link, Outlet } from "@remix-run/react";
 import { css, cx } from "styled-system/css";
 import { container } from "styled-system/patterns";
 import { Icon, IconName } from "~/components/Icon";
 import { useMatchPageTitle } from "~/hooks/useMatchPageTitle";
+import { useSignout } from "~/hooks/useSignout";
 
 const links: {
   label: string;
@@ -34,6 +35,8 @@ const links: {
 
 export default function MainLayout() {
   const pageTitle = useMatchPageTitle();
+
+  const signout = useSignout();
 
   return (
     <div>
@@ -97,7 +100,13 @@ export default function MainLayout() {
               <DropdownMenu.Content align="end">
                 <DropdownMenu.Item shortcut="⌘ E">Settings</DropdownMenu.Item>
                 <DropdownMenu.Separator />
-                <DropdownMenu.Item>Logout</DropdownMenu.Item>
+                <DropdownMenu.Item
+                  onClick={() => {
+                    signout();
+                  }}
+                >
+                  Logout
+                </DropdownMenu.Item>
               </DropdownMenu.Content>
             </DropdownMenu.Root>
           </div>
