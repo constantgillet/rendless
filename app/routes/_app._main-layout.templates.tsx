@@ -100,12 +100,14 @@ export default function TemplatePage() {
                       overflow: "hidden",
                     })}
                   >
-                    <img
-                      src="https://assets-global.website-files.com/6040ba28127600ad9182e1be/648ac36424d7794b98b5d3ce_artboard.jpg"
-                      width={"full"}
-                      height={"full"}
-                      alt="Og  template"
-                    />
+                    <Link to={`/editor/${template.id}`}>
+                      <img
+                        src="https://assets-global.website-files.com/6040ba28127600ad9182e1be/648ac36424d7794b98b5d3ce_artboard.jpg"
+                        width={"full"}
+                        height={"full"}
+                        alt="Og  template"
+                      />
+                    </Link>
                   </div>
                   <div
                     className={css({ display: "flex", alignItems: "center" })}
