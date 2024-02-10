@@ -4,6 +4,7 @@ import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { css } from "styled-system/css";
 import { grid, gridItem } from "styled-system/patterns";
 import { DeleteTemplateButton } from "~/components/DeleteTemplateButton";
+import { Spinner } from "~/components/Spinner";
 import { prisma } from "~/libs/prisma";
 import { Tree } from "~/stores/EditorStore";
 
@@ -75,6 +76,8 @@ export default function TemplatePage() {
             You will discover here all your images templates
           </div>
           <Button variant="classic" onClick={onClickCreateButton}>
+            {createTemplateFetcher.state === "loading" ||
+              (createTemplateFetcher.state === "submitting" && <Spinner />)}
             Create a template
           </Button>
         </div>
@@ -116,7 +119,7 @@ export default function TemplatePage() {
                     <div className={css({ flex: 1 })}>{template.name}</div>
                     <div className={css({ display: "flex", gap: 2 })}>
                       <Link to={`/editor/${template.id}`}>
-                        <Button size="2">Edition</Button>{" "}
+                        <Button size="2">Edition</Button>
                       </Link>
                       <DeleteTemplateButton templateId={template.id} />
                     </div>

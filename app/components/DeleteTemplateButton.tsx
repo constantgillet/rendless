@@ -2,6 +2,7 @@ import { AlertDialog, Button } from "@radix-ui/themes";
 import { useFetcher } from "@remix-run/react";
 import { css } from "styled-system/css";
 import { action as deleteAction } from "~/routes/api.delete-template";
+import { Spinner } from "./Spinner";
 
 type DeleteTemplateButtonProps = {
   templateId: string;
@@ -59,6 +60,8 @@ export const DeleteTemplateButton = ({
               fetcher.state === "loading" || fetcher.state === "submitting"
             }
           >
+            {fetcher.state === "loading" ||
+              (fetcher.state === "submitting" && <Spinner />)}
             Delete template
           </Button>
         </div>
