@@ -66,6 +66,7 @@ type HistoryState = {
 interface EditorState {
   selected: string[];
   tree: Tree;
+  setTree: (tree: Tree) => void;
   selectedTool: Tool;
   setSelected: (selected: string[]) => void;
   addElement: (element: ElementType) => void;
@@ -136,6 +137,7 @@ export const useEditorStore = create<EditorState>()(
   // @ts-ignore
   devtools((set) => ({
     tree: defaultTree,
+    setTree: (tree) => set({ tree }),
     selected: [],
     selectedTool: "select",
     setSelected: (selected) => set({ selected }),
