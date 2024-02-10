@@ -12,6 +12,10 @@ import { Theme } from "@radix-ui/themes";
 import styles from "./index.css";
 import radixStyles from "@radix-ui/themes/styles.css";
 
+export const loader = ({ context: { user } }: LoaderFunctionArgs) => {
+  return { user };
+};
+
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
   { rel: "stylesheet", href: radixStyles },

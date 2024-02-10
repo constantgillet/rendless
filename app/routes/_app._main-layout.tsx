@@ -1,10 +1,11 @@
-import { Button, DropdownMenu, IconButton } from "@radix-ui/themes";
+import { Avatar, Button, DropdownMenu, IconButton } from "@radix-ui/themes";
 import { Link, Outlet } from "@remix-run/react";
 import { css, cx } from "styled-system/css";
 import { container } from "styled-system/patterns";
 import { Icon, IconName } from "~/components/Icon";
 import { useMatchPageTitle } from "~/hooks/useMatchPageTitle";
 import { useSignout } from "~/hooks/useSignout";
+import { useUser } from "~/hooks/useUser";
 
 const links: {
   label: string;
@@ -37,6 +38,7 @@ export default function MainLayout() {
   const pageTitle = useMatchPageTitle();
 
   const signout = useSignout();
+  const user = useUser();
 
   return (
     <div>
@@ -86,15 +88,12 @@ export default function MainLayout() {
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
                 <Button variant="ghost" size="2" color="gray">
-                  davendrix
-                  <IconButton
+                  {user?.username}
+                  <Avatar
+                    fallback={user?.username[0] || ""}
+                    size="1"
                     radius="full"
-                    size={"1"}
-                    color="gray"
-                    variant="classic"
-                  >
-                    C
-                  </IconButton>
+                  />
                 </Button>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content align="end">
