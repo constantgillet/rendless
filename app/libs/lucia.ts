@@ -34,7 +34,7 @@ declare module "lucia" {
 
 interface DatabaseUserAttributes {
   username: string;
-  email: true;
+  email: string;
 }
 
 export const ensureAuthenticated = (user: Context["user"]) => {

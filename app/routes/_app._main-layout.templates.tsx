@@ -3,6 +3,7 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { css } from "styled-system/css";
 import { grid, gridItem } from "styled-system/patterns";
+import { DeleteTemplateButton } from "~/components/DeleteTemplateButton";
 import { prisma } from "~/libs/prisma";
 import { Tree } from "~/stores/EditorStore";
 
@@ -117,9 +118,7 @@ export default function TemplatePage() {
                       <Link to={`/editor/${template.id}`}>
                         <Button size="2">Edition</Button>{" "}
                       </Link>
-                      <Button size="2" variant="outline" color="red">
-                        Delete
-                      </Button>
+                      <DeleteTemplateButton templateId={template.id} />
                     </div>
                   </div>
                 </div>
