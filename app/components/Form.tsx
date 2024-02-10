@@ -3,6 +3,7 @@ import { ButtonProps } from "node_modules/@radix-ui/themes/dist/esm/components/b
 import { TextFieldInputProps } from "node_modules/@radix-ui/themes/dist/esm/components/text-field";
 import { useField, useIsSubmitting } from "remix-validated-form";
 import { css } from "styled-system/css";
+import { Spinner } from "./Spinner";
 
 type FormInputProps = TextFieldInputProps & {
   name: string;
@@ -44,7 +45,13 @@ export const FormSubmitButton = (props: FormSubmitButtonProps) => {
 
   return (
     <Button type="submit" disabled={isSubmitting} {...props}>
-      {isSubmitting ? "Submitting..." : props.children}
+      {isSubmitting ? (
+        <>
+          <Spinner size={16} /> Submitting
+        </>
+      ) : (
+        props.children
+      )}
     </Button>
   );
 };
