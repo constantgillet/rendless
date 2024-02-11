@@ -96,7 +96,7 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
           })}
         >
           <Button variant="outline">Use image</Button>
-          <Button>Preview</Button>
+          <Button>Deploy</Button>
         </div>
       </div>
     </header>

@@ -1,5 +1,5 @@
 import { Avatar, Button, DropdownMenu, IconButton } from "@radix-ui/themes";
-import { Link, Outlet } from "@remix-run/react";
+import { Link, Outlet, useLocation } from "@remix-run/react";
 import { css, cx } from "styled-system/css";
 import { container } from "styled-system/patterns";
 import { Icon, IconName } from "~/components/Icon";
@@ -50,6 +50,8 @@ export default function MainLayout() {
   const signout = useSignout();
   const user = useUser();
 
+  const { pathname } = useLocation();
+
   return (
     <div>
       <header
@@ -82,11 +84,21 @@ export default function MainLayout() {
             <div
               className={css({
                 spaceX: "24px",
+                display: "flex",
+                gap: "4px",
               })}
             >
               {links.map((link) => (
                 <Link key={link.href} to={link.href} title={link.label}>
-                  <Button variant="ghost" size="3" color="gray">
+                  <Button
+                    variant="ghost"
+                    size="3"
+                    color="gray"
+                    style={{
+                      background:
+                        pathname === link.href ? "var(--gray-a3)" : undefined,
+                    }}
+                  >
                     <Icon name={link.iconName} size="md" />
                     {link.label}
                   </Button>
