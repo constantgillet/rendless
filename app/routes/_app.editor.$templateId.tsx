@@ -15,7 +15,7 @@ import "../contents/fontInfo.json";
 import { FontLoader } from "~/components/FontLoader";
 import { MoveableManager } from "~/components/MoveableManager";
 import { prisma } from "~/libs/prisma";
-import { useLoaderData } from "@remix-run/react";
+import { ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
 import { Tree, useEditorStore } from "~/stores/EditorStore";
 
 export const meta: MetaFunction = () => {
@@ -87,7 +87,7 @@ export default function Index() {
           overflow: "hidden",
         }}
       >
-        <TopBar initalName={template.name} />
+        <TopBar initalName={template.name} templateId={template.id} />
         <div
           className={css({
             flex: 1,
@@ -121,3 +121,5 @@ const TreeLoader = (props: TreeLoaderProps) => {
 
   return null;
 };
+
+export const shouldRevalidate = () => false;

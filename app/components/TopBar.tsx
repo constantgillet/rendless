@@ -1,19 +1,14 @@
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
-import {
-  Button,
-  Callout,
-  Dialog,
-  IconButton,
-  TextField,
-  Tooltip,
-} from "@radix-ui/themes";
+import { Button, Callout, Dialog, IconButton, Tooltip } from "@radix-ui/themes";
 import { Tool, useEditorStore } from "../stores/EditorStore";
-import { withZod } from "@remix-validated-form/with-zod";
-import { z } from "zod";
-import { ValidatedForm } from "remix-validated-form";
-import { FormInput } from "./Form";
-import { useState } from "react";
+
+import { ValidatedForm, useFormContext } from "remix-validated-form";
+import { FormInput, FormSubmitButton } from "./Form";
+import { useEffect, useState } from "react";
+import { editTemplateNamevalidator } from "~/routes/api.update-template-name";
+import { useFetcher } from "@remix-run/react";
+import { action as updateTemplateNameAction } from "~/routes/api.update-template-name";
 
 const toolsData = [
   {
@@ -35,9 +30,10 @@ const toolsData = [
 
 type TopBarProps = {
   initalName: string;
+  templateId: string;
 };
 
-export const TopBar = ({ initalName }: TopBarProps) => {
+export const TopBar = ({ initalName, templateId }: TopBarProps) => {
   const selectedTool = useEditorStore((state) => state.selectedTool);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
 
@@ -88,7 +84,7 @@ export const TopBar = ({ initalName }: TopBarProps) => {
             justifyContent: "center",
           })}
         >
-          <TemplateNameButton initalName={initalName} />
+          <TemplateNameButton templateId={templateId} initalName={initalName} />
         </div>
         <div
           className={css({
@@ -107,31 +103,42 @@ export const TopBar = ({ initalName }: TopBarProps) => {
   );
 };
 
-export const validator = withZod(
-  z.object({
-    templateName: z
-      .string()
-      .min(1, { message: "Template name is required" })
-      .max(100, {
-        message: "Template name can't be longer than 100 characters",
-      })
-      .regex(/^[a-zA-Z0-9_.-]*$/, {
-        message:
-          "Template name can only contain letters, numbers, and the characters . _ -",
-      }),
-  })
-);
-
 type TemplateNameButtonProps = {
   initalName: string;
+  templateId: string;
 };
 
-const TemplateNameButton = ({ initalName }: TemplateNameButtonProps) => {
+const formId = "edit-template-name";
+
+const TemplateNameButton = ({
+  initalName,
+  templateId,
+}: TemplateNameButtonProps) => {
   const [templateName, setTemplateName] = useState(initalName);
+  const [open, setOpen] = useState(false);
+  const formContext = useFormContext(formId);
+
+  const fetcher = useFetcher<typeof updateTemplateNameAction>();
+
+  useEffect(() => {
+    if (fetcher.data?.ok) {
+      const newTemplateName = formContext.getValues().get("templateName");
+
+      if (newTemplateName) {
+        setTemplateName(newTemplateName as string);
+        setOpen(false);
+      }
+    }
+  }, [fetcher.state, fetcher.data]);
 
   return (
-    <Dialog.Root>
-      <Dialog.Trigger>
+    <Dialog.Root
+      open={open}
+      onOpenChange={(val) => {
+        setOpen(val);
+      }}
+    >
+      <Dialog.Trigger onClick={() => setOpen(true)}>
         <button
           className={css({
             border: "none",
@@ -149,14 +156,24 @@ const TemplateNameButton = ({ initalName }: TemplateNameButtonProps) => {
       </Dialog.Trigger>
       <Dialog.Content style={{ maxWidth: 460 }}>
         <Dialog.Title>Edit template name</Dialog.Title>
-
         <ValidatedForm
-          validator={validator}
-          method="post"
+          id={formId}
+          validator={editTemplateNamevalidator}
           defaultValues={{
             templateName: templateName,
           }}
+          fetcher={fetcher}
+          onSubmit={(values, e) => {
+            e.preventDefault();
+
+            fetcher.submit(values, {
+              method: "POST",
+              action: "/api/update-template-name",
+            });
+          }}
+          replace={false}
         >
+          <input type="hidden" name="templateId" value={templateId} />
           <div
             className={css({
               spaceY: "3",
@@ -164,7 +181,7 @@ const TemplateNameButton = ({ initalName }: TemplateNameButtonProps) => {
           >
             <Callout.Root>
               <Callout.Icon>
-                <Icon name="info" />
+                <Icon name="info" size="lg" />
               </Callout.Icon>
               <Callout.Text>
                 Please change the template name in your code after you changed
@@ -187,7 +204,7 @@ const TemplateNameButton = ({ initalName }: TemplateNameButtonProps) => {
                 Cancel
               </Button>
             </Dialog.Close>
-            <Button type="submit">Save template</Button>
+            <FormSubmitButton>Save template</FormSubmitButton>
           </div>
         </ValidatedForm>
       </Dialog.Content>
