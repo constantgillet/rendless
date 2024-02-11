@@ -34,6 +34,16 @@ const links: {
   },
 ];
 
+const linkClassName = css({
+  fontSize: "sm",
+  color: "var(--gray-11)",
+  _hover: {
+    textDecoration: "underline",
+  },
+  alignItems: "center",
+  display: "flex",
+});
+
 export default function MainLayout() {
   const pageTitle = useMatchPageTitle();
 
@@ -84,7 +94,15 @@ export default function MainLayout() {
               ))}
             </div>
           </div>
-          <div>
+          <div className={css({ display: "flex", gap: 4 })}>
+            <div className={css({ display: "flex", gap: "2" })}>
+              <Link to={"/"} className={linkClassName}>
+                Help
+              </Link>
+              <Link to={"/"} className={linkClassName}>
+                Docs
+              </Link>
+            </div>
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
                 <Button variant="ghost" size="2" color="gray">

@@ -110,6 +110,7 @@ type TemplateNameButtonProps = {
 
 const formId = "edit-template-name";
 
+//TODO CHANGE THE WAY FOR PREVENTING REFETCHING
 const TemplateNameButton = ({
   initalName,
   templateId,
