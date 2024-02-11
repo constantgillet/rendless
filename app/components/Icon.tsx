@@ -19,7 +19,8 @@ export type IconName =
   | "home"
   | "templates"
   | "data-bar-horizontal"
-  | "settings";
+  | "settings"
+  | "info";
 
 export const iconStyle = cva({
   base: {

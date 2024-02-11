@@ -1,7 +1,19 @@
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
-import { Button, IconButton, Tooltip } from "@radix-ui/themes";
+import {
+  Button,
+  Callout,
+  Dialog,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@radix-ui/themes";
 import { Tool, useEditorStore } from "../stores/EditorStore";
+import { withZod } from "@remix-validated-form/with-zod";
+import { z } from "zod";
+import { ValidatedForm } from "remix-validated-form";
+import { FormInput } from "./Form";
+import { useState } from "react";
 
 const toolsData = [
   {
@@ -21,7 +33,11 @@ const toolsData = [
   },
 ];
 
-export const TopBar = () => {
+type TopBarProps = {
+  initalName: string;
+};
+
+export const TopBar = ({ initalName }: TopBarProps) => {
   const selectedTool = useEditorStore((state) => state.selectedTool);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
 
@@ -72,18 +88,7 @@ export const TopBar = () => {
             justifyContent: "center",
           })}
         >
-          <input
-            value={"Template name"}
-            className={css({
-              border: "none",
-              outline: "none",
-              textAlign: "center",
-              fontSize: "var(--font-size-3)",
-              fontWeight: "var(--font-weight-medium)",
-              color: "var(--color-text)",
-              backgroundColor: "transparent",
-            })}
-          />
+          <TemplateNameButton initalName={initalName} />
         </div>
         <div
           className={css({
@@ -99,5 +104,93 @@ export const TopBar = () => {
         </div>
       </div>
     </header>
+  );
+};
+
+export const validator = withZod(
+  z.object({
+    templateName: z
+      .string()
+      .min(1, { message: "Template name is required" })
+      .max(100, {
+        message: "Template name can't be longer than 100 characters",
+      })
+      .regex(/^[a-zA-Z0-9_.-]*$/, {
+        message:
+          "Template name can only contain letters, numbers, and the characters . _ -",
+      }),
+  })
+);
+
+type TemplateNameButtonProps = {
+  initalName: string;
+};
+
+const TemplateNameButton = ({ initalName }: TemplateNameButtonProps) => {
+  const [templateName, setTemplateName] = useState(initalName);
+
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger>
+        <button
+          className={css({
+            border: "none",
+            outline: "none",
+            textAlign: "center",
+            fontSize: "var(--font-size-3)",
+            fontWeight: "var(--font-weight-medium)",
+            color: "var(--color-text)",
+            backgroundColor: "transparent",
+            cursor: "text",
+          })}
+        >
+          {templateName}
+        </button>
+      </Dialog.Trigger>
+      <Dialog.Content style={{ maxWidth: 460 }}>
+        <Dialog.Title>Edit template name</Dialog.Title>
+
+        <ValidatedForm
+          validator={validator}
+          method="post"
+          defaultValues={{
+            templateName: templateName,
+          }}
+        >
+          <div
+            className={css({
+              spaceY: "3",
+            })}
+          >
+            <Callout.Root>
+              <Callout.Icon>
+                <Icon name="info" />
+              </Callout.Icon>
+              <Callout.Text>
+                Please change the template name in your code after you changed
+                it here.
+              </Callout.Text>
+            </Callout.Root>{" "}
+            <FormInput name="templateName" placeholder="template-name" />
+          </div>
+
+          <div
+            className={css({
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: "8px",
+              marginTop: "4",
+            })}
+          >
+            <Dialog.Close>
+              <Button variant="soft" color="gray">
+                Cancel
+              </Button>
+            </Dialog.Close>
+            <Button type="submit">Save template</Button>
+          </div>
+        </ValidatedForm>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 };

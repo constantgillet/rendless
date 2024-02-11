@@ -52,7 +52,6 @@ export async function loader({
       throw new Error("You don't have permission to access this template");
     }
 
-    //Map return of template.tree as Tree type
     const template = {
       ...templateData,
       tree: templateData?.tree as unknown as Tree,
@@ -88,7 +87,7 @@ export default function Index() {
           overflow: "hidden",
         }}
       >
-        <TopBar />
+        <TopBar initalName={template.name} />
         <div
           className={css({
             flex: 1,
