@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { editTemplateNamevalidator } from "~/routes/api.update-template-name";
 import { useFetcher } from "@remix-run/react";
 import { action as updateTemplateNameAction } from "~/routes/api.update-template-name";
+import { Spinner } from "./Spinner";
 
 const toolsData = [
   {
@@ -95,6 +96,17 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
             alignItems: "center",
           })}
         >
+          <div
+            className={css({
+              display: "flex",
+              color: "var(--gray-a11)",
+              alignItems: "center",
+              gap: "2",
+              fontSize: "sm",
+            })}
+          >
+            <Spinner fill="var(--accent-9)" /> Saving ...
+          </div>
           <Button variant="outline">Use image</Button>
           <Button>Deploy</Button>
         </div>

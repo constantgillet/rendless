@@ -1,8 +1,8 @@
 type SpinnerProps = {
   size?: number;
-};
+} & React.SVGProps<SVGSVGElement>;
 
-export const Spinner = ({ size = 14 }: SpinnerProps) => {
+export const Spinner = ({ size = 14, ...props }: SpinnerProps) => {
   return (
     <svg
       width={size}
@@ -10,6 +10,7 @@ export const Spinner = ({ size = 14 }: SpinnerProps) => {
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
+      {...props}
     >
       <style
         dangerouslySetInnerHTML={{
