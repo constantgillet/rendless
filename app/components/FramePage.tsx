@@ -13,6 +13,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
     const tree = useEditorStore((state) => state.tree);
     const scale = useScaleStore((state) => state.scale);
     const selectedTool = useEditorStore((state) => state.selectedTool);
+    const setSelected = useEditorStore((state) => state.setSelected);
 
     const increaseScale = useScaleStore((state) => state.increase);
     const decreaseScale = useScaleStore((state) => state.decrease);
@@ -43,6 +44,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
           )}
         >
           <div
+            role="presentation"
             style={{
               minWidth: "100%",
               minHeight: "100%",
@@ -50,6 +52,11 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
               justifyContent: "center",
               alignItems: "center",
               width: "fit-content",
+            }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setSelected([]);
+              }
             }}
           >
             <div
