@@ -20,7 +20,8 @@ export type IconName =
   | "templates"
   | "data-bar-horizontal"
   | "settings"
-  | "info";
+  | "info"
+  | "checkmark-circle";
 
 export const iconStyle = cva({
   base: {
