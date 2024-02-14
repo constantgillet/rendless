@@ -97,7 +97,7 @@ export const MoveableManager = (props: MoveableManagerProps) => {
   };
 
   const selectedTargetsElements = selectedTargets.map((id) =>
-    container.current!.querySelector<HTMLElement | SVGElement>(
+    container.current?.querySelector<HTMLElement | SVGElement>(
       `[${DATA_SCENA_ELEMENT_ID}="${id}"]`
     )
   );
