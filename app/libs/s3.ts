@@ -1,26 +1,34 @@
-import { S3 } from "aws-sdk";
+import {
+  S3Client,
+  PutObjectCommand,
+  type PutObjectCommandInput,
+} from "@aws-sdk/client-s3";
 
-const s3 = new S3({
+const s3 = new S3Client({
   forcePathStyle: false, // Configures to use subdomain/virtual calling format.
   endpoint: "https://ams3.digitaloceanspaces.com",
-  region: "us-east-1",
+  region: "ams3",
   credentials: {
-    accessKeyId: process.env.SPACES_KEY,
-    secretAccessKey: process.env.SPACES_SECRET,
+    accessKeyId: process.env.SPACES_KEY as string,
+    secretAccessKey: process.env.SPACES_SECRET as string,
   },
 });
 
-export const uploadToS3 = async () => {
-  const params: S3.PutObjectRequest = {
+export const uploadToS3 = async (fileContent: Buffer) => {
+  const params: PutObjectCommandInput = {
     Bucket: "cgbucket",
-    Key: fileData!.originalname,
+    Key: "ogimages/generated/test.png",
     Body: fileContent,
   };
 
-  try {
-    const res = await s3.upload(params).promise();
+  const command = new PutObjectCommand(params);
 
-    console.log("File Uploaded with Successfull", res.Location);
+  try {
+    const data = await s3.send(command);
+
+    console.log(data);
+
+    return data;
   } catch (error) {
     console.error(error);
     throw new Error("Error uploading file to S3");

@@ -2,6 +2,8 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { prisma } from "~/libs/prisma";
 import { Tree } from "~/stores/EditorStore";
 import satori from "satori";
+import { Resvg } from "@resvg/resvg-js";
+import { uploadToS3 } from "~/libs/s3";
 
 async function fetchFont(font: string): Promise<ArrayBuffer | null> {
   const API = `https://fonts.googleapis.com/css2?family=${font}`;
@@ -23,8 +25,6 @@ async function fetchFont(font: string): Promise<ArrayBuffer | null> {
   if (!resource) return null;
 
   const res = await fetch(resource[1]);
-
-  console.log(res);
 
   return res.arrayBuffer();
 }
@@ -150,6 +150,29 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     });
 
     console.log(svg);
+  } catch (error) {
+    console.error("Error rendering template", error);
+    throw json(
+      {
+        ok: false,
+        error: {
+          message: "Error rendering template",
+          code: "RENDER_TEMPLATE_ERROR",
+        },
+      },
+      { status: 500 }
+    );
+  }
+
+  const resvg = new Resvg(svg);
+
+  try {
+    const pngData = resvg.render();
+    const pngBuffer = pngData.asPng();
+
+    const location = await uploadToS3(pngBuffer);
+
+    console.log("Location", location);
   } catch (error) {
     console.error("Error rendering template", error);
     throw json(
