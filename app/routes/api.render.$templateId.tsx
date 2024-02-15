@@ -4,6 +4,7 @@ import { Tree } from "~/stores/EditorStore";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import { uploadToS3 } from "~/libs/s3";
+import CryptoJS from "crypto-js";
 
 async function fetchFont(font: string): Promise<ArrayBuffer | null> {
   const API = `https://fonts.googleapis.com/css2?family=${font}`;
@@ -96,6 +97,15 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       { status: 404 }
     );
   }
+
+  const url = new URL(`https://og-image/render/${templateId}`);
+  // url.searchParams.set("params-test", "value1");
+
+  const urlHashed = CryptoJS.SHA256(url.toString()).toString();
+
+  console.log("url: ", url);
+
+  console.log("hash: ", urlHashed);
 
   //https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu7GxKOzY.woff2
 
