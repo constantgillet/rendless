@@ -3,7 +3,7 @@ import redis, { RedisClientType } from "redis";
 let redisClient: RedisClientType | null;
 
 (async () => {
-  redisClient = redis.createClient();
+  redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
   redisClient.on("error", (error) => console.error(`Error : ${error}`));
 
