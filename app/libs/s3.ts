@@ -23,8 +23,10 @@ const s3 = new S3Client({
 export const uploadToS3 = async (fileContent: Buffer, key: string) => {
   const params: PutObjectCommandInput = {
     Bucket: "cgbucket",
-    Key: "ogimages/generated/test.png",
+    Key: key,
     Body: fileContent,
+    ACL: "public-read",
+    ContentType: "image/png",
   };
 
   const command = new PutObjectCommand(params);

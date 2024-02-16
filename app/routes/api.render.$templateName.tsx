@@ -5,7 +5,9 @@ import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import { uploadToS3 } from "~/libs/s3";
 import CryptoJS from "crypto-js";
-import { getCacheData } from "~/libs/redis.server";
+import { getCacheData, setCacheData } from "~/libs/redis.server";
+
+const cacheEnabled = true;
 
 async function fetchFont(font: string): Promise<ArrayBuffer | null> {
   const API = `https://fonts.googleapis.com/css2?family=${font}`;
@@ -38,31 +40,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { templateName } = params;
 
   console.log("RENDER TEMPLATE", templateName);
-
-  const url = new URL(`https://og-image/render/${templateName}`);
-  // url.searchParams.set("params-test", "value1");
-
-  const urlHashed = CryptoJS.SHA256(url.toString()).toString();
-
-  console.log("url: ", url);
-
-  console.log("hash: ", urlHashed);
-
-  const cacheKey = `og-image-render-${urlHashed}`;
-
-  try {
-    const cachedData = await getCacheData(cacheKey);
-
-    if (cachedData) {
-      return json({
-        ok: true,
-        data: {
-          url: `${bucketURL}/${urlHashed}.png`,
-        },
-      });
-    }
-  } catch (error) {}
-
   if (!templateName) {
     throw json(
       {
@@ -75,6 +52,26 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       { status: 405 }
     );
   }
+  const url = new URL(`https://og-image/render/${templateName}`);
+
+  const urlHashed = CryptoJS.SHA256(url.toString()).toString();
+  const cacheKey = `og-image-render-${urlHashed}`;
+
+  const imageLocation = `ogimages/generated/${urlHashed}.png`;
+  const imageUrl = `${bucketURL}/${imageLocation}`;
+
+  try {
+    const cachedData = await getCacheData(cacheKey);
+
+    if (cachedData && cacheEnabled) {
+      return json({
+        ok: true,
+        data: {
+          url: imageUrl,
+        },
+      });
+    }
+  } catch (error) {}
 
   let tree: Tree | null = null;
 
@@ -199,7 +196,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const pngData = resvg.render();
     const pngBuffer = pngData.asPng();
 
-    const location = await uploadToS3(pngBuffer);
+    const location = await uploadToS3(pngBuffer, imageLocation);
 
     console.log("Location", location);
   } catch (error) {
@@ -216,5 +213,16 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     );
   }
 
-  return json({ ok: true });
+  try {
+    await setCacheData(cacheKey, "true");
+  } catch (error) {
+    console.error("Error caching data", error);
+  }
+
+  return json({
+    ok: true,
+    data: {
+      url: imageUrl,
+    },
+  });
 };
