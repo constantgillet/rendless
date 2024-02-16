@@ -21,7 +21,8 @@ export type IconName =
   | "data-bar-horizontal"
   | "settings"
   | "info"
-  | "checkmark-circle";
+  | "checkmark-circle"
+  | "braces-variable";
 
 export const iconStyle = cva({
   base: {
@@ -29,6 +30,7 @@ export const iconStyle = cva({
   },
   variants: {
     size: {
+      "2xs": { width: "10px", height: "10px" },
       xs: { width: "12px", height: "12px" },
       sm: { width: "14px", height: "14px" },
       md: { width: "16px", height: "16px" },

@@ -1,9 +1,10 @@
-import { Box, Flex, Grid, TextField } from "@radix-ui/themes";
+import { Badge, Box, Flex, Grid, TextField, Tooltip } from "@radix-ui/themes";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { css } from "styled-system/css";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { useEffect, useState } from "react";
 import { useEditorStore } from "../stores/EditorStore";
+import { Icon } from "./Icon";
 
 //keep only two decimals after the dot only if more than 2 decimals
 const formatValue = (value: number) => {
@@ -145,6 +146,28 @@ export const PositionAndSizeProperties = (
               onBlur={(e) => applyProperty(e, "y")}
               onKeyUp={(e) => onKeyUp(e, "y")}
             />
+            <TextField.Slot
+              style={{
+                paddingLeft: "2px",
+              }}
+            >
+              <Tooltip content="You can use this variable in your template">
+                <div
+                  className={css({
+                    width: "16px",
+                    height: "16px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "var(--accent-12)",
+                    color: "var(--accent-1)",
+                    rounded: "2px",
+                  })}
+                >
+                  <Icon name="braces-variable" size="md" />
+                </div>
+              </Tooltip>
+            </TextField.Slot>
           </TextField.Root>
         </Box>
       </Grid>
