@@ -14,7 +14,13 @@ const s3 = new S3Client({
   },
 });
 
-export const uploadToS3 = async (fileContent: Buffer) => {
+/**
+ *
+ * @param fileContent
+ * @param key ex "ogimages/generated/test.png"
+ * @returns
+ */
+export const uploadToS3 = async (fileContent: Buffer, key: string) => {
   const params: PutObjectCommandInput = {
     Bucket: "cgbucket",
     Key: "ogimages/generated/test.png",
@@ -25,9 +31,6 @@ export const uploadToS3 = async (fileContent: Buffer) => {
 
   try {
     const data = await s3.send(command);
-
-    console.log(data);
-
     return data;
   } catch (error) {
     console.error(error);

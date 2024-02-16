@@ -5,6 +5,7 @@ import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import { uploadToS3 } from "~/libs/s3";
 import CryptoJS from "crypto-js";
+import { getCacheData } from "~/libs/redis.server";
 
 async function fetchFont(font: string): Promise<ArrayBuffer | null> {
   const API = `https://fonts.googleapis.com/css2?family=${font}`;
@@ -30,18 +31,45 @@ async function fetchFont(font: string): Promise<ArrayBuffer | null> {
   return res.arrayBuffer();
 }
 
+const bucketURL = "https://cgbucket.ams3.digitaloceanspaces.com";
+
+//TODO prevent duplicated templateName
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const { templateId } = params;
+  const { templateName } = params;
 
-  console.log("RENDER TEMPLATE", templateId);
+  console.log("RENDER TEMPLATE", templateName);
 
-  if (!templateId) {
+  const url = new URL(`https://og-image/render/${templateName}`);
+  // url.searchParams.set("params-test", "value1");
+
+  const urlHashed = CryptoJS.SHA256(url.toString()).toString();
+
+  console.log("url: ", url);
+
+  console.log("hash: ", urlHashed);
+
+  const cacheKey = `og-image-render-${urlHashed}`;
+
+  try {
+    const cachedData = await getCacheData(cacheKey);
+
+    if (cachedData) {
+      return json({
+        ok: true,
+        data: {
+          url: `${bucketURL}/${urlHashed}.png`,
+        },
+      });
+    }
+  } catch (error) {}
+
+  if (!templateName) {
     throw json(
       {
         ok: false,
         error: {
-          message: "Template ID is required",
-          code: "TEMPLATE_ID_REQUIRED",
+          message: "Template name is required",
+          code: "TEMPLATE_NAME_REQUIRED",
         },
       },
       { status: 405 }
@@ -53,7 +81,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   try {
     const template = await prisma.template.findFirst({
       where: {
-        name: templateId,
+        name: templateName,
       },
     });
 
@@ -97,15 +125,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       { status: 404 }
     );
   }
-
-  const url = new URL(`https://og-image/render/${templateId}`);
-  // url.searchParams.set("params-test", "value1");
-
-  const urlHashed = CryptoJS.SHA256(url.toString()).toString();
-
-  console.log("url: ", url);
-
-  console.log("hash: ", urlHashed);
 
   //https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu7GxKOzY.woff2
 
