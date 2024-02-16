@@ -1,37 +1,13 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { prisma } from "~/libs/prisma";
 import { Tree } from "~/stores/EditorStore";
-import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import { uploadToS3 } from "~/libs/s3";
 import CryptoJS from "crypto-js";
 import { getCacheData, setCacheData } from "~/libs/redis.server";
+import { SvgGenerate } from "~/utils/svgGenerate";
 
 const cacheEnabled = true;
-
-async function fetchFont(font: string): Promise<ArrayBuffer | null> {
-  const API = `https://fonts.googleapis.com/css2?family=${font}`;
-
-  const css = await (
-    await fetch(API, {
-      headers: {
-        // Make sure it returns TTF.
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1",
-      },
-    })
-  ).text();
-
-  const resource = css.match(
-    /src: url\((.+)\) format\('(opentype|truetype)'\)/
-  );
-
-  if (!resource) return null;
-
-  const res = await fetch(resource[1]);
-
-  return res.arrayBuffer();
-}
 
 const bucketURL = "https://cgbucket.ams3.digitaloceanspaces.com";
 
@@ -125,55 +101,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   //https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu7GxKOzY.woff2
 
-  let robotoArrayBuffer: ArrayBuffer | null = null;
-
-  //https://github.com/vercel/satori/blob/main/playground/pages/api/font.ts
-  try {
-    const buffer = await fetchFont("Roboto");
-    robotoArrayBuffer = buffer;
-  } catch (error) {
-    console.error("Error fetching font", error);
-    throw json(
-      {
-        ok: false,
-        error: {
-          message: "Error fetching font",
-          code: "FETCH_FONT_ERROR",
-        },
-      },
-      { status: 500 }
-    );
-  }
-
-  if (!robotoArrayBuffer) {
-    throw json(
-      {
-        ok: false,
-        error: {
-          message: "Font not found",
-          code: "FONT_NOT_FOUND",
-        },
-      },
-      { status: 404 }
-    );
-  }
-
   let svg: string | null = null;
 
   try {
-    svg = await satori(<div style={{ color: "black" }}>hello, world</div>, {
-      width: 1600,
-      height: 630,
-      fonts: [
-        {
-          name: "Roboto",
-          // Use `fs` (Node.js only) or `fetch` to read the font as Buffer/ArrayBuffer and provide `data` here.
-          data: robotoArrayBuffer,
-          weight: 400,
-          style: "normal",
-        },
-      ],
-    });
+    svg = await SvgGenerate(tree);
 
     console.log(svg);
   } catch (error) {
