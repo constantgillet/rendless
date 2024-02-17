@@ -154,17 +154,17 @@ export const PositionAndSizeProperties = (
               <Tooltip content="You can use this variable in your template">
                 <div
                   className={css({
-                    width: "16px",
-                    height: "16px",
+                    width: "20px",
+                    height: "20px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: "var(--accent-12)",
-                    color: "var(--accent-1)",
-                    rounded: "2px",
+                    backgroundColor: "var(--accent-9)",
+                    color: "var(--accent-9-contrast)",
+                    rounded: "4px",
                   })}
                 >
-                  <Icon name="braces-variable" size="md" />
+                  <Icon name="braces-variable" size="sm" />
                 </div>
               </Tooltip>
             </TextField.Slot>

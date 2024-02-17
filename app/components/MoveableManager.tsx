@@ -162,10 +162,11 @@ export const MoveableManager = (props: MoveableManagerProps) => {
   };
 
   const onResize = (resizeEvent: OnResize, isEnd = false) => {
-    const { target, width, height, delta } = resizeEvent;
+    const { target, width, height, delta, drag } = resizeEvent;
 
     delta[0] && (target!.style.width = `${Math.round(width)}px`);
     delta[1] && (target!.style.height = `${Math.round(height)}px`);
+    target!.style.transform = drag.transform;
 
     const targetRect = target!.getBoundingClientRect();
 
@@ -173,6 +174,12 @@ export const MoveableManager = (props: MoveableManagerProps) => {
       id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
       width: Math.round(targetRect.width / scale),
       height: Math.round(targetRect.height / scale),
+      x: Math.round(
+        (targetRect.x - container.current!.getBoundingClientRect().x) / scale
+      ),
+      y: Math.round(
+        (targetRect.y - container.current!.getBoundingClientRect().y) / scale
+      ),
     };
 
     updateElements([element], isEnd ? true : false);
@@ -185,12 +192,11 @@ export const MoveableManager = (props: MoveableManagerProps) => {
         ref={moveableManager}
         targets={selectedTargetsElements}
         container={moveableContainer.current}
-        origin={true}
-        /* Resize event edges */
-        edge={false}
-        /* draggable */
+        // /* Resize event edges */
+        // edge={false}
+        // /* draggable */
         draggable={true}
-        throttleDrag={0}
+        // throttleDrag={0}
         onDrag={(e) => onDrag(e, false)}
         onDragEnd={(e) => onDrag(e, true)}
         onDragGroup={(e) => onDragGroup(e, false)}
@@ -200,7 +206,6 @@ export const MoveableManager = (props: MoveableManagerProps) => {
         /* resizable*/
         /* Only one of resizable, scalable, warpable can be used. */
         resizable={true}
-        throttleResize={0}
         onResize={(e) => onResize(e, false)}
         onResizeEnd={({ target, isDrag, clientX, clientY }) => {
           const targetRect = target!.getBoundingClientRect();
@@ -212,41 +217,6 @@ export const MoveableManager = (props: MoveableManagerProps) => {
           };
 
           updateElements([element], true);
-        }}
-        // onResizeEnd={({ target, isDrag, clientX, clientY }) => {
-        //   console.log("onResizeEnd", target, isDrag);
-
-        //   const targetRect = target!.getBoundingClientRect();
-
-        //   const element = {
-        //     id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-        //     width: targetRect.width / scale,
-        //     height: targetRect.height / scale,
-        //   };
-
-        //   updateElement(element as Tree);
-        // }}
-        /* scalable */
-        /* Only one of resizable, scalable, warpable can be used. */
-        scalable={true}
-        throttleScale={0}
-        onScaleStart={({ target, clientX, clientY }) => {
-          console.log("onScaleStart", target);
-        }}
-        onScale={({
-          target,
-          scale,
-          dist,
-          delta,
-          transform,
-          clientX,
-          clientY,
-        }: OnScale) => {
-          console.log("onScale scale", scale);
-          target!.style.transform = transform;
-        }}
-        onScaleEnd={({ target, isDrag, clientX, clientY }) => {
-          console.log("onScaleEnd", target, isDrag);
         }}
       />
       <Selecto
