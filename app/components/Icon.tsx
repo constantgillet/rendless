@@ -22,7 +22,8 @@ export type IconName =
   | "settings"
   | "info"
   | "checkmark-circle"
-  | "braces-variable";
+  | "braces-variable"
+  | "copy";
 
 export const iconStyle = cva({
   base: {
