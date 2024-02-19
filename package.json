@@ -36,6 +36,7 @@
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^4.4.1",
+    "react-infinite-viewer": "^0.28.1",
     "react-moveable": "^0.56.0",
     "react-virtuoso": "^4.6.2",
     "redis": "^4.6.13",

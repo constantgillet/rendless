@@ -14,13 +14,16 @@ import Selecto from "react-selecto";
 import { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
+import InfiniteViewer from "react-infinite-viewer";
 
 type MoveableManagerProps = {
   container: React.RefObject<HTMLDivElement>;
+  infiniteViewer: React.RefObject<InfiniteViewer>;
 };
 
 export const MoveableManager = (props: MoveableManagerProps) => {
   const container = props.container;
+  const infiniteViewer = props.infiniteViewer;
 
   const selecto = useRef<Selecto>(null);
   const moveableManager = useRef<Moveable>(null);
@@ -222,13 +225,33 @@ export const MoveableManager = (props: MoveableManagerProps) => {
       <Selecto
         ref={selecto}
         dragContainer={".scena-viewer"}
-        selectableTargets={[".scena-viewer .target"]}
+        selectableTargets={[".scena-viewport .target"]}
         hitRate={0}
-        selectableTargets={[`.scena-viewer [${DATA_SCENA_ELEMENT_ID}]`]}
+        selectableTargets={[`.scena-viewport [${DATA_SCENA_ELEMENT_ID}]`]}
         selectByClick={true}
         selectFromInside={false}
         toggleContinueSelect={["shift"]}
         preventDefault={true}
+        // scrollOptions={
+        //   infiniteViewer.current
+        //     ? {
+        //         container: infiniteViewer.current.getContainer(),
+        //         threshold: 30,
+        //         throttleTime: 30,
+        //         getScrollPosition: () => {
+        //           const current = infiniteViewer.current!;
+        //           return [current.getScrollLeft(), current.getScrollTop()];
+        //         },
+        //       }
+        //     : undefined
+        // }
+        onScroll={({ direction }) => {
+          console.log(direction);
+          // infiniteViewer.current!.scrollBy(
+          //   direction[0] * 10,
+          //   direction[1] * 10
+          // );
+        }}
         onDragStart={(e) => {
           const inputEvent = e.inputEvent;
           const target = inputEvent.target;
@@ -276,6 +299,14 @@ export const MoveableManager = (props: MoveableManagerProps) => {
           //   }
           //   moveableManager.current!.getMoveable().dragStart(inputEvent);
           // });
+        }}
+        onScroll={({ direction }) => {
+          console.log(direction);
+
+          // infiniteViewer.current!.scrollBy(
+          //   direction[0] * 10,
+          //   direction[1] * 10
+          // );
         }}
       />
     </>

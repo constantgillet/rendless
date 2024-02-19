@@ -17,6 +17,7 @@ import { MoveableManager } from "~/components/MoveableManager";
 import { prisma } from "~/libs/prisma";
 import { ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
 import { Tree, useEditorStore } from "~/stores/EditorStore";
+import InfiniteViewer from "react-infinite-viewer";
 
 export const meta: MetaFunction = () => {
   return [
@@ -68,6 +69,8 @@ export default function Index() {
   const container = useRef<HTMLDivElement>(null);
   const { template } = useLoaderData<typeof loader>();
 
+  const infiniteViewer = useRef<InfiniteViewer>(null);
+
   console.log(template);
 
   if (typeof document === "undefined") {
@@ -97,11 +100,11 @@ export default function Index() {
           })}
         >
           <LayersPanel />
-          <FramePage ref={container} />
+          <FramePage ref={container} infiniteViewer={infiniteViewer} />
           <PropertiesPanel />
         </div>
       </div>
-      <MoveableManager container={container} />
+      <MoveableManager container={container} infiniteViewer={infiniteViewer} />
       <EditorHotKeys />
       <FontLoader />
     </>

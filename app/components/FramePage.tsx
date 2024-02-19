@@ -5,8 +5,11 @@ import { useEditorStore } from "../stores/EditorStore";
 import { useScaleStore } from "../stores/ScaleStore";
 import { TextElement } from "./TextElement";
 import { CanvasContextMenu } from "./CanvasContextMenu";
+import InfiniteViewer from "react-infinite-viewer";
 
-type Props = HTMLProps<HTMLDivElement>;
+type Props = HTMLProps<HTMLDivElement> & {
+  infiniteViewer: React.RefObject<InfiniteViewer>;
+};
 
 export const FramePage = forwardRef<HTMLButtonElement, Props>(
   function FramePage(props, ref) {
@@ -17,6 +20,8 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
 
     const increaseScale = useScaleStore((state) => state.increase);
     const decreaseScale = useScaleStore((state) => state.decrease);
+
+    const infiniteViewer = props.infiniteViewer;
 
     const onWheel = (e: WheelEvent) => {
       //Zoom in
@@ -29,6 +34,95 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
         decreaseScale(0.02);
       }
     };
+
+    return (
+      <div
+        onWheel={onWheel}
+        className={css({
+          flex: 1,
+        })}
+      >
+        <InfiniteViewer
+          ref={infiniteViewer}
+          // useMouseDrag={true}
+          zoom={scale}
+          className={cx(
+            "scena-viewer",
+            css({
+              width: "100%",
+              height: "100%",
+            })
+          )}
+        >
+          <div
+            className={cx(
+              "scena-viewport",
+              css({
+                width: "100%",
+                height: "100%",
+              })
+            )}
+          >
+            {/* <p style={{ fontSize: "100px", color: "#000" }}>text</p>
+            <button>
+              <p style={{ fontSize: "100px", color: "#000" }}>버튼</p>
+            </button> */}
+            <div
+              className={cx(
+                css({
+                  // aspectRatio: "1.91/1",
+                  backgroundColor: "gray.300",
+                  position: "relative",
+                  // marginX: "auto",w²
+                })
+              )}
+              style={{
+                width: 1200,
+                height: 630,
+                cursor: selectedTool === "select" ? "auto" : "crosshair",
+                backgroundColor: tree.backgroundColor,
+              }}
+              ref={ref}
+            >
+              {tree?.children?.map((child) => {
+                const id = child.id;
+
+                return child.type === "text" ? (
+                  <TextElement key={id} {...child} />
+                ) : (
+                  <div
+                    key={id}
+                    className={cx(
+                      "target",
+                      css({
+                        position: "absolute",
+                        _hover: {
+                          outline: "1px solid #4af",
+                          outlineOffset: "-1px",
+                        },
+                      })
+                    )}
+                    {...{
+                      [DATA_SCENA_ELEMENT_ID]: id,
+                    }}
+                    style={{
+                      transform: `translate(${child.x}px, ${child.y}px)`,
+                      width: child.width,
+                      height: child.height,
+                      backgroundColor: child.backgroundColor,
+                      borderTopLeftRadius: child.borderTopLeftRadius,
+                      borderTopRightRadius: child.borderTopRightRadius,
+                      borderBottomLeftRadius: child.borderBottomLeftRadius,
+                      borderBottomRightRadius: child.borderBottomRightRadius,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </InfiniteViewer>
+      </div>
+    );
 
     return (
       <CanvasContextMenu>
