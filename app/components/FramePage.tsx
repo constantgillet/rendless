@@ -60,6 +60,9 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
               css({
                 width: "100%",
                 height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               })
             )}
           >
@@ -73,6 +76,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
                   // aspectRatio: "1.91/1",
                   backgroundColor: "gray.300",
                   position: "relative",
+                  flexShrink: 0,
                   // marginX: "auto",w²
                 })
               )}
