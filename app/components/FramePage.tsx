@@ -207,214 +207,216 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
     const opositeZoom = 1 / scale;
 
     return (
-      <div
-        onWheel={onWheel}
-        className={css({
-          flex: 1,
-        })}
-      >
-        <InfiniteViewer
-          ref={infiniteViewer}
-          // useMouseDrag={true}
-          zoom={scale}
-          className={cx(
-            "scena-viewer",
-            css({
-              width: "100%",
-              height: "100%",
-            })
-          )}
+      <CanvasContextMenu>
+        <div
+          onWheel={onWheel}
+          className={css({
+            flex: 1,
+          })}
         >
-          <div
+          <InfiniteViewer
+            ref={infiniteViewer}
+            // useMouseDrag={true}
+            zoom={scale}
             className={cx(
-              "scena-viewport",
+              "scena-viewer",
               css({
                 width: "100%",
                 height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
               })
             )}
           >
-            <Moveable
-              zoom={opositeZoom}
-              ref={moveableManager}
-              targets={selectedTargetsElements}
-              snappable={true}
-              /* Resize event edges */
-              edge={false}
-              /* draggable */
-              draggable={true}
-              // throttleDrag={0}
-              onDrag={(e) => onDrag(e, false)}
-              onDragEnd={(e) => onDrag(e, true)}
-              onDragGroup={(e) => onDragGroup(e, false)}
-              onDragGroupEnd={(e) => onDragGroup(e, true)}
-              /* When resize or scale, keeps a ratio of the width, height. */
-              keepRatio={isPressingShift}
-              /* resizable*/
-              /* Only one of resizable, scalable, warpable can be used. */
-              resizable={true}
-              onResize={(e) => onResize(e, false)}
-              onResizeEnd={({ target, isDrag, clientX, clientY }) => {
-                const targetRect = target!.getBoundingClientRect();
+            <div
+              className={cx(
+                "scena-viewport",
+                css({
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                })
+              )}
+            >
+              <Moveable
+                zoom={opositeZoom}
+                ref={moveableManager}
+                targets={selectedTargetsElements}
+                snappable={true}
+                /* Resize event edges */
+                edge={false}
+                /* draggable */
+                draggable={true}
+                // throttleDrag={0}
+                onDrag={(e) => onDrag(e, false)}
+                onDragEnd={(e) => onDrag(e, true)}
+                onDragGroup={(e) => onDragGroup(e, false)}
+                onDragGroupEnd={(e) => onDragGroup(e, true)}
+                /* When resize or scale, keeps a ratio of the width, height. */
+                keepRatio={isPressingShift}
+                /* resizable*/
+                /* Only one of resizable, scalable, warpable can be used. */
+                resizable={true}
+                onResize={(e) => onResize(e, false)}
+                onResizeEnd={({ target, isDrag, clientX, clientY }) => {
+                  const targetRect = target!.getBoundingClientRect();
 
-                const element = {
-                  id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-                  width: Math.round(targetRect.width / scale),
-                  height: Math.round(targetRect.height / scale),
-                };
+                  const element = {
+                    id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+                    width: Math.round(targetRect.width / scale),
+                    height: Math.round(targetRect.height / scale),
+                  };
 
-                updateElements([element], true);
-              }}
-            />
-            {/* <p style={{ fontSize: "100px", color: "#000" }}>text</p>
+                  updateElements([element], true);
+                }}
+              />
+              {/* <p style={{ fontSize: "100px", color: "#000" }}>text</p>
             <button>
               <p style={{ fontSize: "100px", color: "#000" }}>버튼</p>
             </button> */}
-            <div
-              ref={container}
-              className={cx(
-                css({
-                  // aspectRatio: "1.91/1",
-                  backgroundColor: "gray.300",
-                  position: "relative",
-                  flexShrink: 0,
-                  // marginX: "auto",w²
-                })
-              )}
-              style={{
-                width: 1200,
-                height: 630,
-                cursor: selectedTool === "select" ? "auto" : "crosshair",
-                backgroundColor: tree.backgroundColor,
-              }}
-            >
-              {tree?.children?.map((child) => {
-                const id = child.id;
+              <div
+                ref={container}
+                className={cx(
+                  css({
+                    // aspectRatio: "1.91/1",
+                    backgroundColor: "gray.300",
+                    position: "relative",
+                    flexShrink: 0,
+                    // marginX: "auto",w²
+                  })
+                )}
+                style={{
+                  width: 1200,
+                  height: 630,
+                  cursor: selectedTool === "select" ? "auto" : "crosshair",
+                  backgroundColor: tree.backgroundColor,
+                }}
+              >
+                {tree?.children?.map((child) => {
+                  const id = child.id;
 
-                return child.type === "text" ? (
-                  <TextElement key={id} {...child} />
-                ) : (
-                  <div
-                    key={id}
-                    className={cx(
-                      "target",
-                      css({
-                        position: "absolute",
-                        _hover: {
-                          outline: "1px solid #4af",
-                          outlineOffset: "-1px",
-                        },
-                      })
-                    )}
-                    {...{
-                      [DATA_SCENA_ELEMENT_ID]: id,
-                    }}
-                    style={{
-                      transform: `translate(${child.x}px, ${child.y}px)`,
-                      width: child.width,
-                      height: child.height,
-                      backgroundColor: child.backgroundColor,
-                      borderTopLeftRadius: child.borderTopLeftRadius,
-                      borderTopRightRadius: child.borderTopRightRadius,
-                      borderBottomLeftRadius: child.borderBottomLeftRadius,
-                      borderBottomRightRadius: child.borderBottomRightRadius,
-                    }}
-                  />
-                );
-              })}
+                  return child.type === "text" ? (
+                    <TextElement key={id} {...child} />
+                  ) : (
+                    <div
+                      key={id}
+                      className={cx(
+                        "target",
+                        css({
+                          position: "absolute",
+                          _hover: {
+                            outline: "1px solid #4af",
+                            outlineOffset: "-1px",
+                          },
+                        })
+                      )}
+                      {...{
+                        [DATA_SCENA_ELEMENT_ID]: id,
+                      }}
+                      style={{
+                        transform: `translate(${child.x}px, ${child.y}px)`,
+                        width: child.width,
+                        height: child.height,
+                        backgroundColor: child.backgroundColor,
+                        borderTopLeftRadius: child.borderTopLeftRadius,
+                        borderTopRightRadius: child.borderTopRightRadius,
+                        borderBottomLeftRadius: child.borderBottomLeftRadius,
+                        borderBottomRightRadius: child.borderBottomRightRadius,
+                      }}
+                    />
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </InfiniteViewer>
-        <Selecto
-          ref={selecto}
-          dragContainer={".scena-viewer"}
-          hitRate={0}
-          selectableTargets={[`.scena-viewport [${DATA_SCENA_ELEMENT_ID}]`]}
-          selectByClick={true}
-          selectFromInside={false}
-          toggleContinueSelect={["shift"]}
-          preventDefault={true}
-          // scrollOptions={
-          //   infiniteViewer.current
-          //     ? {
-          //         container: infiniteViewer.current.getContainer(),
-          //         threshold: 30,
-          //         throttleTime: 30,
-          //         getScrollPosition: () => {
-          //           const current = infiniteViewer.current!;
-          //           return [current.getScrollLeft(), current.getScrollTop()];
-          //         },
-          //       }
-          //     : undefined
-          // }
-          // onScroll={({ direction }) => {
-          //   console.log(direction);
-          //   // infiniteViewer.current!.scrollBy(
-          //   //   direction[0] * 10,
-          //   //   direction[1] * 10
-          //   // );
-          // }}
-          onDragStart={(e) => {
-            const inputEvent = e.inputEvent;
-            const target = inputEvent.target;
-
-            checkBlur();
-            // if (target.isContentEditable) {
-            //   const contentElement = getContentElement(target);
-
-            //   if (
-            //     contentElement &&
-            //     contentElement.hasAttribute(DATA_SCENA_ELEMENT_ID)
-            //   ) {
-            //     e.stop();
-            //     const id = contentElement.getAttribute(DATA_SCENA_ELEMENT_ID)!;
-            //     setSelectedTargets([id]);
-            //   }
+          </InfiniteViewer>
+          <Selecto
+            ref={selecto}
+            dragContainer={".scena-viewer"}
+            hitRate={0}
+            selectableTargets={[`.scena-viewport [${DATA_SCENA_ELEMENT_ID}]`]}
+            selectByClick={true}
+            selectFromInside={false}
+            toggleContinueSelect={["shift"]}
+            preventDefault={true}
+            // scrollOptions={
+            //   infiniteViewer.current
+            //     ? {
+            //         container: infiniteViewer.current.getContainer(),
+            //         threshold: 30,
+            //         throttleTime: 30,
+            //         getScrollPosition: () => {
+            //           const current = infiniteViewer.current!;
+            //           return [current.getScrollLeft(), current.getScrollTop()];
+            //         },
+            //       }
+            //     : undefined
             // }
-            if (
-              (inputEvent.type === "touchstart" && e.isTrusted) ||
-              moveableManager.current!.isMoveableElement(target) ||
-              selectedTargetsElements.some(
-                (t) => t === target || t?.contains(target)
-              )
-            ) {
-              e.stop();
-            }
-          }}
-          onSelectEnd={({ isDragStart, selected, inputEvent, rect }) => {
-            if (isDragStart) {
-              inputEvent.preventDefault();
-            }
+            // onScroll={({ direction }) => {
+            //   console.log(direction);
+            //   // infiniteViewer.current!.scrollBy(
+            //   //   direction[0] * 10,
+            //   //   direction[1] * 10
+            //   // );
+            // }}
+            onDragStart={(e) => {
+              const inputEvent = e.inputEvent;
+              const target = inputEvent.target;
 
-            // create new element
-            if (selectEndMaker(rect)) {
-              return;
-            }
+              checkBlur();
+              // if (target.isContentEditable) {
+              //   const contentElement = getContentElement(target);
 
-            console.log("selected", selected);
-            const ids = getIdsFromElements(selected);
-            setSelectedTargets(ids);
+              //   if (
+              //     contentElement &&
+              //     contentElement.hasAttribute(DATA_SCENA_ELEMENT_ID)
+              //   ) {
+              //     e.stop();
+              //     const id = contentElement.getAttribute(DATA_SCENA_ELEMENT_ID)!;
+              //     setSelectedTargets([id]);
+              //   }
+              // }
+              if (
+                (inputEvent.type === "touchstart" && e.isTrusted) ||
+                moveableManager.current!.isMoveableElement(target) ||
+                selectedTargetsElements.some(
+                  (t) => t === target || t?.contains(target)
+                )
+              ) {
+                e.stop();
+              }
+            }}
+            onSelectEnd={({ isDragStart, selected, inputEvent, rect }) => {
+              if (isDragStart) {
+                inputEvent.preventDefault();
+              }
 
-            // this.setSelectedTargets(selected).then(() => {
-            //   if (!isDragStart) {
-            //     return;
-            //   }
-            //   moveableManager.current!.getMoveable().dragStart(inputEvent);
-            // });
-          }}
-          onScroll={({ direction }) => {
-            console.log(direction);
+              // create new element
+              if (selectEndMaker(rect)) {
+                return;
+              }
 
-            // infiniteViewer.current!.scrollBy(
-            //   direction[0] * 10,
-            //   direction[1] * 10
-            // );
-          }}
-        />
-      </div>
+              console.log("selected", selected);
+              const ids = getIdsFromElements(selected);
+              setSelectedTargets(ids);
+
+              // this.setSelectedTargets(selected).then(() => {
+              //   if (!isDragStart) {
+              //     return;
+              //   }
+              //   moveableManager.current!.getMoveable().dragStart(inputEvent);
+              // });
+            }}
+            onScroll={({ direction }) => {
+              console.log(direction);
+
+              // infiniteViewer.current!.scrollBy(
+              //   direction[0] * 10,
+              //   direction[1] * 10
+              // );
+            }}
+          />
+        </div>
+      </CanvasContextMenu>
     );
 
     return (
