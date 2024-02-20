@@ -7,7 +7,7 @@ import { ValidatedForm, useFormContext } from "remix-validated-form";
 import { FormInput, FormSubmitButton } from "./Form";
 import { useEffect, useState } from "react";
 import { editTemplateNamevalidator } from "~/routes/api.update-template-name";
-import { useFetcher } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import { action as updateTemplateNameAction } from "~/routes/api.update-template-name";
 import { Spinner } from "./Spinner";
 import { SaveTreeIndicator } from "./SaveTreeIndicator";
@@ -66,6 +66,14 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
             flex: 1,
           })}
         >
+          <Link to="/" title="Rendless">
+            <img
+              src="/images/logo-icon.png"
+              alt="logo"
+              width={32}
+              height={32}
+            />
+          </Link>
           {toolsData.map(({ name, icon, tooltipText }) => (
             <Tooltip content={tooltipText} key={name}>
               <IconButton

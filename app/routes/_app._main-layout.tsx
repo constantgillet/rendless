@@ -79,7 +79,12 @@ export default function MainLayout() {
                 mr: "24px",
               })}
             >
-              logo
+              <img
+                src="/images/rendless-logo.png"
+                alt="Logo"
+                width={120}
+                height={"auto"}
+              />
             </div>
             <div
               className={css({
