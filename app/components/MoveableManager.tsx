@@ -39,9 +39,9 @@ export const MoveableManager = (props: MoveableManagerProps) => {
   const tree = useEditorStore((state) => state.tree);
   const isPressingShift = useKeepRatioStore((state) => state.keepRatio);
 
-  useEffect(() => {
-    moveableManager.current!.updateRect();
-  }, [tree.children, scale]);
+  // useEffect(() => {
+  //   moveableManager.current!.updateRect();
+  // }, [tree.children, scale]);
 
   const checkBlur = () => {
     const activeElement = document.activeElement;
@@ -188,129 +188,7 @@ export const MoveableManager = (props: MoveableManagerProps) => {
     updateElements([element], isEnd ? true : false);
   };
 
-  return (
-    <>
-      <div ref={moveableContainer}></div>
-      <Moveable
-        ref={moveableManager}
-        targets={selectedTargetsElements}
-        container={moveableContainer.current}
-        // /* Resize event edges */
-        // edge={false}
-        // /* draggable */
-        draggable={true}
-        // throttleDrag={0}
-        onDrag={(e) => onDrag(e, false)}
-        onDragEnd={(e) => onDrag(e, true)}
-        onDragGroup={(e) => onDragGroup(e, false)}
-        onDragGroupEnd={(e) => onDragGroup(e, true)}
-        /* When resize or scale, keeps a ratio of the width, height. */
-        keepRatio={isPressingShift}
-        /* resizable*/
-        /* Only one of resizable, scalable, warpable can be used. */
-        resizable={true}
-        onResize={(e) => onResize(e, false)}
-        onResizeEnd={({ target, isDrag, clientX, clientY }) => {
-          const targetRect = target!.getBoundingClientRect();
-
-          const element = {
-            id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-            width: Math.round(targetRect.width / scale),
-            height: Math.round(targetRect.height / scale),
-          };
-
-          updateElements([element], true);
-        }}
-      />
-      <Selecto
-        ref={selecto}
-        dragContainer={".scena-viewer"}
-        selectableTargets={[".scena-viewport .target"]}
-        hitRate={0}
-        selectableTargets={[`.scena-viewport [${DATA_SCENA_ELEMENT_ID}]`]}
-        selectByClick={true}
-        selectFromInside={false}
-        toggleContinueSelect={["shift"]}
-        preventDefault={true}
-        // scrollOptions={
-        //   infiniteViewer.current
-        //     ? {
-        //         container: infiniteViewer.current.getContainer(),
-        //         threshold: 30,
-        //         throttleTime: 30,
-        //         getScrollPosition: () => {
-        //           const current = infiniteViewer.current!;
-        //           return [current.getScrollLeft(), current.getScrollTop()];
-        //         },
-        //       }
-        //     : undefined
-        // }
-        onScroll={({ direction }) => {
-          console.log(direction);
-          // infiniteViewer.current!.scrollBy(
-          //   direction[0] * 10,
-          //   direction[1] * 10
-          // );
-        }}
-        onDragStart={(e) => {
-          const inputEvent = e.inputEvent;
-          const target = inputEvent.target;
-
-          checkBlur();
-          // if (target.isContentEditable) {
-          //   const contentElement = getContentElement(target);
-
-          //   if (
-          //     contentElement &&
-          //     contentElement.hasAttribute(DATA_SCENA_ELEMENT_ID)
-          //   ) {
-          //     e.stop();
-          //     const id = contentElement.getAttribute(DATA_SCENA_ELEMENT_ID)!;
-          //     setSelectedTargets([id]);
-          //   }
-          // }
-          if (
-            (inputEvent.type === "touchstart" && e.isTrusted) ||
-            moveableManager.current!.isMoveableElement(target) ||
-            selectedTargetsElements.some(
-              (t) => t === target || t?.contains(target)
-            )
-          ) {
-            e.stop();
-          }
-        }}
-        onSelectEnd={({ isDragStart, selected, inputEvent, rect }) => {
-          if (isDragStart) {
-            inputEvent.preventDefault();
-          }
-
-          // create new element
-          if (selectEndMaker(rect)) {
-            return;
-          }
-
-          console.log("selected", selected);
-          const ids = getIdsFromElements(selected);
-          setSelectedTargets(ids);
-
-          // this.setSelectedTargets(selected).then(() => {
-          //   if (!isDragStart) {
-          //     return;
-          //   }
-          //   moveableManager.current!.getMoveable().dragStart(inputEvent);
-          // });
-        }}
-        onScroll={({ direction }) => {
-          console.log(direction);
-
-          // infiniteViewer.current!.scrollBy(
-          //   direction[0] * 10,
-          //   direction[1] * 10
-          // );
-        }}
-      />
-    </>
-  );
+  return <></>;
 };
 
 const getIdsFromElements = (targets: (HTMLElement | SVGElement)[]) => {
