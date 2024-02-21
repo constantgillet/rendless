@@ -59,16 +59,45 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
       >
         <div
           className={css({
+            flex: 1,
+            display: "flex",
+            justifyContent: "left",
+            alignItems: "center",
+            gap: "var(--space-2)",
+          })}
+        >
+          <Link
+            to="/templates"
+            title="Back to templates"
+            className={css({
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+              color: "var(--color-text)",
+              textDecoration: "none",
+            })}
+          >
+            <Icon name="chevron-left" />
+            <Icon
+              name="rendless"
+              size="2xl"
+              className={css({
+                color: "var(--accent-9)",
+              })}
+            />
+          </Link>
+          <TemplateNameButton templateId={templateId} initalName={initalName} />
+        </div>
+        <div
+          className={css({
             display: "flex",
             alignItems: "center",
+            justifyContent: "center",
             height: "100%",
             gap: "var(--space-2)",
             flex: 1,
           })}
         >
-          <Link to="/" title="Rendless">
-            <Icon name="rendless" size="2xl" />
-          </Link>
           {toolsData.map(({ name, icon, tooltipText }) => (
             <Tooltip content={tooltipText} key={name}>
               <IconButton
@@ -82,15 +111,7 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
             </Tooltip>
           ))}
         </div>
-        <div
-          className={css({
-            flex: 1,
-            display: "flex",
-            justifyContent: "center",
-          })}
-        >
-          <TemplateNameButton templateId={templateId} initalName={initalName} />
-        </div>
+
         <div
           className={css({
             gap: "var(--space-2)",
