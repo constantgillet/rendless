@@ -67,12 +67,7 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
           })}
         >
           <Link to="/" title="Rendless">
-            <img
-              src="/images/logo-icon.png"
-              alt="logo"
-              width={32}
-              height={32}
-            />
+            <Icon name="rendless" size="2xl" />
           </Link>
           {toolsData.map(({ name, icon, tooltipText }) => (
             <Tooltip content={tooltipText} key={name}>

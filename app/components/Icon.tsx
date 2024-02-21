@@ -23,7 +23,8 @@ export type IconName =
   | "info"
   | "checkmark-circle"
   | "braces-variable"
-  | "copy";
+  | "copy"
+  | "rendless";
 
 export const iconStyle = cva({
   base: {
@@ -39,6 +40,11 @@ export const iconStyle = cva({
       xl: { width: "20px", height: "20px" },
       "2xl": { width: "24px", height: "24px" },
       "3xl": { width: "28px", height: "28px" },
+      "4xl": { width: "32px", height: "32px" },
+      "5xl": { width: "40px", height: "40px" },
+      "6xl": { width: "48px", height: "48px" },
+      "7xl": { width: "56px", height: "56px" },
+      "8xl": { width: "64px", height: "64px" },
     },
     spin: {
       true: {

@@ -47,6 +47,13 @@ export default function AuthLayout() {
             margin: "auto",
           })}
         >
+          <img
+            src="/images/favicon-xl.png"
+            width={64}
+            height={64}
+            alt="Logo"
+            className={css({ mb: "12px" })}
+          />
           <Outlet />
         </div>
       </div>
