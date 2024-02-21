@@ -15,6 +15,7 @@ import Selecto from "react-selecto";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
 import { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
+import { RectElement } from "./RectElement";
 
 type Props = HTMLProps<HTMLDivElement> & {
   infiniteViewer: React.RefObject<InfiniteViewer>;
@@ -298,32 +299,7 @@ export const FramePage = forwardRef<HTMLButtonElement, Props>(
                   return child.type === "text" ? (
                     <TextElement key={id} {...child} />
                   ) : (
-                    <div
-                      key={id}
-                      className={cx(
-                        "target",
-                        css({
-                          position: "absolute",
-                          _hover: {
-                            outline: "1px solid #4af",
-                            outlineOffset: "-1px",
-                          },
-                        })
-                      )}
-                      {...{
-                        [DATA_SCENA_ELEMENT_ID]: id,
-                      }}
-                      style={{
-                        transform: `translate(${child.x}px, ${child.y}px)`,
-                        width: child.width,
-                        height: child.height,
-                        backgroundColor: child.backgroundColor,
-                        borderTopLeftRadius: child.borderTopLeftRadius,
-                        borderTopRightRadius: child.borderTopRightRadius,
-                        borderBottomLeftRadius: child.borderBottomLeftRadius,
-                        borderBottomRightRadius: child.borderBottomRightRadius,
-                      }}
-                    />
+                    <RectElement key={id} {...child} />
                   );
                 })}
               </div>

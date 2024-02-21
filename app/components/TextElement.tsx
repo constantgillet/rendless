@@ -103,9 +103,9 @@ export const TextElement = (props: TextElementProps) => {
         })
       )}
       style={{
-        transform: `translate(${props.x * scale}px, ${props.y * scale}px)`,
-        width: props.width * scale,
-        height: props.height * scale,
+        transform: `translate(${props.x}px, ${props.y}px)`,
+        width: props.width,
+        height: props.height,
       }}
       {...{
         [DATA_SCENA_ELEMENT_ID]: props.id,
@@ -127,7 +127,7 @@ export const TextElement = (props: TextElementProps) => {
         )}
         style={{
           fontFamily: props.fontFamily,
-          fontSize: props.fontSize * scale,
+          fontSize: props.fontSize,
           fontWeight: props.fontWeight,
           fontStyle: props.fontStyle,
           background: "transparent",
