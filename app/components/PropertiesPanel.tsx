@@ -34,14 +34,12 @@ export type ValueType = {
   nodeId: string;
   propertyName: string;
   value: any;
+  variable?: boolean;
+  variableName?: string;
 };
 
 const GroupProperties = (nodes: ElementType[]) => {
-  const propertieFlatList: Array<{
-    nodeId: string;
-    propertyName: string;
-    value: any;
-  }> = [];
+  const propertieFlatList: Array<ValueType> = [];
 
   for (const node of nodes) {
     Object.entries(node).forEach(([key, value]) => {
@@ -50,10 +48,17 @@ const GroupProperties = (nodes: ElementType[]) => {
         return;
       }
 
+      //Check if the node has a variable
+      const variable = node.variables?.find(
+        (variable) => variable.property === key
+      );
+
       propertieFlatList.push({
         nodeId: node.id,
         propertyName: key,
         value: value,
+        variable: variable ? true : false,
+        variableName: variable ? variable.name : undefined,
       });
     });
   }

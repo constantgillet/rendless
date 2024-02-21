@@ -24,6 +24,10 @@ interface Element<T extends ObjectType> {
   y: number;
   width: number;
   height: number;
+  variables: {
+    property: string;
+    name: string;
+  }[];
 }
 
 export type ElementRect = Element<"rect"> & {
@@ -113,6 +117,7 @@ const defaultTree: Tree = {
       borderWidth: 0,
       borderColor: "red",
       borderStyle: "solid",
+      variables: [],
     },
     {
       id: "2vvvvv",
@@ -129,6 +134,12 @@ const defaultTree: Tree = {
       borderWidth: 0,
       borderColor: "red",
       borderStyle: "solid",
+      variables: [
+        {
+          property: "width",
+          name: "bannerWidth",
+        },
+      ],
     },
   ],
 };

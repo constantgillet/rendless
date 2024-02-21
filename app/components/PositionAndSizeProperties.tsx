@@ -5,6 +5,8 @@ import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { useEffect, useState } from "react";
 import { useEditorStore } from "../stores/EditorStore";
 import { Icon } from "./Icon";
+import { getVarFromString } from "~/utils/getVarFromString";
+import { getElementVariables } from "~/stores/actions/getElementVariables";
 
 //keep only two decimals after the dot only if more than 2 decimals
 const formatValue = (value: number) => {
@@ -86,6 +88,39 @@ export const PositionAndSizeProperties = (
     property: keyof PositionAndSizePropertiesProps["properties"]
   ) => {
     const newValue = event.target.value;
+
+    const variableName = getVarFromString(newValue);
+
+    if (variableName && variableName.length > 0) {
+      updateElements(
+        props.properties[property].map((property) => {
+          const currentVaribles = getElementVariables(property.nodeId);
+
+          //Create new vaiables with the new variable if it doesn't exist
+          const newVariables = currentVaribles.find(
+            (variable) => variable.name === variableName
+          )
+            ? currentVaribles
+            : [
+                ...currentVaribles,
+                { property: property.propertyName, name: variableName },
+              ];
+
+          return {
+            id: property.nodeId,
+            variables: [
+              {
+                property: property.propertyName,
+                name: variableName,
+              },
+            ],
+          };
+        }),
+        true
+      );
+
+      return;
+    }
 
     if (isNaN(Number(newValue))) {
       return;
@@ -183,6 +218,31 @@ export const PositionAndSizeProperties = (
                 onBlur={(e) => applyProperty(e, "width")}
                 onKeyUp={(e) => onKeyUp(e, "width")}
               />
+              {props.properties.width[0].variable ? (
+                <TextField.Slot
+                  style={{
+                    paddingLeft: "2px",
+                  }}
+                >
+                  <Tooltip content="You can use this variable in your template">
+                    <div
+                      className={css({
+                        width: "20px",
+                        height: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "var(--accent-9)",
+                        color: "var(--accent-9-contrast)",
+                        rounded: "4px",
+                        _hover: { cursor: "help" },
+                      })}
+                    >
+                      <Icon name="braces-variable" size="sm" />
+                    </div>
+                  </Tooltip>
+                </TextField.Slot>
+              ) : null}
             </TextField.Root>
           </Box>
           <Box>
