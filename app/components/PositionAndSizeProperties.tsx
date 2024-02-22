@@ -40,8 +40,11 @@ export const PositionAndSizeProperties = (
   );
 
   const [width, setWidth] = useState(
-    arePropertiesTheSame(props.properties.width)
+    arePropertiesTheSame(props.properties.width) &&
+      !props.properties.width[0].variable
       ? formatValue(props.properties.width[0].value)
+      : arePropertiesTheSame(props.properties.width)
+      ? `{{${props.properties.width[0].variableName}}}`
       : "Mixed"
   );
 
@@ -69,8 +72,11 @@ export const PositionAndSizeProperties = (
 
   useEffect(() => {
     setWidth(
-      arePropertiesTheSame(props.properties.width)
+      arePropertiesTheSame(props.properties.width) &&
+        !props.properties.width[0].variable
         ? formatValue(props.properties.width[0].value)
+        : arePropertiesTheSame(props.properties.width)
+        ? `{{${props.properties.width[0].variableName}}}`
         : "Mixed"
     );
   }, [props.properties.width]);
@@ -94,26 +100,24 @@ export const PositionAndSizeProperties = (
     if (variableName && variableName.length > 0) {
       updateElements(
         props.properties[property].map((property) => {
-          const currentVaribles = getElementVariables(property.nodeId);
+          const currentVariables = getElementVariables(property.nodeId);
 
           //Create new vaiables with the new variable if it doesn't exist
-          const newVariables = currentVaribles.find(
-            (variable) => variable.name === variableName
-          )
-            ? currentVaribles
-            : [
-                ...currentVaribles,
-                { property: property.propertyName, name: variableName },
-              ];
+          const newVariablesWithoutProperty = currentVariables.filter(
+            (variable) => variable.property !== property.propertyName
+          );
+
+          const newVariables = [
+            ...newVariablesWithoutProperty,
+            {
+              property: property.propertyName,
+              name: variableName,
+            },
+          ];
 
           return {
             id: property.nodeId,
-            variables: [
-              {
-                property: property.propertyName,
-                name: variableName,
-              },
-            ],
+            variables: newVariables,
           };
         }),
         true
@@ -129,10 +133,19 @@ export const PositionAndSizeProperties = (
     const value = Number(newValue);
 
     updateElements(
-      props.properties[property].map((property) => ({
-        id: property.nodeId,
-        [property.propertyName]: value,
-      })),
+      props.properties[property].map((property) => {
+        const currentVariables = getElementVariables(property.nodeId);
+
+        const newVariablesWithoutProperty = currentVariables.filter(
+          (variable) => variable.property !== property.propertyName
+        );
+
+        return {
+          id: property.nodeId,
+          [property.propertyName]: value,
+          variables: newVariablesWithoutProperty,
+        };
+      }),
       true
     );
 
