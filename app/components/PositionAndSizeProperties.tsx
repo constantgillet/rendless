@@ -163,7 +163,7 @@ export const PositionAndSizeProperties = (
 
   return (
     <PanelGroup title="Position & size">
-      <Grid columns="2" gap="4" width="auto">
+      <Grid columns="2" gap="2" width="auto">
         <Box>
           <TextField.Root>
             <TextField.Slot
@@ -219,8 +219,8 @@ export const PositionAndSizeProperties = (
           </TextField.Root>
         </Box>
       </Grid>
-      <Flex gap="4">
-        <Grid columns="2" gap="4" width="auto">
+      <Flex gap="2">
+        <Grid columns="2" gap="2" width="auto">
           <Box>
             <TextField.Root>
               <TextField.Slot>w</TextField.Slot>

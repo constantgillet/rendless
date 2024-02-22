@@ -1,17 +1,6 @@
-import {
-  Box,
-  IconButton,
-  TextField,
-  Text,
-  Grid,
-  Flex,
-  Separator as RadixSeparator,
-} from "@radix-ui/themes";
+import { Text, Grid, Separator as RadixSeparator } from "@radix-ui/themes";
 import { css } from "styled-system/css";
-import { Icon } from "./Icon";
-import { ElementType, Tree, useEditorStore } from "../stores/EditorStore";
-import { useEffect, useState } from "react";
-import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
+import { ElementType, useEditorStore } from "../stores/EditorStore";
 import { BackgroundColorProperties } from "./BackgroundColorProperties";
 import { TextColorProperties } from "./TextColorProperties";
 import { TextProperties } from "./TextProperties";
@@ -212,7 +201,7 @@ export const PanelGroup = (props: PanelGroupProps) => {
       <Text size="2" className={css({})}>
         {props.title}
       </Text>
-      <Grid columns="1" gap="4" width="auto">
+      <Grid columns="1" gap="2" width="auto">
         {props.children}
       </Grid>
     </div>
