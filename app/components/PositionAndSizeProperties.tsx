@@ -27,66 +27,39 @@ export const PositionAndSizeProperties = (
 ) => {
   const updateElements = useEditorStore((state) => state.updateElements);
 
-  const [xValue, setX] = useState(
-    arePropertiesTheSame(props.properties.x)
-      ? formatValue(props.properties.x[0].value)
-      : "Mixed"
-  );
+  const setDefaultValueFromProps = (
+    property: keyof PositionAndSizePropertiesProps["properties"]
+  ) => {
+    return arePropertiesTheSame(props.properties[property]) &&
+      !props.properties[property][0].variable
+      ? formatValue(props.properties[property][0].value)
+      : arePropertiesTheSame(props.properties[property])
+      ? `{{${props.properties[property][0].variableName}}}`
+      : "Mixed";
+  };
 
-  const [y, setY] = useState(
-    arePropertiesTheSame(props.properties.y)
-      ? formatValue(props.properties.y[0].value)
-      : "Mixed"
-  );
+  const [xValue, setX] = useState(setDefaultValueFromProps("x"));
 
-  const [width, setWidth] = useState(
-    arePropertiesTheSame(props.properties.width) &&
-      !props.properties.width[0].variable
-      ? formatValue(props.properties.width[0].value)
-      : arePropertiesTheSame(props.properties.width)
-      ? `{{${props.properties.width[0].variableName}}}`
-      : "Mixed"
-  );
+  const [y, setY] = useState(setDefaultValueFromProps("y"));
 
-  const [height, setHeight] = useState(
-    arePropertiesTheSame(props.properties.height)
-      ? formatValue(props.properties.height[0].value)
-      : "Mixed"
-  );
+  const [width, setWidth] = useState(setDefaultValueFromProps("width"));
+
+  const [height, setHeight] = useState(setDefaultValueFromProps("height"));
 
   useEffect(() => {
-    setX(
-      arePropertiesTheSame(props.properties.x)
-        ? formatValue(props.properties.x[0].value)
-        : "Mixed"
-    );
+    setX(setDefaultValueFromProps("x"));
   }, [props.properties.x]);
 
   useEffect(() => {
-    setY(
-      arePropertiesTheSame(props.properties.y)
-        ? formatValue(props.properties.y[0].value)
-        : "Mixed"
-    );
+    setY(setDefaultValueFromProps("y"));
   }, [props.properties.y]);
 
   useEffect(() => {
-    setWidth(
-      arePropertiesTheSame(props.properties.width) &&
-        !props.properties.width[0].variable
-        ? formatValue(props.properties.width[0].value)
-        : arePropertiesTheSame(props.properties.width)
-        ? `{{${props.properties.width[0].variableName}}}`
-        : "Mixed"
-    );
+    setWidth(setDefaultValueFromProps("width"));
   }, [props.properties.width]);
 
   useEffect(() => {
-    setHeight(
-      arePropertiesTheSame(props.properties.height)
-        ? formatValue(props.properties.height[0].value)
-        : "Mixed"
-    );
+    setHeight(setDefaultValueFromProps("height"));
   }, [props.properties.height]);
 
   const applyProperty = (
