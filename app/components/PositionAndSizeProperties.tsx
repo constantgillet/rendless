@@ -1,12 +1,11 @@
-import { Badge, Box, Flex, Grid, TextField, Tooltip } from "@radix-ui/themes";
+import { Box, Flex, Grid } from "@radix-ui/themes";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
-import { css } from "styled-system/css";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { useEffect, useState } from "react";
 import { useEditorStore } from "../stores/EditorStore";
-import { Icon } from "./Icon";
 import { getVarFromString } from "~/utils/getVarFromString";
 import { getElementVariables } from "~/stores/actions/getElementVariables";
+import { PropertyTextField } from "./PropertyTextField";
 
 //keep only two decimals after the dot only if more than 2 decimals
 const formatValue = (value: number) => {
@@ -38,7 +37,7 @@ export const PositionAndSizeProperties = (
       : "Mixed";
   };
 
-  const [xValue, setX] = useState(setDefaultValueFromProps("x"));
+  const [x, setX] = useState(setDefaultValueFromProps("x"));
 
   const [y, setY] = useState(setDefaultValueFromProps("y"));
 
@@ -138,110 +137,51 @@ export const PositionAndSizeProperties = (
     <PanelGroup title="Position & size">
       <Grid columns="2" gap="2" width="auto">
         <Box>
-          <TextField.Root>
-            <TextField.Slot
-              className={css({
-                color: "var(--color-text-muted)",
-                display: "flex",
-                alignItems: "center",
-              })}
-            >
-              <div>x</div>
-            </TextField.Slot>
-            <TextField.Input
-              placeholder="Horizontal"
-              value={xValue}
-              onChange={(e) => setX(e.target.value)}
-              onBlur={(e) => applyProperty(e, "x")}
-              onKeyUp={(e) => onKeyUp(e, "x")}
-            />
-          </TextField.Root>
+          <PropertyTextField
+            icon={<>x</>}
+            hasVariable={props.properties.x[0].variable || false}
+            placeholder="Horizontal"
+            value={x}
+            onChange={(e) => setX(e.target.value)}
+            onBlur={(e) => applyProperty(e, "x")}
+            onKeyUp={(e) => onKeyUp(e, "x")}
+          />
         </Box>
         <Box>
-          <TextField.Root>
-            <TextField.Slot>y</TextField.Slot>
-            <TextField.Input
-              placeholder="Vertical"
-              value={y}
-              onChange={(e) => setY(e.target.value)}
-              onBlur={(e) => applyProperty(e, "y")}
-              onKeyUp={(e) => onKeyUp(e, "y")}
-            />
-            <TextField.Slot
-              style={{
-                paddingLeft: "2px",
-              }}
-            >
-              <Tooltip content="You can use this variable in your template">
-                <div
-                  className={css({
-                    width: "20px",
-                    height: "20px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "var(--accent-9)",
-                    color: "var(--accent-9-contrast)",
-                    rounded: "4px",
-                  })}
-                >
-                  <Icon name="braces-variable" size="sm" />
-                </div>
-              </Tooltip>
-            </TextField.Slot>
-          </TextField.Root>
+          <PropertyTextField
+            icon={<>y</>}
+            hasVariable={props.properties.y[0].variable || false}
+            placeholder="Vertical"
+            value={y}
+            onChange={(e) => setY(e.target.value)}
+            onBlur={(e) => applyProperty(e, "y")}
+            onKeyUp={(e) => onKeyUp(e, "y")}
+          />
         </Box>
       </Grid>
       <Flex gap="2">
         <Grid columns="2" gap="2" width="auto">
           <Box>
-            <TextField.Root>
-              <TextField.Slot>w</TextField.Slot>
-              <TextField.Input
-                placeholder="width"
-                value={width}
-                onChange={(e) => setWidth(e.target.value)}
-                onBlur={(e) => applyProperty(e, "width")}
-                onKeyUp={(e) => onKeyUp(e, "width")}
-              />
-              {props.properties.width[0].variable ? (
-                <TextField.Slot
-                  style={{
-                    paddingLeft: "2px",
-                  }}
-                >
-                  <Tooltip content="You can use this variable in your template">
-                    <div
-                      className={css({
-                        width: "20px",
-                        height: "20px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "var(--accent-9)",
-                        color: "var(--accent-9-contrast)",
-                        rounded: "4px",
-                        _hover: { cursor: "help" },
-                      })}
-                    >
-                      <Icon name="braces-variable" size="sm" />
-                    </div>
-                  </Tooltip>
-                </TextField.Slot>
-              ) : null}
-            </TextField.Root>
+            <PropertyTextField
+              icon={<>w</>}
+              hasVariable={props.properties.width[0].variable || false}
+              placeholder="width"
+              value={width}
+              onChange={(e) => setWidth(e.target.value)}
+              onBlur={(e) => applyProperty(e, "width")}
+              onKeyUp={(e) => onKeyUp(e, "width")}
+            />
           </Box>
           <Box>
-            <TextField.Root>
-              <TextField.Slot>h</TextField.Slot>
-              <TextField.Input
-                placeholder="height"
-                value={height}
-                onChange={(e) => setHeight(e.target.value)}
-                onBlur={(e) => applyProperty(e, "height")}
-                onKeyUp={(e) => onKeyUp(e, "height")}
-              />
-            </TextField.Root>
+            <PropertyTextField
+              icon={<>h</>}
+              hasVariable={props.properties.height[0].variable || false}
+              placeholder="height"
+              value={height}
+              onChange={(e) => setHeight(e.target.value)}
+              onBlur={(e) => applyProperty(e, "height")}
+              onKeyUp={(e) => onKeyUp(e, "height")}
+            />
           </Box>
         </Grid>
       </Flex>
