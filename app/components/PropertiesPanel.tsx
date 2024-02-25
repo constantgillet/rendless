@@ -86,7 +86,7 @@ export const PropertiesPanel = () => {
   return (
     <aside
       className={css({
-        w: 244,
+        w: 268,
         backgroundColor: "var(--color-panel)",
         borderColor: "var(--global-color-border, currentColor)",
         padding: "var(--space-4)",
