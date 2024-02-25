@@ -6,6 +6,7 @@ import { TextColorProperties } from "./TextColorProperties";
 import { TextProperties } from "./TextProperties";
 import { RadiusProperties } from "./RadiusProperties";
 import { PositionAndSizeProperties } from "./PositionAndSizeProperties";
+import { VariablesFoundIndicator } from "./VariablesFoundIndicator";
 
 const Separator = () => {
   return (
@@ -176,6 +177,8 @@ export const PropertiesPanel = () => {
                 ],
               }}
             />
+            <Separator />
+            <VariablesFoundIndicator />
             <Separator />
           </>
         )
