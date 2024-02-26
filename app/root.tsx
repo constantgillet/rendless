@@ -11,6 +11,7 @@ import { Theme } from "@radix-ui/themes";
 
 import styles from "./index.css";
 import radixStyles from "@radix-ui/themes/styles.css";
+import { Toaster } from "react-hot-toast";
 
 export const loader = ({ context: { user } }: LoaderFunctionArgs) => {
   return { user };
@@ -32,6 +33,7 @@ export default function App() {
         <Links />
       </head>
       <body className="dark">
+        <Toaster position="bottom-center" reverseOrder={true} />
         <Theme accentColor="indigo" grayColor="slate" radius="medium">
           <Outlet />
         </Theme>

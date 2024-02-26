@@ -4,6 +4,7 @@ import { Icon } from "./Icon";
 import { Tree, useEditorStore } from "~/stores/EditorStore";
 import { useMemo } from "react";
 import { css } from "styled-system/css";
+import toast from "react-hot-toast";
 
 const getAllVariablesList = (tree: Tree) => {
   const variableList: Array<string> = [];
@@ -36,6 +37,11 @@ export const VariablesFoundIndicator = () => {
 
   console.log(variables);
 
+  const onClickCopyVariable = (variable: string) => {
+    navigator.clipboard.writeText(variable);
+    toast.success(`Copied ${variable} to clipboard`);
+  };
+
   return (
     <PanelGroup title="Templates Variables">
       <Callout.Root size={"1"} color="gray">
@@ -63,6 +69,7 @@ export const VariablesFoundIndicator = () => {
               className={css({
                 cursor: "pointer",
               })}
+              onClick={() => onClickCopyVariable(variable)}
             />
           </Badge>
         ))}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
 import { bringElementsToFront } from "~/stores/actions/bringElementsToFront";
 import { sendElementsToBack } from "~/stores/actions/sendElementsToBack";
+import toast from "react-hot-toast";
 
 export const EditorHotKeys = () => {
   const selectedTargets = useEditorStore((state) => state.selected);
@@ -191,6 +192,13 @@ export const EditorHotKeys = () => {
       enabled: selectedTargets.length > 0,
     }
   );
+
+  //Save
+  useHotkeys("mod+s", (e) => {
+    e.preventDefault();
+
+    toast.success("Rendless autosave your design");
+  });
 
   return <></>;
 };
