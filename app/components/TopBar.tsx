@@ -11,6 +11,7 @@ import { Link, useFetcher } from "@remix-run/react";
 import { action as updateTemplateNameAction } from "~/routes/api.update-template-name";
 import { Spinner } from "./Spinner";
 import { SaveTreeIndicator } from "./SaveTreeIndicator";
+import toast from "react-hot-toast";
 
 const toolsData = [
   {
@@ -155,9 +156,10 @@ const TemplateNameButton = ({
       if (newTemplateName) {
         setTemplateName(newTemplateName as string);
         setOpen(false);
+        toast.success("Template name updated");
       }
     }
-  }, [fetcher.state, fetcher.data]);
+  }, [fetcher.data]);
 
   return (
     <Dialog.Root
