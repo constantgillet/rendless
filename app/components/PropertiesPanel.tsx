@@ -96,7 +96,8 @@ export const PropertiesPanel = () => {
       {properties["x"] &&
         properties["y"] &&
         properties["width"] &&
-        properties["height"] && (
+        properties["height"] &&
+        properties["rotate"] && (
           <>
             <PositionAndSizeProperties
               properties={{
@@ -104,6 +105,7 @@ export const PropertiesPanel = () => {
                 y: properties["y"],
                 width: properties["width"],
                 height: properties["height"],
+                rotate: properties["rotate"],
               }}
             />
             <Separator />

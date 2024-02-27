@@ -95,6 +95,7 @@ export const FramePage = (props: Props) => {
       y: y,
       width: width,
       height: height,
+      rotate: 0,
       backgroundColor: selectedTool === "rect" ? "#9b9b9b" : undefined,
       content: selectedTool === "text" ? "" : undefined,
       color: selectedTool === "text" ? "#000000" : undefined,
@@ -176,6 +177,8 @@ export const FramePage = (props: Props) => {
 
     target!.style.transform = dragEvent.transform;
     updateElements([element], isEnd ? true : false);
+
+    //TODO fix this
   };
 
   const onResize = (resizeEvent: OnResize, isEnd = false) => {
@@ -248,7 +251,7 @@ export const FramePage = (props: Props) => {
               draggable={true}
               // throttleDrag={0}
               onDrag={(e) => onDrag(e, false)}
-              onDragEnd={(e) => onDrag(e, true)}
+              // onDragEnd={(e) => onDrag(e, true)}
               onDragGroup={(e) => onDragGroup(e, false)}
               onDragGroupEnd={(e) => onDragGroup(e, true)}
               /* When resize or scale, keeps a ratio of the width, height. */
@@ -267,6 +270,17 @@ export const FramePage = (props: Props) => {
                 };
 
                 updateElements([element], true);
+              }}
+              rotatable={true}
+              onRotate={(e) => {
+                e.target.style.transform = e.drag.transform;
+
+                const element = {
+                  id: e.target.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+                  rotate: e.absoluteRotation,
+                };
+
+                updateElements([element], false);
               }}
             />
             <div

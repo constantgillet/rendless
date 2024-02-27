@@ -24,6 +24,7 @@ interface Element<T extends ObjectType> {
   y: number;
   width: number;
   height: number;
+  rotate: number;
   variables: {
     property: string;
     name: string;
@@ -107,6 +108,7 @@ const defaultTree: Tree = {
       type: "rect",
       x: 100,
       y: 100,
+      rotate: 0,
       width: 74,
       height: 74,
       backgroundColor: "#1bc529",
@@ -126,6 +128,7 @@ const defaultTree: Tree = {
       y: 100,
       width: 120,
       height: 60,
+      rotate: 0,
       backgroundColor: "#d42f2f",
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,

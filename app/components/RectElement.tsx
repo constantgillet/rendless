@@ -21,7 +21,7 @@ export const RectElement = (props: ReactElementProps) => {
         [DATA_SCENA_ELEMENT_ID]: props.id,
       }}
       style={{
-        transform: `translate(${props.x}px, ${props.y}px)`,
+        transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
         width: props.width,
         height: props.height,
         backgroundColor: props.backgroundColor,

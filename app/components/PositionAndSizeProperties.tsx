@@ -6,6 +6,7 @@ import { useEditorStore } from "../stores/EditorStore";
 import { getVarFromString } from "~/utils/getVarFromString";
 import { getElementVariables } from "~/stores/actions/getElementVariables";
 import { PropertyTextField } from "./PropertyTextField";
+import { Icon } from "./Icon";
 
 //keep only two decimals after the dot only if more than 2 decimals
 const formatValue = (value: number) => {
@@ -18,6 +19,7 @@ type PositionAndSizePropertiesProps = {
     y: ValueType[];
     width: ValueType[];
     height: ValueType[];
+    rotate: ValueType[];
   };
 };
 
@@ -45,6 +47,8 @@ export const PositionAndSizeProperties = (
 
   const [height, setHeight] = useState(setDefaultValueFromProps("height"));
 
+  const [rotate, setRotate] = useState(setDefaultValueFromProps("rotate"));
+
   useEffect(() => {
     setX(setDefaultValueFromProps("x"));
   }, [props.properties.x]);
@@ -60,6 +64,10 @@ export const PositionAndSizeProperties = (
   useEffect(() => {
     setHeight(setDefaultValueFromProps("height"));
   }, [props.properties.height]);
+
+  useEffect(() => {
+    setRotate(setDefaultValueFromProps("rotate"));
+  }, [props.properties.rotate]);
 
   const applyProperty = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -181,6 +189,21 @@ export const PositionAndSizeProperties = (
               onChange={(e) => setHeight(e.target.value)}
               onBlur={(e) => applyProperty(e, "height")}
               onKeyUp={(e) => onKeyUp(e, "height")}
+            />
+          </Box>
+        </Grid>
+      </Flex>
+      <Flex gap="2">
+        <Grid columns="2" gap="2" width="auto">
+          <Box>
+            <PropertyTextField
+              icon={<Icon name="rotate-left" />}
+              hasVariable={props.properties.rotate[0].variable || false}
+              placeholder="rotate"
+              value={rotate}
+              onChange={(e) => setRotate(e.target.value)}
+              onBlur={(e) => applyProperty(e, "rotate")}
+              onKeyUp={(e) => onKeyUp(e, "rotate")}
             />
           </Box>
         </Grid>

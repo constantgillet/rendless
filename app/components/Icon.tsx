@@ -24,7 +24,8 @@ export type IconName =
   | "checkmark-circle"
   | "braces-variable"
   | "copy"
-  | "rendless";
+  | "rendless"
+  | "rotate-left";
 
 export const iconStyle = cva({
   base: {
