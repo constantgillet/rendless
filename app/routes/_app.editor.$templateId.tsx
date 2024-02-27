@@ -18,6 +18,8 @@ import { prisma } from "~/libs/prisma";
 import { ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
 import { Tree, useEditorStore } from "~/stores/EditorStore";
 import InfiniteViewer from "react-infinite-viewer";
+import { useScaleStore } from "~/stores/ScaleStore";
+import { defaultTree } from "~/constants/defaultTree";
 
 export const meta: MetaFunction = () => {
   return [
@@ -117,10 +119,22 @@ type TreeLoaderProps = {
 
 const TreeLoader = (props: TreeLoaderProps) => {
   const setTree = useEditorStore((state) => state.setTree);
+  const setScale = useScaleStore((state) => state.setScale);
+  const setSelected = useEditorStore((state) => state.setSelected);
 
   useEffect(() => {
     setTree(props.tree);
+
+    return () => {
+      reset();
+      setSelected([]);
+    };
   }, [props.tree, setTree]);
+
+  const reset = () => {
+    setTree(defaultTree);
+    setScale(1);
+  };
 
   return null;
 };
