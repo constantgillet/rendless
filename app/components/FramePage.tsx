@@ -162,12 +162,10 @@ export const FramePage = (props: Props) => {
     dragEvent: OnDrag,
     isEnd = false
   ) => {
-    const { target } = dragEvent;
+    const { target, translate } = dragEvent;
 
-    const containerRect = container.current!.getBoundingClientRect();
-    const targetRect = target!.getBoundingClientRect();
-    const x = Math.round((targetRect.x - containerRect.x) / scale);
-    const y = Math.round((targetRect.y - containerRect.y) / scale);
+    const x = Math.round(translate[0]);
+    const y = Math.round(translate[1]);
 
     const element = {
       id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
@@ -177,8 +175,6 @@ export const FramePage = (props: Props) => {
 
     target!.style.transform = dragEvent.transform;
     updateElements([element], isEnd ? true : false);
-
-    //TODO fix this
   };
 
   const onResize = (resizeEvent: OnResize, isEnd = false) => {
@@ -194,12 +190,8 @@ export const FramePage = (props: Props) => {
       id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
       width: Math.round(targetRect.width / scale),
       height: Math.round(targetRect.height / scale),
-      x: Math.round(
-        (targetRect.x - container.current!.getBoundingClientRect().x) / scale
-      ),
-      y: Math.round(
-        (targetRect.y - container.current!.getBoundingClientRect().y) / scale
-      ),
+      x: Math.round(drag.translate[0]),
+      y: Math.round(drag.translate[1]),
     };
 
     updateElements([element], isEnd ? true : false);
@@ -251,7 +243,7 @@ export const FramePage = (props: Props) => {
               draggable={true}
               // throttleDrag={0}
               onDrag={(e) => onDrag(e, false)}
-              // onDragEnd={(e) => onDrag(e, true)}
+              onDragEnd={(e) => onDrag(e, true)}
               onDragGroup={(e) => onDragGroup(e, false)}
               onDragGroupEnd={(e) => onDragGroup(e, true)}
               /* When resize or scale, keeps a ratio of the width, height. */
