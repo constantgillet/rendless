@@ -35,8 +35,6 @@ export const VariablesFoundIndicator = () => {
 
   const variables = useMemo(() => getAllVariablesList(tree), [tree]);
 
-  console.log(variables);
-
   const onClickCopyVariable = (variable: string) => {
     navigator.clipboard.writeText(variable);
     toast.success(`Copied ${variable} to clipboard`);
