@@ -14,7 +14,7 @@ export const PropertyTextField = (props: PropertyTextFieldProps) => {
 
   return (
     <TextField.Root>
-      <TextField.Slot>{icon}</TextField.Slot>
+      {icon ? <TextField.Slot>{icon}</TextField.Slot> : null}
       <TextField.Input {...inputProps} />
       {hasVariable ? (
         <TextField.Slot

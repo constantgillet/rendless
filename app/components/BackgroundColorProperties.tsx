@@ -14,6 +14,8 @@ import { css } from "styled-system/css";
 import * as SelectPicker from "react-color";
 import * as PopoverRadix from "@radix-ui/react-popover";
 import { groupBySameValue } from "~/utils/groupBySameValue";
+import { PropertyTextField } from "./PropertyTextField";
+import { grid, gridItem } from "styled-system/patterns";
 
 type BackgroundColorPropertiesProps = {
   properties: {
@@ -61,45 +63,41 @@ export const BackgroundColorProperties = (
           <Popover.Root key={index}>
             <>
               <PopoverRadix.Anchor>
-                <div
-                  className={css({
-                    display: "flex",
-                    width: "180px",
-                    gap: "8px",
-                  })}
-                >
-                  <TextField.Root>
-                    <TextField.Slot>
-                      <Popover.Trigger onClick={(e) => e.stopPropagation()}>
-                        <button
-                          className={css({
-                            width: "24px",
-                            height: "20px",
-                            flexShrink: 0,
-                            _hover: {
-                              cursor: "pointer",
-                            },
-                            borderRadius: "3px",
-                          })}
-                          style={{
-                            backgroundColor: color.value,
-                          }}
-                        />
-                      </Popover.Trigger>
-                    </TextField.Slot>
-                    <TextField.Input
+                <div className={grid({ columns: 12, gap: 2 })}>
+                  <div className={gridItem({ colSpan: 7 })}>
+                    <PropertyTextField
+                      icon={
+                        <Popover.Trigger onClick={(e) => e.stopPropagation()}>
+                          <button
+                            className={css({
+                              width: "24px",
+                              height: "20px",
+                              flexShrink: 0,
+                              _hover: {
+                                cursor: "pointer",
+                              },
+                              borderRadius: "3px",
+                            })}
+                            style={{
+                              backgroundColor: color.value,
+                            }}
+                          />
+                        </Popover.Trigger>
+                      }
+                      hasVariable={false}
+                      placeholder="color hex"
                       value={color.value}
-                      className={css({
-                        width: "68px!important",
-                      })}
+                      onChange={(e) => {}}
+                      onBlur={(e) => {}}
                     />
-                  </TextField.Root>
-                  <TextFieldInput
-                    value={"100%"}
-                    className={css({
-                      width: "52px!important",
-                    })}
-                  />
+                  </div>
+                  <div className={gridItem({ colSpan: 5 })}>
+                    <PropertyTextField
+                      hasVariable={false}
+                      placeholder="height"
+                      value={"100%"}
+                    />
+                  </div>
                 </div>
               </PopoverRadix.Anchor>
               <Popover.Content side="left">
