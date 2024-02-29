@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import type {} from "@redux-devtools/extension"; // required for devtools typing
 import { v4 as uuidv4 } from "uuid";
+import { defaultTree } from "~/constants/defaultTree";
 
 export type Tool = "select" | "text" | "rect";
 
@@ -93,59 +94,6 @@ interface EditorState {
   ) => void;
   moveIndexPosition: (elementIds: string[], newPosition: number) => void;
 }
-
-const defaultTree: Tree = {
-  id: "1",
-  type: "page",
-  width: 1200,
-  height: 630,
-  backgroundColor: "#d1d5db",
-  x: 0,
-  y: 0,
-  children: [
-    {
-      id: "qzdqzdqzd",
-      type: "rect",
-      x: 100,
-      y: 100,
-      rotate: 0,
-      width: 74,
-      height: 74,
-      backgroundColor: "#1bc529",
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-      borderWidth: 0,
-      borderColor: "red",
-      borderStyle: "solid",
-      variables: [],
-    },
-    {
-      id: "2vvvvv",
-      type: "rect",
-      x: 300,
-      y: 100,
-      width: 120,
-      height: 60,
-      rotate: 0,
-      backgroundColor: "#d42f2f",
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-      borderWidth: 0,
-      borderColor: "red",
-      borderStyle: "solid",
-      variables: [
-        {
-          property: "width",
-          name: "bannerWidth",
-        },
-      ],
-    },
-  ],
-};
 
 export const useEditorStore = create<EditorState>()(
   // @ts-ignore
