@@ -20,6 +20,7 @@ import { grid, gridItem } from "styled-system/patterns";
 type BackgroundColorPropertiesProps = {
   properties: {
     backgroundColor: ValueType[];
+    backgroundOpacity: ValueType[];
   };
 };
 

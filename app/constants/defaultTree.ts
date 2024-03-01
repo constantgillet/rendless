@@ -8,6 +8,7 @@ export const defaultTree: Tree = {
   backgroundColor: "#d1d5db",
   x: 0,
   y: 0,
+  rotate: 1,
   children: [
     {
       id: "qzdqzdqzd",
@@ -18,6 +19,7 @@ export const defaultTree: Tree = {
       height: 74,
       rotate: 0,
       backgroundColor: "#1bc529",
+      backgroundOpacity: 1,
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
       borderBottomLeftRadius: 0,
@@ -36,6 +38,7 @@ export const defaultTree: Tree = {
       width: 120,
       height: 60,
       backgroundColor: "#d42f2f",
+      backgroundOpacity: 1,
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
       borderBottomLeftRadius: 0,

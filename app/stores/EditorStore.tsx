@@ -34,6 +34,7 @@ interface Element<T extends ObjectType> {
 
 export type ElementRect = Element<"rect"> & {
   backgroundColor: string;
+  backgroundOpacity: number;
   borderWidth: number;
   borderColor: string;
   borderStyle: string;
