@@ -202,6 +202,7 @@ export const PanelGroup = (props: PanelGroupProps) => {
         display: "flex",
         flexDirection: "column",
         gap: "var(--space-3)",
+        fontWeight: "medium",
       })}
     >
       <Text size="2" className={css({})}>

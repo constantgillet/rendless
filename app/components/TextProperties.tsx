@@ -19,6 +19,8 @@ import { FontPicker } from "./FontPicker";
 import { FontSizePicker } from "./FontSizePicker";
 import { FontVariantPicker } from "./FontVariantPicker";
 import fontsContent from "../contents/fontInfo.json";
+import { css } from "styled-system/css";
+import { PropertyLine } from "./PropertyLine";
 
 type TextPropertiesProps = {
   properties: {
@@ -86,7 +88,7 @@ export const TextProperties = (props: TextPropertiesProps) => {
   return (
     <PanelGroup title="Text">
       <Flex direction="column" gap="1">
-        <div>
+        <PropertyLine label="Font">
           <FontPicker
             value={fontFamilyProperty}
             onValueChange={(value) => {
@@ -112,8 +114,8 @@ export const TextProperties = (props: TextPropertiesProps) => {
               );
             }}
           />
-        </div>
-        <div>
+        </PropertyLine>
+        <PropertyLine label="Variant">
           <FontVariantPicker
             fontFamily={fontFamilyProperty}
             fontWeightValue={fontWeightProperty}
@@ -129,8 +131,8 @@ export const TextProperties = (props: TextPropertiesProps) => {
               );
             }}
           />
-        </div>
-        <div>
+        </PropertyLine>
+        <PropertyLine label="Font size">
           <FontSizePicker
             value={fontSizePropety}
             onValueChange={(newVal) => {
@@ -143,36 +145,38 @@ export const TextProperties = (props: TextPropertiesProps) => {
               );
             }}
           />
-        </div>
-        <Flex gap="1">
-          <Tooltip content={"Text align left"}>
-            <IconButton
-              size="2"
-              variant={textAlignProperty === "left" ? "solid" : "outline"}
-              onClick={() => onClickTextAlign("left")}
-            >
-              <Icon name="text-align-left" aria-checked />
-            </IconButton>
-          </Tooltip>
-          <Tooltip content={"Text align center"}>
-            <IconButton
-              size="2"
-              variant={textAlignProperty === "center" ? "solid" : "outline"}
-              onClick={() => onClickTextAlign("center")}
-            >
-              <Icon name="text-align-center" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip content={"Text align right"}>
-            <IconButton
-              size="2"
-              variant={textAlignProperty === "right" ? "solid" : "outline"}
-              onClick={() => onClickTextAlign("right")}
-            >
-              <Icon name="text-align-right" />
-            </IconButton>
-          </Tooltip>
-        </Flex>
+        </PropertyLine>
+        <PropertyLine label="Decoration">
+          <Flex gap="1">
+            <Tooltip content={"Text align left"}>
+              <IconButton
+                size="2"
+                variant={textAlignProperty === "left" ? "solid" : "outline"}
+                onClick={() => onClickTextAlign("left")}
+              >
+                <Icon name="text-align-left" aria-checked />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={"Text align center"}>
+              <IconButton
+                size="2"
+                variant={textAlignProperty === "center" ? "solid" : "outline"}
+                onClick={() => onClickTextAlign("center")}
+              >
+                <Icon name="text-align-center" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={"Text align right"}>
+              <IconButton
+                size="2"
+                variant={textAlignProperty === "right" ? "solid" : "outline"}
+                onClick={() => onClickTextAlign("right")}
+              >
+                <Icon name="text-align-right" />
+              </IconButton>
+            </Tooltip>
+          </Flex>
+        </PropertyLine>
       </Flex>
     </PanelGroup>
   );
