@@ -26,7 +26,10 @@ export type IconName =
   | "copy"
   | "rendless"
   | "rotate-left"
-  | "text-align-justify";
+  | "text-align-justify"
+  | "text-case-uppercase"
+  | "text-case-title"
+  | "text-case-lowercase";
 
 export const iconStyle = cva({
   base: {
