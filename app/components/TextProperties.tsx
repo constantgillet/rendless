@@ -75,7 +75,9 @@ export const TextProperties = (props: TextPropertiesProps) => {
     [props.properties.textAlign]
   );
 
-  const onClickTextAlign = (textAlign: "left" | "center" | "right") => {
+  const onClickTextAlign = (
+    textAlign: "left" | "center" | "right" | "justify"
+  ) => {
     updateElements(
       props.properties.textAlign.map((property) => ({
         id: property.nodeId,
@@ -146,11 +148,11 @@ export const TextProperties = (props: TextPropertiesProps) => {
             }}
           />
         </PropertyLine>
-        <PropertyLine label="Decoration">
+        <PropertyLine label="Align">
           <Flex gap="1">
             <Tooltip content={"Text align left"}>
               <IconButton
-                size="2"
+                size="1"
                 variant={textAlignProperty === "left" ? "solid" : "outline"}
                 onClick={() => onClickTextAlign("left")}
               >
@@ -159,7 +161,7 @@ export const TextProperties = (props: TextPropertiesProps) => {
             </Tooltip>
             <Tooltip content={"Text align center"}>
               <IconButton
-                size="2"
+                size="1"
                 variant={textAlignProperty === "center" ? "solid" : "outline"}
                 onClick={() => onClickTextAlign("center")}
               >
@@ -168,11 +170,20 @@ export const TextProperties = (props: TextPropertiesProps) => {
             </Tooltip>
             <Tooltip content={"Text align right"}>
               <IconButton
-                size="2"
+                size="1"
                 variant={textAlignProperty === "right" ? "solid" : "outline"}
                 onClick={() => onClickTextAlign("right")}
               >
                 <Icon name="text-align-right" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={"Text align right"}>
+              <IconButton
+                size="1"
+                variant={textAlignProperty === "justify" ? "solid" : "outline"}
+                onClick={() => onClickTextAlign("justify")}
+              >
+                <Icon name="text-align-justify" />
               </IconButton>
             </Tooltip>
           </Flex>

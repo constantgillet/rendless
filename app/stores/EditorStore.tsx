@@ -51,7 +51,7 @@ export type ElementText = Element<"text"> & {
   fontFamily: string;
   fontWeight: number;
   fontStyle: "normal" | "italic";
-  textAlign: "left" | "center" | "right";
+  textAlign: "left" | "center" | "right" | "justify";
   lineHeight: number;
 };
 

@@ -25,7 +25,8 @@ export type IconName =
   | "braces-variable"
   | "copy"
   | "rendless"
-  | "rotate-left";
+  | "rotate-left"
+  | "text-align-justify";
 
 export const iconStyle = cva({
   base: {
