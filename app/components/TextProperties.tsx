@@ -188,6 +188,45 @@ export const TextProperties = (props: TextPropertiesProps) => {
             </Tooltip>
           </Flex>
         </PropertyLine>
+        <PropertyLine label="Text Transform">
+          <Flex gap="1">
+            <Tooltip content={"Default"}>
+              <IconButton
+                size="1"
+                variant={textAlignProperty === "left" ? "solid" : "outline"}
+                onClick={() => onClickTextAlign("left")}
+              >
+                -
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={"Text capitalize"}>
+              <IconButton
+                size="1"
+                variant={textAlignProperty === "center" ? "solid" : "outline"}
+              >
+                <Icon name="text-case-title" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={"Text lowercase"}>
+              <IconButton
+                size="1"
+                variant={textAlignProperty === "right" ? "solid" : "outline"}
+                onClick={() => onClickTextAlign("right")}
+              >
+                <Icon name="text-case-lowercase" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={"Text uppercase"}>
+              <IconButton
+                size="1"
+                variant={textAlignProperty === "justify" ? "solid" : "outline"}
+                onClick={() => onClickTextAlign("justify")}
+              >
+                <Icon name="text-case-uppercase" />
+              </IconButton>
+            </Tooltip>
+          </Flex>
+        </PropertyLine>
       </Flex>
     </PanelGroup>
   );
