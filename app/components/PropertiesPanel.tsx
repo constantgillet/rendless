@@ -135,7 +135,8 @@ export const PropertiesPanel = () => {
       {properties["fontSize"] &&
         properties["textAlign"] &&
         properties["fontWeight"] &&
-        properties["fontStyle"] && (
+        properties["fontStyle"] &&
+        properties["textTransform"] && (
           <>
             <TextProperties
               properties={{
@@ -144,6 +145,7 @@ export const PropertiesPanel = () => {
                 textAlign: properties["textAlign"],
                 fontWeight: properties["fontWeight"],
                 fontStyle: properties["fontStyle"],
+                textTransform: properties["textTransform"],
               }}
             />
             <Separator />

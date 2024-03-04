@@ -29,6 +29,7 @@ type TextPropertiesProps = {
     textAlign: ValueType[];
     fontWeight: ValueType[];
     fontStyle: ValueType[];
+    textTransform: ValueType[];
   };
 };
 
@@ -75,6 +76,14 @@ export const TextProperties = (props: TextPropertiesProps) => {
     [props.properties.textAlign]
   );
 
+  const textTransform = useMemo(
+    () =>
+      arePropertiesTheSame(props.properties.textTransform)
+        ? props.properties.textTransform[0].value.toString()
+        : "Mixed",
+    [props.properties.textTransform]
+  );
+
   const onClickTextAlign = (
     textAlign: "left" | "center" | "right" | "justify"
   ) => {
@@ -82,6 +91,18 @@ export const TextProperties = (props: TextPropertiesProps) => {
       props.properties.textAlign.map((property) => ({
         id: property.nodeId,
         textAlign: textAlign,
+      })),
+      true
+    );
+  };
+
+  const onClickTextTransform = (
+    textTransform: "none" | "capitalize" | "uppercase" | "lowercase"
+  ) => {
+    updateElements(
+      props.properties.textTransform.map((property) => ({
+        id: property.nodeId,
+        textTransform: textTransform,
       })),
       true
     );
@@ -193,8 +214,8 @@ export const TextProperties = (props: TextPropertiesProps) => {
             <Tooltip content={"Default"}>
               <IconButton
                 size="1"
-                variant={textAlignProperty === "left" ? "solid" : "outline"}
-                onClick={() => onClickTextAlign("left")}
+                variant={textTransform === "none" ? "solid" : "outline"}
+                onClick={() => onClickTextTransform("none")}
               >
                 -
               </IconButton>
@@ -202,7 +223,8 @@ export const TextProperties = (props: TextPropertiesProps) => {
             <Tooltip content={"Text capitalize"}>
               <IconButton
                 size="1"
-                variant={textAlignProperty === "center" ? "solid" : "outline"}
+                variant={textTransform === "capitalize" ? "solid" : "outline"}
+                onClick={() => onClickTextTransform("capitalize")}
               >
                 <Icon name="text-case-title" />
               </IconButton>
@@ -210,8 +232,8 @@ export const TextProperties = (props: TextPropertiesProps) => {
             <Tooltip content={"Text lowercase"}>
               <IconButton
                 size="1"
-                variant={textAlignProperty === "right" ? "solid" : "outline"}
-                onClick={() => onClickTextAlign("right")}
+                variant={textTransform === "lowercase" ? "solid" : "outline"}
+                onClick={() => onClickTextTransform("lowercase")}
               >
                 <Icon name="text-case-lowercase" />
               </IconButton>
@@ -219,8 +241,8 @@ export const TextProperties = (props: TextPropertiesProps) => {
             <Tooltip content={"Text uppercase"}>
               <IconButton
                 size="1"
-                variant={textAlignProperty === "justify" ? "solid" : "outline"}
-                onClick={() => onClickTextAlign("justify")}
+                variant={textTransform === "uppercase" ? "solid" : "outline"}
+                onClick={() => onClickTextTransform("uppercase")}
               >
                 <Icon name="text-case-uppercase" />
               </IconButton>

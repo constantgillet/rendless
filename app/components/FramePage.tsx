@@ -105,6 +105,7 @@ export const FramePage = (props: Props) => {
       fontWeight: selectedTool === "text" ? 400 : undefined,
       fontStyle: selectedTool === "text" ? "normal" : undefined,
       textAlign: selectedTool === "text" ? "left" : undefined,
+      textTransform: selectedTool === "text" ? "none" : undefined,
       borderTopLeftRadius: selectedTool === "rect" ? 0 : undefined,
       borderTopRightRadius: selectedTool === "rect" ? 0 : undefined,
       borderBottomLeftRadius: selectedTool === "rect" ? 0 : undefined,

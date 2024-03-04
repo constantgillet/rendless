@@ -52,6 +52,7 @@ export type ElementText = Element<"text"> & {
   fontWeight: number;
   fontStyle: "normal" | "italic";
   textAlign: "left" | "center" | "right" | "justify";
+  textTransform: "none" | "uppercase" | "lowercase" | "capitalize";
   lineHeight: number;
 };
 
