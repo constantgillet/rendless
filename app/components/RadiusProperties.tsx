@@ -4,6 +4,9 @@ import { Icon } from "./Icon";
 import { useEffect, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { useEditorStore } from "../stores/EditorStore";
+import { getVarFromString } from "~/utils/getVarFromString";
+import { getElementVariables } from "~/stores/actions/getElementVariables";
+import { PropertyTextField } from "./PropertyTextField";
 
 type RadiusPropertiesProps = {
   properties: {
@@ -17,59 +20,50 @@ type RadiusPropertiesProps = {
 export const RadiusProperties = (props: RadiusPropertiesProps) => {
   const updateElements = useEditorStore((state) => state.updateElements);
 
+  const setDefaultValueFromProps = (
+    property: keyof RadiusPropertiesProps["properties"]
+  ) => {
+    return arePropertiesTheSame(props.properties[property]) &&
+      !props.properties[property][0].variable
+      ? props.properties[property][0].value
+      : arePropertiesTheSame(props.properties[property])
+      ? `{{${props.properties[property][0].variableName}}}`
+      : "Mixed";
+  };
+
   const [borderTopLeftRadiusValue, setBorderTopLeftRadius] = useState(
-    arePropertiesTheSame(props.properties.borderTopLeftRadius)
-      ? props.properties.borderTopLeftRadius[0].value
-      : "Mixed"
+    setDefaultValueFromProps("borderTopLeftRadius")
   );
 
   const [borderTopRightRadiusValue, setBorderTopRightRadius] = useState(
-    arePropertiesTheSame(props.properties.borderTopRightRadius)
-      ? props.properties.borderTopRightRadius[0].value
-      : "Mixed"
+    setDefaultValueFromProps("borderTopRightRadius")
   );
 
   const [borderBottomLeftRadiusValue, setBorderBottomLeftRadius] = useState(
-    arePropertiesTheSame(props.properties.borderBottomLeftRadius)
-      ? props.properties.borderBottomLeftRadius[0].value
-      : "Mixed"
+    setDefaultValueFromProps("borderBottomLeftRadius")
   );
 
   const [borderBottomRightRadiusValue, setBorderBottomRightRadius] = useState(
-    arePropertiesTheSame(props.properties.borderBottomRightRadius)
-      ? props.properties.borderBottomRightRadius[0].value
-      : "Mixed"
+    setDefaultValueFromProps("borderBottomRightRadius")
   );
 
   useEffect(() => {
-    setBorderTopLeftRadius(
-      arePropertiesTheSame(props.properties.borderTopLeftRadius)
-        ? props.properties.borderTopLeftRadius[0].value
-        : "Mixed"
-    );
+    setBorderTopLeftRadius(setDefaultValueFromProps("borderTopLeftRadius"));
   }, [props.properties.borderTopLeftRadius]);
 
   useEffect(() => {
-    setBorderTopRightRadius(
-      arePropertiesTheSame(props.properties.borderTopRightRadius)
-        ? props.properties.borderTopRightRadius[0].value
-        : "Mixed"
-    );
+    setBorderTopRightRadius(setDefaultValueFromProps("borderTopRightRadius"));
   }, [props.properties.borderTopRightRadius]);
 
   useEffect(() => {
     setBorderBottomLeftRadius(
-      arePropertiesTheSame(props.properties.borderBottomLeftRadius)
-        ? props.properties.borderBottomLeftRadius[0].value
-        : "Mixed"
+      setDefaultValueFromProps("borderBottomLeftRadius")
     );
   }, [props.properties.borderBottomLeftRadius]);
 
   useEffect(() => {
     setBorderBottomRightRadius(
-      arePropertiesTheSame(props.properties.borderBottomRightRadius)
-        ? props.properties.borderBottomRightRadius[0].value
-        : "Mixed"
+      setDefaultValueFromProps("borderBottomRightRadius")
     );
   }, [props.properties.borderBottomRightRadius]);
 
@@ -78,6 +72,37 @@ export const RadiusProperties = (props: RadiusPropertiesProps) => {
     property: keyof RadiusPropertiesProps["properties"]
   ) => {
     const newValue = event.target.value;
+
+    const variableName = getVarFromString(newValue);
+
+    if (variableName && variableName.length > 0) {
+      updateElements(
+        props.properties[property].map((property) => {
+          const currentVariables = getElementVariables(property.nodeId);
+
+          //Create new vaiables with the new variable if it doesn't exist
+          const newVariablesWithoutProperty = currentVariables.filter(
+            (variable) => variable.property !== property.propertyName
+          );
+
+          const newVariables = [
+            ...newVariablesWithoutProperty,
+            {
+              property: property.propertyName,
+              name: variableName,
+            },
+          ];
+
+          return {
+            id: property.nodeId,
+            variables: newVariables,
+          };
+        }),
+        true
+      );
+
+      return;
+    }
 
     if (isNaN(Number(newValue))) {
       return;
@@ -107,65 +132,61 @@ export const RadiusProperties = (props: RadiusPropertiesProps) => {
 
   return (
     <PanelGroup title="Radius">
-      <Grid columns="2" gap="4" width="auto">
+      <Grid columns="2" gap="2" width="auto">
         <Box>
-          <TextField.Root>
-            <TextField.Slot>
-              <Icon name="corner-top-left" strokeWidth={2} />
-            </TextField.Slot>
-            <TextField.Input
-              placeholder="Top left"
-              value={borderTopLeftRadiusValue}
-              onChange={(e) => setBorderTopLeftRadius(e.target.value)}
-              onBlur={(e) => applyProperty(e, "borderTopLeftRadius")}
-              onKeyUp={(e) => onKeyUp(e, "borderTopLeftRadius")}
-            />
-          </TextField.Root>
+          <PropertyTextField
+            icon={<Icon name="corner-top-left" strokeWidth={2} />}
+            placeholder="Top left"
+            hasVariable={
+              props.properties.borderTopLeftRadius[0].variable || false
+            }
+            value={borderTopLeftRadiusValue}
+            onChange={(e) => setBorderTopLeftRadius(e.target.value)}
+            onBlur={(e) => applyProperty(e, "borderTopLeftRadius")}
+            onKeyUp={(e) => onKeyUp(e, "borderTopLeftRadius")}
+          />
         </Box>
         <Box>
-          <TextField.Root>
-            <TextField.Slot>
-              <Icon name="corner-top-right" strokeWidth={2} />
-            </TextField.Slot>
-            <TextField.Input
-              placeholder="Top right"
-              value={borderTopRightRadiusValue}
-              onChange={(e) => setBorderTopRightRadius(e.target.value)}
-              onBlur={(e) => applyProperty(e, "borderTopRightRadius")}
-              onKeyUp={(e) => onKeyUp(e, "borderTopRightRadius")}
-            />
-          </TextField.Root>
+          <PropertyTextField
+            icon={<Icon name="corner-top-right" strokeWidth={2} />}
+            placeholder="Top right"
+            hasVariable={
+              props.properties.borderTopRightRadius[0].variable || false
+            }
+            value={borderTopRightRadiusValue}
+            onChange={(e) => setBorderTopRightRadius(e.target.value)}
+            onBlur={(e) => applyProperty(e, "borderTopRightRadius")}
+            onKeyUp={(e) => onKeyUp(e, "borderTopRightRadius")}
+          />
         </Box>
       </Grid>
       <Flex gap="4">
-        <Grid columns="2" gap="4" width="auto">
+        <Grid columns="2" gap="2" width="auto">
           <Box>
-            <TextField.Root>
-              <TextField.Slot>
-                <Icon name="corner-bottom-left" strokeWidth={2} />
-              </TextField.Slot>
-              <TextField.Input
-                placeholder="Bottom left"
-                value={borderBottomLeftRadiusValue}
-                onChange={(e) => setBorderBottomLeftRadius(e.target.value)}
-                onBlur={(e) => applyProperty(e, "borderBottomLeftRadius")}
-                onKeyUp={(e) => onKeyUp(e, "borderBottomLeftRadius")}
-              />
-            </TextField.Root>
+            <PropertyTextField
+              icon={<Icon name="corner-bottom-left" strokeWidth={2} />}
+              placeholder="Bottom left"
+              hasVariable={
+                props.properties.borderBottomLeftRadius[0].variable || false
+              }
+              value={borderBottomLeftRadiusValue}
+              onChange={(e) => setBorderBottomLeftRadius(e.target.value)}
+              onBlur={(e) => applyProperty(e, "borderBottomLeftRadius")}
+              onKeyUp={(e) => onKeyUp(e, "borderBottomLeftRadius")}
+            />
           </Box>
           <Box>
-            <TextField.Root>
-              <TextField.Slot>
-                <Icon name="corner-bottom-right" strokeWidth={2} />
-              </TextField.Slot>
-              <TextField.Input
-                placeholder="Bottom right"
-                value={borderBottomRightRadiusValue}
-                onChange={(e) => setBorderBottomRightRadius(e.target.value)}
-                onBlur={(e) => applyProperty(e, "borderBottomRightRadius")}
-                onKeyUp={(e) => onKeyUp(e, "borderBottomRightRadius")}
-              />
-            </TextField.Root>
+            <PropertyTextField
+              icon={<Icon name="corner-bottom-right" strokeWidth={2} />}
+              placeholder="Bottom right"
+              hasVariable={
+                props.properties.borderBottomRightRadius[0].variable || false
+              }
+              value={borderBottomRightRadiusValue}
+              onChange={(e) => setBorderBottomRightRadius(e.target.value)}
+              onBlur={(e) => applyProperty(e, "borderBottomRightRadius")}
+              onKeyUp={(e) => onKeyUp(e, "borderBottomRightRadius")}
+            />
           </Box>
         </Grid>
       </Flex>

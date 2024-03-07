@@ -110,7 +110,7 @@ export const TextProperties = (props: TextPropertiesProps) => {
 
   return (
     <PanelGroup title="Text">
-      <Flex direction="column" gap="1">
+      <Flex direction="column" gap="2">
         <PropertyLine label="Font">
           <FontPicker
             value={fontFamilyProperty}
