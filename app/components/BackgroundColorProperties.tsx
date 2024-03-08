@@ -51,6 +51,33 @@ export const BackgroundColorProperties = (
     );
   };
 
+  const applyProperty = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    property: keyof BackgroundColorPropertiesProps["properties"]
+  ) => {
+    const newValue = event.target.value;
+
+    if (isNaN(Number(newValue))) {
+      return;
+    }
+
+    const value = Number(newValue);
+
+    if (value < 0 || value > 100) {
+      return;
+    }
+
+    updateElements(
+      props.properties[property].map((property) => ({
+        id: property.nodeId,
+        backgroundOpacity: value,
+      })),
+      true
+    );
+
+    event.target.blur();
+  };
+
   return (
     <PanelGroup
       title={
@@ -103,6 +130,7 @@ export const BackgroundColorProperties = (
               </PopoverRadix.Anchor>
               <Popover.Content side="left">
                 <SelectPicker.SketchPicker
+                  disableAlpha
                   styles={{
                     default: {
                       picker: {
@@ -114,11 +142,10 @@ export const BackgroundColorProperties = (
                     background: "var(--colors-background)!important",
                   })}
                   color={color.value}
-                  onChange={(newColor) =>
-                    applyColor(newColor.hex, color.elementIds)
-                  }
+                  onChange={(newColor) => {
+                    applyColor(newColor.hex, color.elementIds);
+                  }}
                   onChangeComplete={(newColor) => {
-                    console.log("onChangeComplete", newColor);
                     applyColor(newColor.hex, color.elementIds, true);
                   }}
                 />
