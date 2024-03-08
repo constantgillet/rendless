@@ -103,9 +103,15 @@ export const BackgroundColorProperties = (
               </PopoverRadix.Anchor>
               <Popover.Content side="left">
                 <SelectPicker.SketchPicker
+                  styles={{
+                    default: {
+                      picker: {
+                        boxShadow: "none",
+                      },
+                    },
+                  }}
                   className={css({
                     background: "var(--colors-background)!important",
-                    shadow: "none!important",
                   })}
                   color={color.value}
                   onChange={(newColor) =>

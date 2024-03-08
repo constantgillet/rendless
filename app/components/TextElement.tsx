@@ -103,7 +103,7 @@ export const TextElement = (props: TextElementProps) => {
         })
       )}
       style={{
-        transform: `translate(${props.x}px, ${props.y}px)`,
+        transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
         width: props.width,
         height: props.height,
       }}
