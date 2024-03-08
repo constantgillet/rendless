@@ -157,3 +157,72 @@ export const BackgroundColorProperties = (
     </PanelGroup>
   );
 };
+
+const ColorSelector = () => {
+  return (
+    <Popover.Root>
+      <>
+        <PopoverRadix.Anchor>
+          <div className={grid({ columns: 12, gap: 2 })}>
+            <div className={gridItem({ colSpan: 7 })}>
+              <PropertyTextField
+                icon={
+                  <Popover.Trigger onClick={(e) => e.stopPropagation()}>
+                    <button
+                      className={css({
+                        width: "24px",
+                        height: "20px",
+                        flexShrink: 0,
+                        _hover: {
+                          cursor: "pointer",
+                        },
+                        borderRadius: "3px",
+                      })}
+                      style={{
+                        backgroundColor: color.value,
+                      }}
+                    />
+                  </Popover.Trigger>
+                }
+                hasVariable={false}
+                placeholder="color hex"
+                value={color.value}
+                onChange={(e) => {}}
+                onBlur={(e) => {}}
+              />
+            </div>
+            <div className={gridItem({ colSpan: 5 })}>
+              <PropertyTextField
+                hasVariable={false}
+                placeholder="height"
+                value={"100%"}
+              />
+            </div>
+          </div>
+        </PopoverRadix.Anchor>
+        <Popover.Content side="left">
+          <SelectPicker.SketchPicker
+            disableAlpha
+            styles={{
+              default: {
+                picker: {
+                  boxShadow: "none",
+                },
+              },
+            }}
+            className={css({
+              background: "var(--colors-background)!important",
+            })}
+            color={color.value}
+            onChange={(newColor) => {
+              applyColor(newColor.hex, color.elementIds);
+            }}
+            onChangeComplete={(newColor) => {
+              applyColor(newColor.hex, color.elementIds, true);
+            }}
+          />
+        </Popover.Content>
+      </>
+    </Popover.Root>
+  );
+};
