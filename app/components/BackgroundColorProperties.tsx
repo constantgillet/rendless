@@ -13,9 +13,11 @@ import { useEditorStore } from "../stores/EditorStore";
 import { css } from "styled-system/css";
 import * as SelectPicker from "react-color";
 import * as PopoverRadix from "@radix-ui/react-popover";
-import { groupBySameValue } from "~/utils/groupBySameValue";
+import { groupBySameColor } from "~/utils/groupBySameColor";
 import { PropertyTextField } from "./PropertyTextField";
 import { grid, gridItem } from "styled-system/patterns";
+import { getVarFromString } from "~/utils/getVarFromString";
+import { getElementVariables } from "~/stores/actions/getElementVariables";
 
 type BackgroundColorPropertiesProps = {
   properties: {
@@ -30,12 +32,20 @@ export const BackgroundColorProperties = (
   const updateElements = useEditorStore((state) => state.updateElements);
 
   const [colorValues, setColorValues] = useState(
-    groupBySameValue(props.properties.backgroundColor)
+    groupBySameColor(
+      props.properties.backgroundColor,
+      props.properties.backgroundOpacity
+    )
   );
 
   useEffect(() => {
-    setColorValues(groupBySameValue(props.properties.backgroundColor));
-  }, [props.properties.backgroundColor]);
+    setColorValues(
+      groupBySameColor(
+        props.properties.backgroundColor,
+        props.properties.backgroundOpacity
+      )
+    );
+  }, [props.properties.backgroundColor, props.properties.backgroundOpacity]);
 
   const applyColor = (
     color: string,
@@ -51,27 +61,57 @@ export const BackgroundColorProperties = (
     );
   };
 
-  const applyProperty = (
+  const applyColorInput = (
     event: React.ChangeEvent<HTMLInputElement>,
     property: keyof BackgroundColorPropertiesProps["properties"]
   ) => {
     const newValue = event.target.value;
 
-    if (isNaN(Number(newValue))) {
-      return;
-    }
+    const variableName = getVarFromString(newValue);
 
-    const value = Number(newValue);
+    if (variableName && variableName.length > 0) {
+      updateElements(
+        props.properties[property].map((property) => {
+          const currentVariables = getElementVariables(property.nodeId);
 
-    if (value < 0 || value > 100) {
+          //Create new vaiables with the new variable if it doesn't exist
+          const newVariablesWithoutProperty = currentVariables.filter(
+            (variable) => variable.property !== property.propertyName
+          );
+
+          const newVariables = [
+            ...newVariablesWithoutProperty,
+            {
+              property: property.propertyName,
+              name: variableName,
+            },
+          ];
+
+          return {
+            id: property.nodeId,
+            variables: newVariables,
+          };
+        }),
+        true
+      );
+
       return;
     }
 
     updateElements(
-      props.properties[property].map((property) => ({
-        id: property.nodeId,
-        backgroundOpacity: value,
-      })),
+      props.properties[property].map((property) => {
+        const currentVariables = getElementVariables(property.nodeId);
+
+        const newVariablesWithoutProperty = currentVariables.filter(
+          (variable) => variable.property !== property.propertyName
+        );
+
+        return {
+          id: property.nodeId,
+          [property.propertyName]: newValue,
+          variables: newVariablesWithoutProperty,
+        };
+      }),
       true
     );
 
@@ -112,7 +152,7 @@ export const BackgroundColorProperties = (
                           />
                         </Popover.Trigger>
                       }
-                      hasVariable={false}
+                      hasVariable={color.colorVariable ? true : false}
                       placeholder="color hex"
                       value={color.value}
                       onChange={(e) => {}}
@@ -155,74 +195,5 @@ export const BackgroundColorProperties = (
         ))}
       </Flex>
     </PanelGroup>
-  );
-};
-
-const ColorSelector = () => {
-  return (
-    <Popover.Root>
-      <>
-        <PopoverRadix.Anchor>
-          <div className={grid({ columns: 12, gap: 2 })}>
-            <div className={gridItem({ colSpan: 7 })}>
-              <PropertyTextField
-                icon={
-                  <Popover.Trigger onClick={(e) => e.stopPropagation()}>
-                    <button
-                      className={css({
-                        width: "24px",
-                        height: "20px",
-                        flexShrink: 0,
-                        _hover: {
-                          cursor: "pointer",
-                        },
-                        borderRadius: "3px",
-                      })}
-                      style={{
-                        backgroundColor: color.value,
-                      }}
-                    />
-                  </Popover.Trigger>
-                }
-                hasVariable={false}
-                placeholder="color hex"
-                value={color.value}
-                onChange={(e) => {}}
-                onBlur={(e) => {}}
-              />
-            </div>
-            <div className={gridItem({ colSpan: 5 })}>
-              <PropertyTextField
-                hasVariable={false}
-                placeholder="height"
-                value={"100%"}
-              />
-            </div>
-          </div>
-        </PopoverRadix.Anchor>
-        <Popover.Content side="left">
-          <SelectPicker.SketchPicker
-            disableAlpha
-            styles={{
-              default: {
-                picker: {
-                  boxShadow: "none",
-                },
-              },
-            }}
-            className={css({
-              background: "var(--colors-background)!important",
-            })}
-            color={color.value}
-            onChange={(newColor) => {
-              applyColor(newColor.hex, color.elementIds);
-            }}
-            onChangeComplete={(newColor) => {
-              applyColor(newColor.hex, color.elementIds, true);
-            }}
-          />
-        </Popover.Content>
-      </>
-    </Popover.Root>
   );
 };

@@ -180,6 +180,13 @@ export const PropertiesPanel = () => {
                     propertyName: "backgroundColor",
                   },
                 ],
+                backgroundOpacity: [
+                  {
+                    value: 100,
+                    nodeId: "1",
+                    propertyName: "backgroundOpacity",
+                  },
+                ],
               }}
             />
             <Separator />

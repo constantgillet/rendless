@@ -13,7 +13,7 @@ import { useEditorStore } from "../stores/EditorStore";
 import { css } from "styled-system/css";
 import * as SelectPicker from "react-color";
 import * as PopoverRadix from "@radix-ui/react-popover";
-import { groupBySameValue } from "~/utils/groupBySameValue";
+import { groupBySameColor } from "~/utils/groupBySameColor";
 
 type TextColorPropertiesProps = {
   properties: {
@@ -25,11 +25,11 @@ export const TextColorProperties = (props: TextColorPropertiesProps) => {
   const updateElement = useEditorStore((state) => state.updateElement);
 
   const [colorValues, setColorValues] = useState(
-    groupBySameValue(props.properties.color)
+    groupBySameColor(props.properties.color)
   );
 
   useEffect(() => {
-    setColorValues(groupBySameValue(props.properties.color));
+    setColorValues(groupBySameColor(props.properties.color));
   }, [props.properties.color]);
 
   const applyColor = (color: string, elementIds: string[]) => {
