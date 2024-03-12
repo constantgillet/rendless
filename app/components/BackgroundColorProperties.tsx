@@ -18,6 +18,7 @@ import { PropertyTextField } from "./PropertyTextField";
 import { grid, gridItem } from "styled-system/patterns";
 import { getVarFromString } from "~/utils/getVarFromString";
 import { getElementVariables } from "~/stores/actions/getElementVariables";
+import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
 
 type BackgroundColorPropertiesProps = {
   properties: {
@@ -127,8 +128,12 @@ export const BackgroundColorProperties = (
       }
     >
       <Flex direction="column" gap={"2"}>
-        {colorValues.map((color, index) => (
-          <ColorLine key={index} color={color} applyColor={applyColor} />
+        {colorValues.map((color) => (
+          <ColorLine
+            key={color.elementIds[0]}
+            color={color}
+            applyColor={applyColor}
+          />
         ))}
       </Flex>
     </PanelGroup>
@@ -151,6 +156,71 @@ type ColorLineProps = {
 };
 
 const ColorLine = ({ color, applyColor }: ColorLineProps) => {
+  const updateElements = useEditorStore((state) => state.updateElements);
+
+  const [opacity, setOpacity] = useState(
+    color.opacityVariable
+      ? `{{${color.opacityVariable}}}`
+      : `${color.opacity * 100}%`
+  );
+
+  const applyOpacity = (opacity: string) => {
+    const elementIds = color.elementIds;
+
+    const variableName = getVarFromString(opacity);
+
+    if (variableName && variableName.length > 0) {
+      updateElements(
+        elementIds.map((elementId) => {
+          const currentVariables = getElementVariables(elementId);
+
+          //Create new vaiables with the new variable if it doesn't exist
+          const newVariablesWithoutProperty = currentVariables.filter(
+            (variable) => variable.property !== "backgroundOpacity"
+          );
+
+          const newVariables = [
+            ...newVariablesWithoutProperty,
+            {
+              property: "backgroundOpacity",
+              name: variableName,
+            },
+          ];
+
+          return {
+            id: elementId,
+            variables: newVariables,
+          };
+        }),
+        true
+      );
+
+      return;
+    }
+
+    const opacityValue = Number(opacity.replace("%", "")) / 100;
+
+    if (isNaN(opacityValue) || opacityValue < 0 || opacityValue > 1) {
+      return;
+    }
+
+    updateElements(
+      elementIds.map((elementId) => {
+        const newVariablesWithoutProperty = getVariablesWithoutProperty(
+          "backgroundOpacity",
+          elementId
+        );
+
+        return {
+          id: elementId,
+          backgroundOpacity: opacityValue,
+          variables: newVariablesWithoutProperty,
+        };
+      }),
+      true
+    );
+  };
+
   return (
     <Popover.Root>
       <>
@@ -185,9 +255,20 @@ const ColorLine = ({ color, applyColor }: ColorLineProps) => {
             </div>
             <div className={gridItem({ colSpan: 5 })}>
               <PropertyTextField
-                hasVariable={false}
-                placeholder="height"
-                value={color.opacity * 100 + "%"}
+                hasVariable={color.opacityVariable ? true : false}
+                placeholder="Opacity"
+                value={opacity}
+                onChange={(e) => {
+                  setOpacity(e.target.value);
+                }}
+                onBlur={(e) => {
+                  applyOpacity(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.key == "Enter") {
+                    applyOpacity(e.currentTarget.value);
+                  }
+                }}
               />
             </div>
           </div>

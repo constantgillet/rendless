@@ -7,6 +7,7 @@ import { getVarFromString } from "~/utils/getVarFromString";
 import { getElementVariables } from "~/stores/actions/getElementVariables";
 import { PropertyTextField } from "./PropertyTextField";
 import { Icon } from "./Icon";
+import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
 
 //keep only two decimals after the dot only if more than 2 decimals
 const formatValue = (value: number) => {
@@ -114,10 +115,9 @@ export const PositionAndSizeProperties = (
 
     updateElements(
       props.properties[property].map((property) => {
-        const currentVariables = getElementVariables(property.nodeId);
-
-        const newVariablesWithoutProperty = currentVariables.filter(
-          (variable) => variable.property !== property.propertyName
+        const newVariablesWithoutProperty = getVariablesWithoutProperty(
+          property.propertyName,
+          property.nodeId
         );
 
         return {
