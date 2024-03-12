@@ -62,63 +62,6 @@ export const BackgroundColorProperties = (
     );
   };
 
-  const applyColorInput = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    property: keyof BackgroundColorPropertiesProps["properties"]
-  ) => {
-    const newValue = event.target.value;
-
-    const variableName = getVarFromString(newValue);
-
-    if (variableName && variableName.length > 0) {
-      updateElements(
-        props.properties[property].map((property) => {
-          const currentVariables = getElementVariables(property.nodeId);
-
-          //Create new vaiables with the new variable if it doesn't exist
-          const newVariablesWithoutProperty = currentVariables.filter(
-            (variable) => variable.property !== property.propertyName
-          );
-
-          const newVariables = [
-            ...newVariablesWithoutProperty,
-            {
-              property: property.propertyName,
-              name: variableName,
-            },
-          ];
-
-          return {
-            id: property.nodeId,
-            variables: newVariables,
-          };
-        }),
-        true
-      );
-
-      return;
-    }
-
-    updateElements(
-      props.properties[property].map((property) => {
-        const currentVariables = getElementVariables(property.nodeId);
-
-        const newVariablesWithoutProperty = currentVariables.filter(
-          (variable) => variable.property !== property.propertyName
-        );
-
-        return {
-          id: property.nodeId,
-          [property.propertyName]: newValue,
-          variables: newVariablesWithoutProperty,
-        };
-      }),
-      true
-    );
-
-    event.target.blur();
-  };
-
   return (
     <PanelGroup
       title={

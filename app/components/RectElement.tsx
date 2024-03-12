@@ -1,6 +1,7 @@
 import { css, cx } from "styled-system/css";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { ElementRect } from "../stores/EditorStore";
+import { addAlphaToHex } from "~/utils/addAlphaToHex";
 
 type ReactElementProps = ElementRect;
 
@@ -24,7 +25,10 @@ export const RectElement = (props: ReactElementProps) => {
         transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
         width: props.width,
         height: props.height,
-        backgroundColor: props.backgroundColor,
+        backgroundColor: addAlphaToHex(
+          props.backgroundColor,
+          props.backgroundOpacity
+        ),
         borderTopLeftRadius: props.borderTopLeftRadius,
         borderTopRightRadius: props.borderTopRightRadius,
         borderBottomLeftRadius: props.borderBottomLeftRadius,
