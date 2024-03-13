@@ -48,20 +48,6 @@ export const BackgroundColorProperties = (
     );
   }, [props.properties.backgroundColor, props.properties.backgroundOpacity]);
 
-  const applyColor = (
-    color: string,
-    elementIds: string[],
-    saveToHistory = false
-  ) => {
-    updateElements(
-      elementIds.map((elementId) => ({
-        id: elementId,
-        backgroundColor: color,
-      })),
-      saveToHistory
-    );
-  };
-
   return (
     <PanelGroup
       title={
@@ -72,11 +58,7 @@ export const BackgroundColorProperties = (
     >
       <Flex direction="column" gap={"2"}>
         {colorValues.map((color) => (
-          <ColorLine
-            key={color.elementIds[0]}
-            color={color}
-            applyColor={applyColor}
-          />
+          <ColorLine key={color.elementIds[0]} color={color} />
         ))}
       </Flex>
     </PanelGroup>
@@ -91,14 +73,9 @@ type ColorLineProps = {
     colorVariable?: string | undefined;
     opacityVariable?: string | undefined;
   };
-  applyColor: (
-    color: string,
-    elementIds: string[],
-    saveToHistory?: boolean
-  ) => void;
 };
 
-const ColorLine = ({ color, applyColor }: ColorLineProps) => {
+const ColorLine = ({ color }: ColorLineProps) => {
   const updateElements = useEditorStore((state) => state.updateElements);
 
   const [opacity, setOpacity] = useState(
@@ -106,6 +83,84 @@ const ColorLine = ({ color, applyColor }: ColorLineProps) => {
       ? `{{${color.opacityVariable}}}`
       : `${color.opacity * 100}%`
   );
+
+  const [colorValue, setColorValue] = useState(
+    color?.colorVariable ? `{{${color.colorVariable}}}` : color.value
+  );
+
+  useEffect(() => {
+    setColorValue(
+      color?.colorVariable ? `{{${color.colorVariable}}}` : color.value
+    );
+  }, [color.value, color.colorVariable]);
+
+  const applyColor = (newColor: string, saveToHistory = false) => {
+    const elementIds = color.elementIds;
+
+    updateElements(
+      elementIds.map((elementId) => ({
+        id: elementId,
+        backgroundColor: newColor,
+      })),
+      saveToHistory
+    );
+  };
+
+  const applyColorInput = (newColorValue: string) => {
+    const elementIds = color.elementIds;
+
+    const variableName = getVarFromString(newColorValue);
+
+    if (variableName && variableName.length > 0) {
+      updateElements(
+        elementIds.map((elementId) => {
+          const currentVariables = getElementVariables(elementId);
+
+          //Create new vaiables with the new variable if it doesn't exist
+          const newVariablesWithoutProperty = currentVariables.filter(
+            (variable) => variable.property !== "backgroundColor"
+          );
+
+          const newVariables = [
+            ...newVariablesWithoutProperty,
+            {
+              property: "backgroundColor",
+              name: variableName,
+            },
+          ];
+
+          return {
+            id: elementId,
+            variables: newVariables,
+          };
+        }),
+        true
+      );
+
+      return;
+    }
+
+    //Check if the color is hex color and valid
+    if (!/^#[0-9A-F]{6}$/i.test(newColorValue)) {
+      return;
+    }
+
+    updateElements(
+      elementIds.map((elementId) => {
+        const newVariablesWithoutProperty = getVariablesWithoutProperty(
+          "backgroundColor",
+          elementId
+        );
+
+        return {
+          id: elementId,
+          backgroundColor: newColorValue,
+          variables: newVariablesWithoutProperty,
+        };
+      }),
+      true
+    );
+  };
 
   const applyOpacity = (opacity: string) => {
     const elementIds = color.elementIds;
@@ -189,11 +244,18 @@ const ColorLine = ({ color, applyColor }: ColorLineProps) => {
                     />
                   </Popover.Trigger>
                 }
-                hasVariable={false}
+                hasVariable={color.colorVariable ? true : false}
                 placeholder="color hex"
-                value={color.value}
-                onChange={(e) => {}}
-                onBlur={(e) => {}}
+                value={colorValue}
+                onChange={(e) => setColorValue(e.target.value)}
+                onBlur={(e) => {
+                  applyColorInput(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.key == "Enter") {
+                    applyColorInput(e.currentTarget.value);
+                  }
+                }}
               />
             </div>
             <div className={gridItem({ colSpan: 5 })}>
