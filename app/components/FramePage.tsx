@@ -100,6 +100,7 @@ export const FramePage = (props: Props) => {
       backgroundOpacity: selectedTool === "rect" ? 1 : undefined,
       content: selectedTool === "text" ? "" : undefined,
       color: selectedTool === "text" ? "#000000" : undefined,
+      textColorOpacity: selectedTool === "text" ? 1 : undefined,
       fontSize: selectedTool === "text" ? 18 : undefined,
       fontFamily: selectedTool === "text" ? "Inter" : undefined,
       fontWeight: selectedTool === "text" ? 400 : undefined,

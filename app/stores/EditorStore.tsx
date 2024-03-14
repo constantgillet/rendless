@@ -48,6 +48,7 @@ export type ElementText = Element<"text"> & {
   content: string;
   fontSize: number;
   color: string;
+  textColorOpacity: number;
   fontFamily: string;
   fontWeight: number;
   fontStyle: "normal" | "italic";

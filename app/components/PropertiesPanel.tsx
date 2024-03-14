@@ -122,11 +122,12 @@ export const PropertiesPanel = () => {
           <Separator />
         </>
       )}
-      {properties["color"] && (
+      {properties["color"] && properties["textColorOpacity"] && (
         <>
           <TextColorProperties
             properties={{
               color: properties["color"],
+              textColorOpacity: properties["textColorOpacity"],
             }}
           />
           <Separator />
