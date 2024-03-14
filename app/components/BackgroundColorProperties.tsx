@@ -22,8 +22,6 @@ type BackgroundColorPropertiesProps = {
 export const BackgroundColorProperties = (
   props: BackgroundColorPropertiesProps
 ) => {
-  const updateElements = useEditorStore((state) => state.updateElements);
-
   const [colorValues, setColorValues] = useState(
     groupBySameColor(
       props.properties.backgroundColor,
@@ -237,10 +235,10 @@ const ColorLine = ({ color }: ColorLineProps) => {
             })}
             color={color.value}
             onChange={(newColor) => {
-              applyColor(newColor.hex, color.elementIds);
+              applyColor(newColor.hex);
             }}
             onChangeComplete={(newColor) => {
-              applyColor(newColor.hex, color.elementIds, true);
+              applyColor(newColor.hex, true);
             }}
           />
         </Popover.Content>
