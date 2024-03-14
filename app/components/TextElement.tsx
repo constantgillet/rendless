@@ -127,7 +127,7 @@ export const TextElement = (props: TextElementProps) => {
         )}
         style={{
           fontFamily: props.fontFamily,
-          fontSize: props.fontSize,
+          fontSize: props.fontSize + "px",
           fontWeight: props.fontWeight,
           fontStyle: props.fontStyle,
           background: "transparent",
