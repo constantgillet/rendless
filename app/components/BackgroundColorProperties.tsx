@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Popover,
-  TextField,
-  TextFieldInput,
-} from "@radix-ui/themes";
+import { Flex, Popover } from "@radix-ui/themes";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { useEffect, useState } from "react";
 import { useEditorStore } from "../stores/EditorStore";
@@ -17,8 +9,8 @@ import { groupBySameColor } from "~/utils/groupBySameColor";
 import { PropertyTextField } from "./PropertyTextField";
 import { grid, gridItem } from "styled-system/patterns";
 import { getVarFromString } from "~/utils/getVarFromString";
-import { getElementVariables } from "~/stores/actions/getElementVariables";
 import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
+import { updateElementsVariables } from "~/stores/actions/updateElementsVariables";
 
 type BackgroundColorPropertiesProps = {
   properties: {
@@ -112,31 +104,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
     const variableName = getVarFromString(newColorValue);
 
     if (variableName && variableName.length > 0) {
-      updateElements(
-        elementIds.map((elementId) => {
-          const currentVariables = getElementVariables(elementId);
-
-          //Create new vaiables with the new variable if it doesn't exist
-          const newVariablesWithoutProperty = currentVariables.filter(
-            (variable) => variable.property !== "backgroundColor"
-          );
-
-          const newVariables = [
-            ...newVariablesWithoutProperty,
-            {
-              property: "backgroundColor",
-              name: variableName,
-            },
-          ];
-
-          return {
-            id: elementId,
-            variables: newVariables,
-          };
-        }),
-        true
-      );
-
+      updateElementsVariables(elementIds, "backgroundColor", variableName);
       return;
     }
 
@@ -168,31 +136,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
     const variableName = getVarFromString(opacity);
 
     if (variableName && variableName.length > 0) {
-      updateElements(
-        elementIds.map((elementId) => {
-          const currentVariables = getElementVariables(elementId);
-
-          //Create new vaiables with the new variable if it doesn't exist
-          const newVariablesWithoutProperty = currentVariables.filter(
-            (variable) => variable.property !== "backgroundOpacity"
-          );
-
-          const newVariables = [
-            ...newVariablesWithoutProperty,
-            {
-              property: "backgroundOpacity",
-              name: variableName,
-            },
-          ];
-
-          return {
-            id: elementId,
-            variables: newVariables,
-          };
-        }),
-        true
-      );
-
+      updateElementsVariables(elementIds, "backgroundOpacity", variableName);
       return;
     }
 
