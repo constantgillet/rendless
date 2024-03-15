@@ -4,6 +4,7 @@ import { useScaleStore } from "../stores/ScaleStore";
 import { useEffect, useRef, useState } from "react";
 import { ElementText, useEditorStore } from "../stores/EditorStore";
 import { useDebounce } from "~/hooks/useDebounce";
+import { addAlphaToHex } from "~/utils/addAlphaToHex";
 
 type TextElementProps = ElementText;
 
@@ -131,7 +132,7 @@ export const TextElement = (props: TextElementProps) => {
           fontWeight: props.fontWeight,
           fontStyle: props.fontStyle,
           background: "transparent",
-          color: props.color,
+          color: addAlphaToHex(props.color, props.textColorOpacity),
           cursor: isEditingContent ? "text" : "default",
           textAlign: props.textAlign,
           textTransform: props.textTransform,
