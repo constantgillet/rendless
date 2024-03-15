@@ -1,10 +1,11 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import * as m from "~/paraglide/messages";
 
 export default function Index() {
   return (
     <div>
-      <h1>Index 2</h1>
-      <p>Welcome to your new Remix app!</p>
+      <h1>Index</h1>
+      <p>{m.hello_world()}</p>
     </div>
   );
 }

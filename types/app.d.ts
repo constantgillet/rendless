@@ -1,4 +1,5 @@
 import "@remix-run/server-runtime";
+import { availableLanguageTags } from "~/paraglide/runtime";
 
 type Context = {
   user?: null | {
@@ -9,6 +10,7 @@ type Context = {
   session?: null | {
     id: string;
   };
+  lang: (typeof availableLanguageTags)[number];
 };
 
 declare module "@remix-run/server-runtime" {

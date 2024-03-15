@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prepare": "panda codegen",
-    "build": "npm run build:remix && npm run build:server",
+    "build": "paraglide-js compile --project ./project.inlang --outdir ./app/paraglide && npm run build:remix && npm run build:server",
     "build:remix": "remix build",
     "build:server": "esbuild --format=esm --platform=node --bundle ./server.ts --outfile=build/server.js --packages=external",
     "dev": "concurrently --names SERVER,REMIX --prefix-colors bgGreen.gray.bold,bgBlue.gray.bold \"npm run dev:build\" \"npm run dev:remix\"",
@@ -13,7 +13,8 @@
     "dev:remix": "remix dev --manual -c \"node --watch-path ./build/server.js --watch ./build/server.js\"",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "cross-env NODE_ENV=production node ./build/server.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "postinstall": "paraglide-js compile --project ./project.inlang --outdir ./app/paraglide"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.515.0",
@@ -72,7 +73,8 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prisma": "^5.9.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "@inlang/paraglide-js": "1.3.2"
   },
   "engines": {
     "node": ">=18.0.0"

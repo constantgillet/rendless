@@ -6,6 +6,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import { Theme } from "@radix-ui/themes";
 
@@ -13,8 +14,8 @@ import styles from "./index.css";
 import radixStyles from "@radix-ui/themes/styles.css";
 import { Toaster } from "react-hot-toast";
 
-export const loader = ({ context: { user } }: LoaderFunctionArgs) => {
-  return { user };
+export const loader = ({ context: { user, lang } }: LoaderFunctionArgs) => {
+  return { user, lang };
 };
 
 export const links: LinksFunction = () => [
@@ -23,8 +24,10 @@ export const links: LinksFunction = () => [
 ];
 
 export default function App() {
+  const { lang } = useLoaderData<typeof loader>();
+
   return (
-    <html lang="en">
+    <html lang={lang}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

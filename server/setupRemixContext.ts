@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { lucia } from "../app/libs/lucia";
+import { LANGUAGE_COOKIE } from "../app/constants/cookiesNames";
+import {
+  availableLanguageTags,
+  sourceLanguageTag,
+} from "../app/paraglide/runtime";
 
 export async function setupRemixContext(
   req: Request,
@@ -7,6 +12,9 @@ export async function setupRemixContext(
   next: NextFunction
 ) {
   const auth = await validateAuth(req, res);
+  const language = getLanguage(req);
+
+  res.locals.lang = language;
 
   if (auth?.user && auth?.session) {
     res.locals.user = {
@@ -58,4 +66,31 @@ const validateAuth = async (req: Request, res: Response) => {
   } catch (e) {
     console.error(e);
   }
+};
+
+const getLanguage = (req: Request) => {
+  //Get cookie language
+  const cookieLanguageValue = req.cookies[LANGUAGE_COOKIE] as
+    | string
+    | undefined;
+
+  if (
+    cookieLanguageValue &&
+    availableLanguageTags.includes(
+      cookieLanguageValue as (typeof availableLanguageTags)[number]
+    )
+  ) {
+    return cookieLanguageValue as (typeof availableLanguageTags)[number];
+  }
+
+  const aceptedLanguages = req.acceptsLanguages();
+  const filteredLanguages = aceptedLanguages.filter((lang) => {
+    return [availableLanguageTags].includes(lang);
+  });
+
+  if (filteredLanguages.length > 0) {
+    return filteredLanguages[0] as (typeof availableLanguageTags)[number];
+  }
+
+  return sourceLanguageTag;
 };
