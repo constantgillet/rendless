@@ -1,5 +1,9 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "hello_world": "Salut tout le monde!",
-  "test": "Ceci est un test"
+  "test": "Ceci est un test",
+  "login": "Se connecter",
+  "register": "Inscription",
+  "missing_account_text": "Vous n'avez pas de compte?",
+  "password": "Mot de passe"
 }

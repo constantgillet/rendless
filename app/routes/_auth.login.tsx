@@ -8,6 +8,7 @@ import { FormInput, FormSubmitButton } from "~/components/Form";
 import { lucia } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
 import { Argon2id } from "~/libs/olso";
+import * as m from "~/paraglide/messages";
 
 export const validator = withZod(
   z.object({
@@ -41,7 +42,7 @@ export default function LoginPage() {
             color: "var(--gray-12)",
           })}
         >
-          Login
+          {m.login()}
         </h1>
         <p
           className={css({
@@ -49,7 +50,8 @@ export default function LoginPage() {
             fontSize: "md",
           })}
         >
-          Don{"'"}t have an account? <Link href="/register">Register</Link>.
+          {m.missing_account_text()}{" "}
+          <Link href="/register">{m.register()}</Link>.
         </p>
       </div>
       <ValidatedForm
@@ -70,7 +72,7 @@ export default function LoginPage() {
           />
           <FormInput
             name="password"
-            placeholder="Password"
+            placeholder={m.password()}
             type="password"
             size="3"
             variant="classic"
@@ -84,7 +86,7 @@ export default function LoginPage() {
             })}
             variant="classic"
           >
-            Login
+            {m.login()}
           </FormSubmitButton>
         </div>
       </ValidatedForm>
