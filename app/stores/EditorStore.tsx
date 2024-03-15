@@ -59,6 +59,7 @@ export type ElementText = Element<"text"> & {
 
 export type ElementPage = Element<"page"> & {
   backgroundColor: string;
+  backgroundOpacity: number;
 };
 
 export type ElementType = ElementText | ElementRect;
@@ -197,21 +198,27 @@ export const useEditorStore = create<EditorState>()(
     },
     updateElements: (elements, saveToHistory = false) => {
       set((state) => {
-        const newTree: Tree = {
-          ...state.tree,
-          children: state.tree.children?.map((child) => {
-            const element = elements.find((element) => element.id === child.id);
+        //Create a recursive function to update the element and its children
 
-            if (element) {
-              return {
-                ...child,
-                ...element,
-              };
-            }
+        const updateElement = (tree: Tree, element: UpdateElementParam) => {
+          if (tree.id === element.id) {
+            return {
+              ...tree,
+              ...element,
+            };
+          }
 
-            return child;
-          }),
+          return {
+            ...tree,
+            children: tree.children?.map((child) =>
+              child.id === element.id ? { ...child, ...element } : child
+            ),
+          };
         };
+
+        const newTree = elements.reduce((acc, element) => {
+          return updateElement(acc, element);
+        }, state.tree);
 
         if (!saveToHistory) {
           return {

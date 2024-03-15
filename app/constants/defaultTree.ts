@@ -6,6 +6,7 @@ export const defaultTree: Tree = {
   width: 1200,
   height: 630,
   backgroundColor: "#d1d5db",
+  backgroundOpacity: 1,
   x: 0,
   y: 0,
   rotate: 1,

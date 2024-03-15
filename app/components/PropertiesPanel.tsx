@@ -183,7 +183,7 @@ export const PropertiesPanel = () => {
                 ],
                 backgroundOpacity: [
                   {
-                    value: 100,
+                    value: 1,
                     nodeId: "1",
                     propertyName: "backgroundOpacity",
                   },
