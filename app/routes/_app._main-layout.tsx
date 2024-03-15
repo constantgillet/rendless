@@ -6,6 +6,7 @@ import { Icon, IconName } from "~/components/Icon";
 import { useMatchPageTitle } from "~/hooks/useMatchPageTitle";
 import { useSignout } from "~/hooks/useSignout";
 import { useUser } from "~/hooks/useUser";
+import * as m from "~/paraglide/messages";
 
 const links: {
   label: string;
@@ -28,8 +29,8 @@ const links: {
     iconName: "data-bar-horizontal",
   },
   {
-    label: "Settings",
-    href: "/settings",
+    label: m.settings(),
+    href: "/account",
     iconName: "settings",
   },
 ];
@@ -100,8 +101,9 @@ export default function MainLayout() {
                     size="3"
                     color="gray"
                     style={{
-                      background:
-                        pathname === link.href ? "var(--gray-a3)" : undefined,
+                      background: link.href.includes(pathname)
+                        ? "var(--gray-a3)"
+                        : undefined,
                     }}
                   >
                     <Icon name={link.iconName} size="md" />
@@ -114,7 +116,7 @@ export default function MainLayout() {
           <div className={css({ display: "flex", gap: 4 })}>
             <div className={css({ display: "flex", gap: "2" })}>
               <Link to={"/"} className={linkClassName}>
-                Help
+                {m.help()}
               </Link>
               <Link to={"/"} className={linkClassName}>
                 Docs

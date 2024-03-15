@@ -5,5 +5,7 @@
   "login": "Se connecter",
   "register": "Inscription",
   "missing_account_text": "Vous n'avez pas de compte?",
-  "password": "Mot de passe"
+  "password": "Mot de passe",
+  "settings": "Paramètres",
+  "help": "Aide"
 }

@@ -5,5 +5,7 @@
   "login": "Login",
   "register": "Register",
   "missing_account_text": "Don't have an account?",
-  "password": "Password"
+  "password": "Password",
+  "settings": "Settings",
+  "help": "Help"
 }
