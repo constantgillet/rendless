@@ -7,5 +7,6 @@
   "missing_account_text": "Vous n'avez pas de compte?",
   "password": "Mot de passe",
   "settings": "Paramètres",
-  "help": "Aide"
+  "help": "Aide",
+  "save_changes": "Sauvegarder les changements"
 }
