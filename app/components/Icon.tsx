@@ -29,7 +29,8 @@ export type IconName =
   | "text-align-justify"
   | "text-case-uppercase"
   | "text-case-title"
-  | "text-case-lowercase";
+  | "text-case-lowercase"
+  | "image";
 
 export const iconStyle = cva({
   base: {

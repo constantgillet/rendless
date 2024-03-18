@@ -1,8 +1,13 @@
 import { css, cx } from "styled-system/css";
 import { useEditorStore } from "../stores/EditorStore";
-import { Button } from "@radix-ui/themes";
-import { Icon } from "./Icon";
+import { Icon, IconName } from "./Icon";
 import { useEffect, useState } from "react";
+
+const elementTypeIconMap = {
+  rect: "shape",
+  text: "text",
+  image: "image",
+} as { [key: string]: IconName };
 
 export const LayersPanel = () => {
   const tree = useEditorStore((state) => state.tree);
@@ -110,7 +115,7 @@ export const LayersPanel = () => {
                   }
                 }}
               >
-                <Icon name={child.type === "rect" ? "shape" : "text"} />
+                <Icon name={elementTypeIconMap[child.type]} />
                 Layer {child.type}
               </button>
               <Dropzone

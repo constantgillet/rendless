@@ -29,6 +29,11 @@ const toolsData = [
     icon: "shape",
     tooltipText: "Add a shape (R)",
   },
+  {
+    name: "image",
+    icon: "image",
+    tooltipText: "Add an image (I)",
+  },
 ];
 
 type TopBarProps = {
