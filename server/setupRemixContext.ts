@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { lucia } from "../app/libs/lucia";
-import { LANGUAGE_COOKIE } from "../app/constants/cookiesNames";
 import {
   availableLanguageTags,
   sourceLanguageTag,
 } from "../app/paraglide/runtime";
+import { languageCookie } from "../app/libs/cookies.server";
 
 export async function setupRemixContext(
   req: Request,
@@ -14,7 +14,7 @@ export async function setupRemixContext(
   const auth = await validateAuth(req, res);
   const language = getLanguage(req);
 
-  res.locals.lang = language;
+  res.locals.lang = await language;
 
   if (auth?.user && auth?.session) {
     res.locals.user = {
@@ -68,11 +68,12 @@ const validateAuth = async (req: Request, res: Response) => {
   }
 };
 
-const getLanguage = (req: Request) => {
+const getLanguage = async (req: Request) => {
   //Get cookie language
-  const cookieLanguageValue = req.cookies[LANGUAGE_COOKIE] as
-    | string
-    | undefined;
+
+  const cookieLanguageValue = await languageCookie.parse(
+    req.headers.cookie || ""
+  );
 
   if (
     cookieLanguageValue &&

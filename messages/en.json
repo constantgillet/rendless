@@ -8,5 +8,9 @@
   "password": "Password",
   "settings": "Settings",
   "help": "Help",
-  "save_changes": "Save changes"
+  "save_changes": "Save changes",
+  "settings_language_description": "Set the language you want to use in the application.",
+  "setting_language": "Language",
+  "general_settings": "General settings",
+  "changes_saved": "Changes saved"
 }

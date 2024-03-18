@@ -1,6 +1,13 @@
 import { Card, Select } from "@radix-ui/themes";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import {
+  ShouldRevalidateFunction,
+  useFetcher,
+  useRevalidator,
+} from "@remix-run/react";
 import { withZod } from "@remix-validated-form/with-zod";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { css } from "styled-system/css";
 import { z } from "zod";
@@ -32,21 +39,35 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return validationError(result.error);
   }
 
-  console.log(result.data);
-
   const cookieHeader = request.headers.get("Cookie");
   let languageCookieParsed = (await languageCookie.parse(cookieHeader)) || {};
 
   languageCookieParsed = result.data.language;
 
-  return redirect("/account", {
-    headers: {
-      "Set-Cookie": await languageCookie.serialize(languageCookieParsed),
+  return json(
+    {
+      ok: true,
     },
-  });
+    {
+      headers: {
+        "Set-Cookie": await languageCookie.serialize(languageCookieParsed),
+      },
+    }
+  );
 };
 
 export default function AccountPage() {
+  const fetcher = useFetcher<typeof action>();
+  const revalidator = useRevalidator();
+
+  useEffect(() => {
+    if (fetcher.data?.ok) {
+      revalidator.revalidate();
+
+      toast.success(m.changes_saved());
+    }
+  }, [fetcher.data, revalidator]);
+
   return (
     <div>
       <h1
@@ -57,17 +78,22 @@ export default function AccountPage() {
           marginBottom: "4",
         })}
       >
-        General settings
+        {m.general_settings()}
       </h1>
       <ValidatedForm
         validator={validator}
-        method="post"
+        fetcher={fetcher}
         className={css({
           spaceY: "18px",
           display: "flex",
           flexDirection: "column",
         })}
         defaultValues={{ language: languageTag() }}
+        onSubmit={(data) => {
+          fetcher.submit(data, {
+            method: "post",
+          });
+        }}
       >
         <Card variant="surface">
           <div
@@ -77,14 +103,14 @@ export default function AccountPage() {
               spaceY: "2",
             })}
           >
-            <label htmlFor="language">Language</label>
+            <label htmlFor="language">{m.setting_language()}</label>
             <p
               className={css({
                 color: "var(--gray-11)",
                 fontSize: "sm",
               })}
             >
-              Set the language you want to use in the application.
+              {m.settings_language_description()}
             </p>
             <div
               className={css({
