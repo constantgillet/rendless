@@ -134,7 +134,9 @@ export default function MainLayout() {
                 </Button>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content align="end">
-                <DropdownMenu.Item shortcut="⌘ E">Settings</DropdownMenu.Item>
+                <Link to={"/account"}>
+                  <DropdownMenu.Item>{m.settings()}</DropdownMenu.Item>
+                </Link>
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item
                   onClick={() => {
