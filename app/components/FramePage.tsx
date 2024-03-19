@@ -17,9 +17,16 @@ import { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
 import { RectElement } from "./RectElement";
 import { defaultElements } from "~/constants/defaultElements";
+import { ImageElement } from "./ImageElement";
 
 type Props = HTMLProps<HTMLDivElement> & {
   infiniteViewer: React.RefObject<InfiniteViewer>;
+};
+
+const componentElementMap = {
+  rect: RectElement,
+  text: TextElement,
+  image: ImageElement,
 };
 
 export const FramePage = (props: Props) => {
@@ -286,11 +293,13 @@ export const FramePage = (props: Props) => {
               {tree?.children?.map((child) => {
                 const id = child.id;
 
-                return child.type === "text" ? (
-                  <TextElement key={id} {...child} />
-                ) : (
-                  <RectElement key={id} {...child} />
-                );
+                const ElementComponent = componentElementMap[child.type];
+
+                if (!ElementComponent) {
+                  return null;
+                }
+
+                return <ElementComponent key={id} {...child} />;
               })}
             </div>
           </div>

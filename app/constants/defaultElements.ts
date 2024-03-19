@@ -1,4 +1,4 @@
-import { ElementRect, ElementText } from "~/stores/EditorStore";
+import { ElementImage, ElementRect, ElementText } from "~/stores/EditorStore";
 
 export const defaultElements = {
   rect: {
@@ -48,7 +48,12 @@ export const defaultElements = {
     rotate: 0,
     width: 100,
     height: 100,
-    src: "",
+    src: null,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+    objectFit: "cover",
     variables: [],
-  },
+  } as ElementImage,
 };
