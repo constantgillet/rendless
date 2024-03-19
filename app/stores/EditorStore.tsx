@@ -4,9 +4,9 @@ import type {} from "@redux-devtools/extension"; // required for devtools typing
 import { v4 as uuidv4 } from "uuid";
 import { defaultTree } from "~/constants/defaultTree";
 
-export type Tool = "select" | "text" | "rect";
+export type Tool = "select" | "text" | "rect" | "image";
 
-export type ObjectType = "page" | "rect" | "text";
+export type ObjectType = "page" | "rect" | "text" | "image";
 
 export type Tree = {
   id: string;
@@ -60,6 +60,15 @@ export type ElementText = Element<"text"> & {
 export type ElementPage = Element<"page"> & {
   backgroundColor: string;
   backgroundOpacity: number;
+};
+
+export type ElementImage = Element<"image"> & {
+  src: string | null;
+  objectFit: "fill" | "contain" | "cover" | "none" | "scale-down";
+  borderTopLeftRadius: number;
+  borderTopRightRadius: number;
+  borderBottomLeftRadius: number;
+  borderBottomRightRadius: number;
 };
 
 export type ElementType = ElementText | ElementRect;

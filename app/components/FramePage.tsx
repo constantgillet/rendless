@@ -16,6 +16,7 @@ import { useKeepRatioStore } from "~/stores/KeepRatioStore";
 import { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
 import { RectElement } from "./RectElement";
+import { defaultElements } from "~/constants/defaultElements";
 
 type Props = HTMLProps<HTMLDivElement> & {
   infiniteViewer: React.RefObject<InfiniteViewer>;
@@ -88,29 +89,15 @@ export const FramePage = (props: Props) => {
     const width = Math.round(rect.width / scale);
     const height = Math.round(rect.height / scale);
 
+    const defaultElement = defaultElements[selectedTool];
+
     const newElement: ElementType = {
+      ...defaultElement,
       id: uuidv4(),
-      type: selectedTool,
-      x: x,
-      y: y,
-      width: width,
-      height: height,
-      rotate: 0,
-      backgroundColor: selectedTool === "rect" ? "#9b9b9b" : undefined,
-      backgroundOpacity: selectedTool === "rect" ? 1 : undefined,
-      content: selectedTool === "text" ? "" : undefined,
-      color: selectedTool === "text" ? "#000000" : undefined,
-      textColorOpacity: selectedTool === "text" ? 1 : undefined,
-      fontSize: selectedTool === "text" ? 18 : undefined,
-      fontFamily: selectedTool === "text" ? "Inter" : undefined,
-      fontWeight: selectedTool === "text" ? 400 : undefined,
-      fontStyle: selectedTool === "text" ? "normal" : undefined,
-      textAlign: selectedTool === "text" ? "left" : undefined,
-      textTransform: selectedTool === "text" ? "none" : undefined,
-      borderTopLeftRadius: selectedTool === "rect" ? 0 : undefined,
-      borderTopRightRadius: selectedTool === "rect" ? 0 : undefined,
-      borderBottomLeftRadius: selectedTool === "rect" ? 0 : undefined,
-      borderBottomRightRadius: selectedTool === "rect" ? 0 : undefined,
+      x,
+      y,
+      width,
+      height,
     };
 
     addElement(newElement);
