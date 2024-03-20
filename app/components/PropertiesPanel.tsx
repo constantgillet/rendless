@@ -7,6 +7,7 @@ import { TextProperties } from "./TextProperties";
 import { RadiusProperties } from "./RadiusProperties";
 import { PositionAndSizeProperties } from "./PositionAndSizeProperties";
 import { VariablesFoundIndicator } from "./VariablesFoundIndicator";
+import { ImageItemsProperties } from "./ImageItemsProperties";
 
 const Separator = () => {
   return (
@@ -117,6 +118,17 @@ export const PropertiesPanel = () => {
             properties={{
               backgroundColor: properties["backgroundColor"],
               backgroundOpacity: properties["backgroundOpacity"],
+            }}
+          />
+          <Separator />
+        </>
+      )}
+      {properties["src"] && properties["objectFit"] && (
+        <>
+          <ImageItemsProperties
+            properties={{
+              src: properties["src"],
+              objectFit: properties["objectFit"],
             }}
           />
           <Separator />
