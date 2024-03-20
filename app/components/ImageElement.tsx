@@ -29,6 +29,7 @@ export const ImageElement = (props: ImageElementProps) => {
           borderTopRightRadius: props.borderTopRightRadius,
           borderBottomLeftRadius: props.borderBottomLeftRadius,
           borderBottomRightRadius: props.borderBottomRightRadius,
+          overflow: "hidden",
         }}
       >
         <svg width="100%" height="100%">
