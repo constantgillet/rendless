@@ -2,10 +2,11 @@ import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
 import { useMemo } from "react";
 import { PropertyLine } from "./PropertyLine";
-import { Button, Select } from "@radix-ui/themes";
+import { Button, IconButton, Select, TextField } from "@radix-ui/themes";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Icon } from "./Icon";
 import { useEditorStore } from "~/stores/EditorStore";
+import { css } from "styled-system/css";
 
 type ImagePropertiesProps = {
   properties: {
@@ -41,7 +42,7 @@ export const ImageItemsProperties = (props: ImagePropertiesProps) => {
             );
           }}
         >
-          <SelectPrimitive.Trigger disabled={false}>
+          <SelectPrimitive.Trigger disabled={objectFitPropety === "Mixed"}>
             <Button
               variant="surface"
               size={"2"}
@@ -60,6 +61,23 @@ export const ImageItemsProperties = (props: ImagePropertiesProps) => {
             ))}
           </Select.Content>
         </Select.Root>
+      </PropertyLine>
+      <PropertyLine label="Image source" direction="column">
+        <div
+          className={css({
+            display: "flex",
+            gap: "1",
+            justifyContent: "space-between",
+          })}
+        >
+          <TextField.Root>
+            <TextField.Input placeholder="Image url or upload" />{" "}
+          </TextField.Root>
+          <Button variant="outline">
+            <Icon name="arrow-upload" />
+            Upload
+          </Button>
+        </div>
       </PropertyLine>
     </PanelGroup>
   );
