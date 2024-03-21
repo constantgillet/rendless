@@ -84,7 +84,7 @@ export const LayersPanel = () => {
                   letterSpacing: "var(--letter-spacing-3)",
                   padding: "6px 12px",
                   color: "var(--gray-a11)",
-                  borderRadius: "var(--radius-3)",
+                  borderRadius: "var(--radius-2)",
                   gap: "var(--space-2)",
                   display: "flex",
                   width: "100%",
