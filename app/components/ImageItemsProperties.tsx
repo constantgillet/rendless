@@ -1,12 +1,16 @@
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { PanelGroup, ValueType } from "./PropertiesPanel";
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import { PropertyLine } from "./PropertyLine";
-import { Button, IconButton, Select, TextField } from "@radix-ui/themes";
+import { Button, Select, TextField } from "@radix-ui/themes";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Icon } from "./Icon";
 import { useEditorStore } from "~/stores/EditorStore";
 import { css } from "styled-system/css";
+import { PropertyTextField } from "./PropertyTextField";
+import { getVarFromString } from "~/utils/getVarFromString";
+import { updateElementsVariables } from "~/stores/actions/updateElementsVariables";
+import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
 
 type ImagePropertiesProps = {
   properties: {
@@ -63,22 +67,96 @@ export const ImageItemsProperties = (props: ImagePropertiesProps) => {
         </Select.Root>
       </PropertyLine>
       <PropertyLine label="Image source" direction="column">
-        <div
-          className={css({
-            display: "flex",
-            gap: "1",
-            justifyContent: "space-between",
-          })}
-        >
-          <TextField.Root>
-            <TextField.Input placeholder="Image url or upload" />{" "}
-          </TextField.Root>
-          <Button variant="outline">
-            <Icon name="arrow-upload" />
-            Upload
-          </Button>
-        </div>
+        {props.properties.src.map((srcProperty) => {
+          return <AssetLine key={srcProperty.nodeId} src={srcProperty} />;
+        })}
       </PropertyLine>
     </PanelGroup>
+  );
+};
+
+type AssetLineProps = {
+  src: ValueType;
+};
+
+const AssetLine = (props: AssetLineProps) => {
+  const srcInputRef = useRef<HTMLInputElement>(null);
+  const uploadInputRef = useRef<HTMLInputElement>(null);
+  const updateElements = useEditorStore((state) => state.updateElements);
+
+  const [srcInputValue, setSrcInputValue] = useState(props.src.value);
+
+  const applySrc = (newSrcValue: string) => {
+    const elementId = props.src.nodeId;
+
+    const variableName = getVarFromString(newSrcValue);
+
+    if (variableName && variableName.length > 0) {
+      updateElementsVariables([elementId], "src", variableName);
+      return;
+    }
+
+    const newVariablesWithoutProperty = getVariablesWithoutProperty(
+      "src",
+      elementId
+    );
+
+    updateElements(
+      [
+        {
+          id: elementId,
+          src: newSrcValue?.length > 0 ? newSrcValue : null,
+          variables: newVariablesWithoutProperty,
+        },
+      ],
+      true
+    );
+
+    //Blur the input to exit edit mode
+    srcInputRef.current?.blur();
+  };
+
+  return (
+    <div
+      className={css({
+        display: "flex",
+        gap: "1",
+        justifyContent: "space-between",
+      })}
+    >
+      <PropertyTextField
+        ref={srcInputRef}
+        hasVariable={false}
+        placeholder="Image url or upload"
+        onChange={(e) => {
+          setSrcInputValue(e.target.value);
+        }}
+        onBlur={() => {
+          applySrc(srcInputValue);
+        }}
+        onKeyUp={(e) => {
+          if (e.key == "Enter") {
+            applySrc(srcInputValue);
+          }
+        }}
+        value={srcInputValue}
+      />
+      <Button
+        variant="outline"
+        onClick={() => {
+          uploadInputRef.current?.click();
+        }}
+      >
+        <Icon name="arrow-upload" />
+        Upload
+      </Button>
+      <input
+        type="file"
+        hidden
+        ref={uploadInputRef}
+        accept="image/png, image/gif, image/jpeg"
+        multiple={false}
+      />
+    </div>
   );
 };

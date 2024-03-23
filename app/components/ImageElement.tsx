@@ -5,7 +5,8 @@ import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 type ImageElementProps = ElementImage;
 
 export const ImageElement = (props: ImageElementProps) => {
-  if (!props.src) {
+  //if (!props.src) {
+  if (true) {
     return (
       <div
         className={cx(

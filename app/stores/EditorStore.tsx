@@ -71,7 +71,7 @@ export type ElementImage = Element<"image"> & {
   borderBottomRightRadius: number;
 };
 
-export type ElementType = ElementText | ElementRect;
+export type ElementType = ElementText | ElementRect | ElementImage;
 
 //Update element param is the same as the element type but with optional properties, only the id is required
 export type UpdateElementParam = Partial<ElementType> & { id: string };
