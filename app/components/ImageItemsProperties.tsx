@@ -84,7 +84,9 @@ const AssetLine = (props: AssetLineProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const updateElements = useEditorStore((state) => state.updateElements);
 
-  const [srcInputValue, setSrcInputValue] = useState(props.src.value);
+  const [srcInputValue, setSrcInputValue] = useState(
+    props.src.variable ? `{{${props.src.variable}}}` : props.src.value
+  );
 
   const applySrc = (newSrcValue: string) => {
     const elementId = props.src.nodeId;
@@ -126,7 +128,7 @@ const AssetLine = (props: AssetLineProps) => {
     >
       <PropertyTextField
         ref={srcInputRef}
-        hasVariable={false}
+        hasVariable={props.src.variable ? true : false}
         placeholder="Image url or upload"
         onChange={(e) => {
           setSrcInputValue(e.target.value);

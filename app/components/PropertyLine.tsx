@@ -10,7 +10,11 @@ const style = cva({
   variants: {
     direction: {
       row: { flexDirection: "row", alignItems: "center" },
-      column: { flexDirection: "column", alignItems: "flex-start" },
+      column: {
+        flexDirection: "column",
+        alignItems: "flex-start",
+        spaceY: "2",
+      },
     },
   },
   defaultVariants: {
