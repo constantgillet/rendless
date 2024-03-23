@@ -5,8 +5,8 @@ import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 type ImageElementProps = ElementImage;
 
 export const ImageElement = (props: ImageElementProps) => {
-  //if (!props.src) {
-  if (true) {
+  if (!props.src) {
+    // if (true) {
     return (
       <div
         className={cx(
@@ -66,5 +66,23 @@ export const ImageElement = (props: ImageElementProps) => {
     );
   }
 
-  return null;
+  return (
+    <img
+      src={props.src}
+      alt={""}
+      {...{
+        [DATA_SCENA_ELEMENT_ID]: props.id,
+      }}
+      style={{
+        transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
+        width: props.width,
+        height: props.height,
+        borderTopLeftRadius: props.borderTopLeftRadius,
+        borderTopRightRadius: props.borderTopRightRadius,
+        borderBottomLeftRadius: props.borderBottomLeftRadius,
+        borderBottomRightRadius: props.borderBottomRightRadius,
+        objectFit: props.objectFit,
+      }}
+    />
+  );
 };
