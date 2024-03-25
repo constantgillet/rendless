@@ -1,4 +1,6 @@
 import satori from "satori";
+import { ImageElementRendered } from "~/render-components/ImageElementRendered";
+import { RectElementRendered } from "~/render-components/RectElementRendered";
 import { Tree } from "~/stores/EditorStore";
 
 async function fetchFont(font: string): Promise<ArrayBuffer | null> {
@@ -51,6 +53,12 @@ export const SvgGenerate = async (tree: Tree) => {
   return svg;
 };
 
+const renderedComponentsMap = {
+  rect: RectElementRendered,
+  text: () => null,
+  image: ImageElementRendered,
+};
+
 const TreeToJsx = ({ tree }: { tree: Tree }) => {
   return (
     <div
@@ -63,33 +71,9 @@ const TreeToJsx = ({ tree }: { tree: Tree }) => {
       }}
     >
       {tree.children.map((child) => {
-        return (
-          <div
-            key={child.id}
-            style={{
-              display: "flex",
-              position: "absolute",
-              top: child.y,
-              left: child.x,
-              width: child.width,
-              height: child.height,
-              backgroundColor:
-                child?.type === "text" ? undefined : child.backgroundColor,
-              borderTopLeftRadius:
-                child?.type === "text" ? undefined : child.borderTopLeftRadius,
-              borderTopRightRadius:
-                child?.type === "text" ? undefined : child.borderTopRightRadius,
-              borderBottomLeftRadius:
-                child?.type === "text"
-                  ? undefined
-                  : child.borderBottomLeftRadius,
-              borderBottomRightRadius:
-                child?.type === "text"
-                  ? undefined
-                  : child.borderBottomRightRadius,
-            }}
-          ></div>
-        );
+        const Component = renderedComponentsMap[child.type];
+
+        return <Component key={child.id} {...child} />;
       })}
     </div>
   );

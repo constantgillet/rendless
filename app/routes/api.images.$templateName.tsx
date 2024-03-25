@@ -2,6 +2,7 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { prisma } from "~/libs/prisma";
 import { Tree } from "~/stores/EditorStore";
 import { Resvg } from "@resvg/resvg-js";
+import { uploadToS3 } from "~/libs/s3";
 import CryptoJS from "crypto-js";
 import { getCacheData, setCacheData } from "~/libs/redis.server";
 import { SvgGenerate } from "~/utils/svgGenerate";
@@ -27,26 +28,26 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       { status: 405 }
     );
   }
-  //   const url = new URL(`https://og-image/render/${templateName}`);
+  const url = new URL(`https://og-image/render/${templateName}`);
 
-  //   const urlHashed = CryptoJS.SHA256(url.toString()).toString();
-  //   const cacheKey = `og-image-render-${urlHashed}`;
+  const urlHashed = CryptoJS.SHA256(url.toString()).toString();
+  const cacheKey = `og-image-render-${urlHashed}`;
 
-  //   const imageLocation = `ogimages/generated/${urlHashed}.png`;
-  //   const imageUrl = `${bucketURL}/${imageLocation}`;
+  const imageLocation = `ogimages/generated/${urlHashed}.png`;
+  const imageUrl = `${bucketURL}/${imageLocation}`;
 
-  //   try {
-  //     const cachedData = await getCacheData(cacheKey);
+  try {
+    const cachedData = await getCacheData(cacheKey);
 
-  //     if (cachedData && cacheEnabled) {
-  //       return json({
-  //         ok: true,
-  //         data: {
-  //           url: imageUrl,
-  //         },
-  //       });
-  //     }
-  //   } catch (error) {}
+    if (cachedData && cacheEnabled) {
+      return json({
+        ok: true,
+        data: {
+          url: imageUrl,
+        },
+      });
+    }
+  } catch (error) {}
 
   let tree: Tree | null = null;
 
@@ -126,11 +127,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const pngData = resvg.render();
     const pngBuffer = pngData.asPng();
 
-    return new Response(pngBuffer, {
-      headers: {
-        "Content-Type": "image/png",
-      },
-    });
+    const location = await uploadToS3(pngBuffer, imageLocation);
+
+    console.log("Location", location);
   } catch (error) {
     console.error("Error rendering template", error);
     throw json(
@@ -144,4 +143,17 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       { status: 500 }
     );
   }
+
+  try {
+    await setCacheData(cacheKey, "true");
+  } catch (error) {
+    console.error("Error caching data", error);
+  }
+
+  return json({
+    ok: true,
+    data: {
+      url: imageUrl,
+    },
+  });
 };
