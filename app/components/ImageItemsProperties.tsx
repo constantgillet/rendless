@@ -67,9 +67,17 @@ export const ImageItemsProperties = (props: ImagePropertiesProps) => {
         </Select.Root>
       </PropertyLine>
       <PropertyLine label="Image source" direction="column">
-        {props.properties.src.map((srcProperty) => {
-          return <AssetLine key={srcProperty.nodeId} src={srcProperty} />;
-        })}
+        <div
+          className={css({
+            display: "flex",
+            flexDirection: "column",
+            gap: "1",
+          })}
+        >
+          {props.properties.src.map((srcProperty) => {
+            return <AssetLine key={srcProperty.nodeId} src={srcProperty} />;
+          })}
+        </div>
       </PropertyLine>
     </PanelGroup>
   );
