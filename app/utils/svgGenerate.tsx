@@ -1,6 +1,7 @@
 import satori from "satori";
 import { ImageElementRendered } from "~/render-components/ImageElementRendered";
 import { RectElementRendered } from "~/render-components/RectElementRendered";
+import { TextElementRendered } from "~/render-components/TextElementRendered";
 import { Tree } from "~/stores/EditorStore";
 
 async function fetchFont(font: string): Promise<ArrayBuffer | null> {
@@ -26,6 +27,16 @@ async function fetchFont(font: string): Promise<ArrayBuffer | null> {
 
   return res.arrayBuffer();
 }
+
+const getAllFonts = async (tree: Tree) => {
+  const fontList = tree.children.reduce((acc, child) => {
+    if (child.type === "text") {
+      acc.push({ fontFamily: child.fontFamily, fontWeight: child.fontWeight });
+    }
+
+    return acc;
+  }, []);
+};
 
 export const SvgGenerate = async (tree: Tree) => {
   let robotoArrayBuffer: ArrayBuffer | null = null;
@@ -55,7 +66,7 @@ export const SvgGenerate = async (tree: Tree) => {
 
 const renderedComponentsMap = {
   rect: RectElementRendered,
-  text: () => null,
+  text: TextElementRendered,
   image: ImageElementRendered,
 };
 
