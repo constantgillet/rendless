@@ -1,4 +1,4 @@
-import satori from "satori";
+import satori, { Font } from "satori";
 import { ImageElementRendered } from "~/render-components/ImageElementRendered";
 import { RectElementRendered } from "~/render-components/RectElementRendered";
 import { TextElementRendered } from "~/render-components/TextElementRendered";
@@ -29,36 +29,40 @@ async function fetchFont(font: string): Promise<ArrayBuffer | null> {
 }
 
 const getAllFonts = async (tree: Tree) => {
-  const fontList = tree.children.reduce((acc, child) => {
-    if (child.type === "text") {
-      acc.push({ fontFamily: child.fontFamily, fontWeight: child.fontWeight });
+  const fontList = tree.children
+    .filter((child) => child.type === "text")
+    .map((child) => ({
+      fontFamily: child.fontFamily,
+      fontWeight: child.fontWeight,
+      fontStyle: child.fontStyle,
+    }));
+
+  const fonts: Font[] = [];
+
+  for (const font of fontList) {
+    const buffer = await fetchFont(font.fontFamily);
+    if (!buffer) {
+      throw new Error("Font not found");
     }
 
-    return acc;
-  }, []);
+    fonts.push({
+      name: font.fontFamily,
+      data: buffer,
+      weight: font.fontWeight,
+      style: font.fontStyle,
+    });
+  }
+
+  return fonts;
 };
 
 export const SvgGenerate = async (tree: Tree) => {
-  let robotoArrayBuffer: ArrayBuffer | null = null;
-  const buffer = await fetchFont("Roboto");
-  robotoArrayBuffer = buffer;
-
-  if (!robotoArrayBuffer) {
-    throw new Error("Font not found");
-  }
+  const fontsLoaded = await getAllFonts(tree);
 
   const svg = await satori(<TreeToJsx tree={tree} />, {
     width: 1200,
     height: 630,
-    fonts: [
-      {
-        name: "Roboto",
-        // Use `fs` (Node.js only) or `fetch` to read the font as Buffer/ArrayBuffer and provide `data` here.
-        data: robotoArrayBuffer,
-        weight: 400,
-        style: "normal",
-      },
-    ],
+    fonts: fontsLoaded,
   });
 
   return svg;
