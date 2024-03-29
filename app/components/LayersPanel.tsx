@@ -25,8 +25,11 @@ export const LayersPanel = () => {
   useEffect(() => {
     const handleMouseUp = () => {
       setIsMouseDown(false);
+      setDropzoneHovered(null);
 
       if (dropzoneHovered !== null && dropzoneHovered !== undefined) {
+        console.log("handleMouseUp", selectedItems, dropzoneHovered);
+
         moveIndexPosition(selectedItems, dropzoneHovered);
       }
     };
@@ -113,6 +116,10 @@ export const LayersPanel = () => {
                   } else {
                     setSelected([id]);
                   }
+                }}
+                onMouseUp={() => {
+                  setIsMouseDown(false);
+                  setDropzoneHovered(null);
                 }}
               >
                 <Icon name={elementTypeIconMap[child.type]} />
