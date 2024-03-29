@@ -74,7 +74,7 @@ export const FramePage = (props: Props) => {
     }
     const selection = document.getSelection()!;
 
-    console.log("selection", selection);
+    // console.log("selection", selection);
 
     if (selection) {
       selection.removeAllRanges();
@@ -370,7 +370,7 @@ export const FramePage = (props: Props) => {
               return;
             }
 
-            console.log("selected", selected);
+            // console.log("selected", selected);
             const ids = getIdsFromElements(selected);
             setSelectedTargets(ids);
 
