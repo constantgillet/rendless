@@ -106,7 +106,7 @@ export default function TemplatePage() {
                   >
                     <Link to={`/editor/${template.id}`}>
                       <img
-                        src="https://assets-global.website-files.com/6040ba28127600ad9182e1be/648ac36424d7794b98b5d3ce_artboard.jpg"
+                        src={`/api/render/${template.name}`}
                         width={"full"}
                         height={"full"}
                         alt="Og  template"

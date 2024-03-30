@@ -90,9 +90,11 @@ export default function AccountPage() {
         })}
         defaultValues={{ language: languageTag() }}
         onSubmit={(data) => {
-          fetcher.submit(data, {
-            method: "post",
-          });
+          console.log(data);
+
+          // fetcher.submit(data, {
+          //   method: "post",
+          // });
         }}
       >
         <Card variant="surface">
