@@ -5,11 +5,13 @@ import { ElementType, useEditorStore } from "../stores/EditorStore";
 import { useScaleStore } from "../stores/ScaleStore";
 import { TextElement } from "./TextElement";
 import { CanvasContextMenu } from "./CanvasContextMenu";
-import InfiniteViewer, { OnDrag } from "react-infinite-viewer";
+import InfiniteViewer from "react-infinite-viewer";
 import Moveable, {
   OnDragGroup,
   OnDragGroupEnd,
   OnResize,
+  OnDrag,
+  OnDragEnd,
 } from "react-moveable";
 import Selecto from "react-selecto";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
@@ -18,6 +20,7 @@ import { v4 as uuidv4 } from "uuid";
 import { RectElement } from "./RectElement";
 import { defaultElements } from "~/constants/defaultElements";
 import { ImageElement } from "./ImageElement";
+import { saveCurrentElementsToHistory } from "~/stores/actions/saveCurrentElementsToHistory";
 
 type Props = HTMLProps<HTMLDivElement> & {
   infiniteViewer: React.RefObject<InfiniteViewer>;
@@ -119,10 +122,7 @@ export const FramePage = (props: Props) => {
     )
   );
 
-  const onDragGroup = (
-    dragEvent: OnDragGroup | OnDragGroupEnd,
-    isEnd = false
-  ) => {
+  const onDragGroup = (dragEvent: OnDragGroup) => {
     const { targets, events } = dragEvent;
 
     const elements = [];
@@ -151,14 +151,10 @@ export const FramePage = (props: Props) => {
 
       elements.push(element);
     }
-    updateElements(elements, isEnd ? true : false);
+    updateElements(elements, false);
   };
 
-  const onDrag = (
-    //dragEvent: OnDrag
-    dragEvent: OnDrag,
-    isEnd = false
-  ) => {
+  const onDrag = (dragEvent: OnDrag) => {
     const { target, translate } = dragEvent;
 
     const x = Math.round(translate[0]);
@@ -171,7 +167,7 @@ export const FramePage = (props: Props) => {
     };
 
     target!.style.transform = dragEvent.transform;
-    updateElements([element], isEnd ? true : false);
+    updateElements([element], false);
   };
 
   const onResize = (resizeEvent: OnResize, isEnd = false) => {
@@ -239,27 +235,17 @@ export const FramePage = (props: Props) => {
               /* draggable */
               draggable={true}
               // throttleDrag={0}
-              onDrag={(e) => onDrag(e, false)}
-              onDragEnd={(e) => onDrag(e, true)}
-              onDragGroup={(e) => onDragGroup(e, false)}
-              onDragGroupEnd={(e) => onDragGroup(e, true)}
+              onDrag={(e) => onDrag(e)}
+              onDragEnd={saveCurrentElementsToHistory}
+              onDragGroup={(e) => onDragGroup(e)}
+              onDragGroupEnd={saveCurrentElementsToHistory}
               /* When resize or scale, keeps a ratio of the width, height. */
               keepRatio={isPressingShift}
               /* resizable*/
               /* Only one of resizable, scalable, warpable can be used. */
               resizable={true}
               onResize={(e) => onResize(e, false)}
-              onResizeEnd={({ target, isDrag, clientX, clientY }) => {
-                const targetRect = target!.getBoundingClientRect();
-
-                const element = {
-                  id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-                  width: Math.round(targetRect.width / scale),
-                  height: Math.round(targetRect.height / scale),
-                };
-
-                updateElements([element], true);
-              }}
+              onResizeEnd={saveCurrentElementsToHistory}
               rotatable={true}
               onRotate={(e) => {
                 e.target.style.transform = e.drag.transform;
@@ -271,6 +257,7 @@ export const FramePage = (props: Props) => {
 
                 updateElements([element], false);
               }}
+              onRotateEnd={saveCurrentElementsToHistory}
             />
             <div
               ref={container}
