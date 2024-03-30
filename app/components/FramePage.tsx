@@ -11,6 +11,7 @@ import Moveable, {
   OnResize,
   OnDrag,
   OnResizeGroup,
+  OnRotateGroup,
 } from "react-moveable";
 import Selecto from "react-selecto";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
@@ -223,6 +224,28 @@ export const FramePage = (props: Props) => {
     updateElements(elements, false);
   };
 
+  const onRotateGroup = (e: OnRotateGroup) => {
+    const { events } = e;
+
+    events.forEach((ev) => {
+      ev.target.style.transform = ev.drag.transform;
+    });
+
+    const elements = [];
+    for (let i = 0; i < events.length; ++i) {
+      const event = events[i];
+      const target = event.target;
+
+      const element = {
+        id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+        rotate: event.absoluteRotation,
+      };
+
+      elements.push(element);
+    }
+    updateElements(elements, false);
+  };
+
   //Add the oposite zoom of scale
   const opositeZoom = 1 / scale;
 
@@ -293,6 +316,8 @@ export const FramePage = (props: Props) => {
                 updateElements([element], false);
               }}
               onRotateEnd={saveCurrentElementsToHistory}
+              onRotateGroup={(e) => onRotateGroup(e)}
+              onRotateGroupEnd={saveCurrentElementsToHistory}
             />
             <div
               ref={container}
