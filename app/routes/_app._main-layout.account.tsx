@@ -11,10 +11,12 @@ const settingsLinks = [
   {
     label: "Security",
     href: "./security",
+    disabled: true,
   },
   {
     label: "Billing",
     href: "./billing",
+    disabled: true,
   },
 ];
 
@@ -50,6 +52,7 @@ export default function SettingsLayout() {
                 variant="ghost"
                 size="3"
                 color="gray"
+                disabled={link.disabled}
                 className={css({
                   w: "100%",
                   textAlign: "left",

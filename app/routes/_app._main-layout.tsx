@@ -135,7 +135,7 @@ export default function MainLayout() {
               </DropdownMenu.Trigger>
               <DropdownMenu.Content align="end">
                 <Link to={"/account"}>
-                  <DropdownMenu.Item>{m.settings()}</DropdownMenu.Item>
+                  <DropdownMenu.Item>General settings</DropdownMenu.Item>
                 </Link>
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item
