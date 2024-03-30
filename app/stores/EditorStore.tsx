@@ -287,6 +287,11 @@ export const useEditorStore = create<EditorState>()(
           (history) => history.id === state.currentHistoryId
         );
 
+        //If we are at the first history, we do nothing
+        if (currentHistoryIndex === 0) {
+          return {};
+        }
+
         //If we are at the last history, we undo to the last one (the one before the last one)
         if (currentHistoryIndex === -1) {
           return {
