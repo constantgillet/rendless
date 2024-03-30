@@ -8,10 +8,9 @@ import { CanvasContextMenu } from "./CanvasContextMenu";
 import InfiniteViewer from "react-infinite-viewer";
 import Moveable, {
   OnDragGroup,
-  OnDragGroupEnd,
   OnResize,
   OnDrag,
-  OnDragEnd,
+  OnResizeGroup,
 } from "react-moveable";
 import Selecto from "react-selecto";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
@@ -190,6 +189,40 @@ export const FramePage = (props: Props) => {
     updateElements([element], isEnd ? true : false);
   };
 
+  const onResizeGroup = (e: OnResizeGroup) => {
+    const { events } = e;
+    events.forEach((ev) => {
+      ev.target.style.width = `${ev.width}px`;
+      ev.target.style.height = `${ev.height}px`;
+      ev.target.style.transform = ev.drag.transform;
+    });
+
+    const elements = [];
+    const containerRect = container.current!.getBoundingClientRect();
+
+    for (let i = 0; i < events.length; ++i) {
+      const event = events[i];
+      const target = event.target;
+
+      const targetRect = target!.getBoundingClientRect();
+
+      //Set x and y with scale factor
+      const x = Math.round((targetRect.x - containerRect.x) / scale);
+      const y = Math.round((targetRect.y - containerRect.y) / scale);
+
+      const element = {
+        id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
+        x: x,
+        y: y,
+        width: Math.round(event.width / scale),
+        height: Math.round(event.height / scale),
+      };
+
+      elements.push(element);
+    }
+    updateElements(elements, false);
+  };
+
   //Add the oposite zoom of scale
   const opositeZoom = 1 / scale;
 
@@ -246,6 +279,8 @@ export const FramePage = (props: Props) => {
               resizable={true}
               onResize={(e) => onResize(e, false)}
               onResizeEnd={saveCurrentElementsToHistory}
+              onResizeGroup={(e) => onResizeGroup(e)}
+              onResizeGroupEnd={saveCurrentElementsToHistory}
               rotatable={true}
               onRotate={(e) => {
                 e.target.style.transform = e.drag.transform;
