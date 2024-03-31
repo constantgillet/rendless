@@ -27,6 +27,18 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       { status: 405 }
     );
   }
+
+  //Get all search params
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+
+  const variablesValues = [] as { name: string; value: string }[];
+
+  searchParams.forEach((value, key) => {
+    variablesValues.push({ name: key, value });
+  });
+
+  //Get query params
   //   const url = new URL(`https://og-image/render/${templateName}`);
 
   //   const urlHashed = CryptoJS.SHA256(url.toString()).toString();
@@ -103,9 +115,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   let svg: string | null = null;
 
   try {
-    svg = await SvgGenerate(tree);
+    svg = await SvgGenerate(tree, variablesValues);
 
-    console.log(svg);
+    // console.log(svg);
   } catch (error) {
     console.error("Error rendering template", error);
     throw json(

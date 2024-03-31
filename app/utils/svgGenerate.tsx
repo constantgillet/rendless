@@ -56,14 +56,22 @@ const getAllFonts = async (tree: Tree) => {
   return fonts;
 };
 
-export const SvgGenerate = async (tree: Tree) => {
+export type VariablesValues = { name: string; value: string }[];
+
+export const SvgGenerate = async (
+  tree: Tree,
+  variablesValues: VariablesValues
+) => {
   const fontsLoaded = await getAllFonts(tree);
 
-  const svg = await satori(<TreeToJsx tree={tree} />, {
-    width: 1200,
-    height: 630,
-    fonts: fontsLoaded,
-  });
+  const svg = await satori(
+    <TreeToJsx tree={tree} variablesValues={variablesValues} />,
+    {
+      width: 1200,
+      height: 630,
+      fonts: fontsLoaded,
+    }
+  );
 
   return svg;
 };
@@ -74,7 +82,13 @@ const renderedComponentsMap = {
   image: ImageElementRendered,
 };
 
-const TreeToJsx = ({ tree }: { tree: Tree }) => {
+const TreeToJsx = ({
+  tree,
+  variablesValues,
+}: {
+  tree: Tree;
+  variablesValues: VariablesValues;
+}) => {
   return (
     <div
       style={{
@@ -88,7 +102,13 @@ const TreeToJsx = ({ tree }: { tree: Tree }) => {
       {tree.children.map((child) => {
         const Component = renderedComponentsMap[child.type];
 
-        return <Component key={child.id} {...child} />;
+        return (
+          <Component
+            key={child.id}
+            variablesValues={variablesValues}
+            {...child}
+          />
+        );
       })}
     </div>
   );

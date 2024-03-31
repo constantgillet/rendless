@@ -1,9 +1,23 @@
+import { VariablesValues } from "~/utils/svgGenerate";
 import { ElementText } from "../stores/EditorStore";
 import { addAlphaToHex } from "~/utils/addAlphaToHex";
 
-type TextElementProps = ElementText;
+type TextElementProps = ElementText & {
+  variablesValues: VariablesValues;
+};
 
 export const TextElementRendered = (props: TextElementProps) => {
+  const contentWithVariables = props.content.replace(
+    /{{(.*?)}}/g,
+    (_, match) => {
+      const variable = props.variablesValues.find(
+        (variable) => variable.name === match
+      );
+
+      return variable ? variable.value : `{{${match}}}`;
+    }
+  );
+
   return (
     <p
       style={{
@@ -26,7 +40,7 @@ export const TextElementRendered = (props: TextElementProps) => {
         color: addAlphaToHex(props.color, props.textColorOpacity),
       }}
     >
-      {props.content}
+      {contentWithVariables}
     </p>
   );
 };
