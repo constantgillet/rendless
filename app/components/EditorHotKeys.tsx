@@ -60,6 +60,11 @@ export const EditorHotKeys = () => {
     setSelectedTool("rect");
   });
 
+  //Select image tool
+  useHotkeys("i", () => {
+    setSelectedTool("image");
+  });
+
   //Up
   useHotkeys(
     ["up", "Shift+up"],

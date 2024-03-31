@@ -1,4 +1,3 @@
-import { Link } from "@radix-ui/themes";
 import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { ValidatedForm, validationError } from "remix-validated-form";
@@ -9,6 +8,7 @@ import { lucia } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
 import { Argon2id } from "~/libs/olso";
 import * as m from "~/paraglide/messages";
+import { Link } from "@remix-run/react";
 
 export const validator = withZod(
   z.object({
@@ -51,7 +51,18 @@ export default function LoginPage() {
           })}
         >
           {m.missing_account_text()}{" "}
-          <Link href="/register">{m.register()}</Link>.
+          <Link
+            to="/register"
+            className={css({
+              color: "var(--accent-a11)",
+              _hover: {
+                textDecoration: "underline",
+              },
+            })}
+          >
+            {m.register()}
+          </Link>
+          .
         </p>
       </div>
       <ValidatedForm
@@ -108,8 +119,29 @@ export default function LoginPage() {
         })}
       >
         By registering, you agree to our{" "}
-        <Link href="/terms">Terms of Service</Link> and{" "}
-        <Link href="/privacy">Privacy Policy</Link>
+        <Link
+          to="/terms"
+          className={css({
+            color: "var(--accent-a11)",
+            _hover: {
+              textDecoration: "underline",
+            },
+          })}
+        >
+          Terms of Service
+        </Link>{" "}
+        and{" "}
+        <Link
+          to="/privacy"
+          className={css({
+            color: "var(--accent-a11)",
+            _hover: {
+              textDecoration: "underline",
+            },
+          })}
+        >
+          Privacy Policy
+        </Link>
       </div>
     </div>
   );
