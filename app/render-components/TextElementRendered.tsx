@@ -6,6 +6,15 @@ type TextElementProps = ElementText & {
   variablesValues: VariablesValues;
 };
 
+const setValueFromVariable = (
+  value: string,
+  variablesValues: VariablesValues
+) => {
+  const variable = variablesValues.find((variable) => variable.name === value);
+
+  return variable ? variable.value : value;
+};
+
 export const TextElementRendered = (props: TextElementProps) => {
   const contentWithVariables = props.content.replace(
     /{{(.*?)}}/g,
