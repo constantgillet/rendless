@@ -1,5 +1,10 @@
 import { Card, Select } from "@radix-ui/themes";
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  MetaFunction,
+  json,
+  redirect,
+} from "@remix-run/node";
 import {
   ShouldRevalidateFunction,
   useFetcher,
@@ -144,3 +149,7 @@ export default function AccountPage() {
     </div>
   );
 }
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Settings - Rendless" }];
+};

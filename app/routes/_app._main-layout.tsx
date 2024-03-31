@@ -12,6 +12,7 @@ const links: {
   label: string;
   href: string;
   iconName: IconName;
+  disabled?: boolean;
 }[] = [
   {
     label: "Home",
@@ -27,6 +28,7 @@ const links: {
     label: "Logs",
     href: "/logs",
     iconName: "data-bar-horizontal",
+    disabled: true,
   },
   {
     label: m.settings(),
@@ -105,6 +107,7 @@ export default function MainLayout() {
                         ? "var(--gray-a3)"
                         : undefined,
                     }}
+                    disabled={link.disabled}
                   >
                     <Icon name={link.iconName} size="md" />
                     {link.label}

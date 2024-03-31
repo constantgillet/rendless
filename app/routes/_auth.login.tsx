@@ -1,5 +1,5 @@
 import { Link } from "@radix-ui/themes";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { css } from "styled-system/css";
@@ -164,4 +164,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect("/app", {
     headers: { "Set-Cookie": sessionCookie.serialize() },
   });
+};
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Login - Rendless" }];
 };

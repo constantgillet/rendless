@@ -1,5 +1,5 @@
 import { Button, Card, IconButton, Inset } from "@radix-ui/themes";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import toast from "react-hot-toast";
 import { css } from "styled-system/css";
@@ -164,4 +164,8 @@ export default function TemplatePage() {
 
 export const handle = {
   pageTitle: "templates",
+};
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Templates - Rendless" }];
 };

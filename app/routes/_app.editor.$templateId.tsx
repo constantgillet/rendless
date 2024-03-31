@@ -22,10 +22,7 @@ import { useScaleStore } from "~/stores/ScaleStore";
 import { defaultTree } from "~/constants/defaultTree";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
+  return [{ title: "Editor - Rendless" }];
 };
 
 export async function loader({

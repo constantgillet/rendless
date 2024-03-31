@@ -41,10 +41,10 @@ const validateAuth = async (req: Request, res: Response) => {
     return { session: null, user: null };
   }
 
-  const result = await lucia.validateSession(sessionId);
-
   // next.js throws when you attempt to set cookie when rendering page
   try {
+    const result = await lucia.validateSession(sessionId);
+
     if (result.session && result.session.fresh) {
       const sessionCookie = lucia.createSessionCookie(result.session.id);
       res.cookie(

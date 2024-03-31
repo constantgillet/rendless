@@ -1,4 +1,5 @@
 import { Card } from "@radix-ui/themes";
+import { MetaFunction } from "@remix-run/node";
 import { css } from "styled-system/css";
 
 export default function AppHome() {
@@ -11,6 +12,10 @@ export default function AppHome() {
 
 export const handle = {
   pageTitle: "home",
+};
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Home - Rendless" }];
 };
 
 const OnboardingCard = () => {
