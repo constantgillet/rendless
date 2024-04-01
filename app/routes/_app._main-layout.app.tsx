@@ -1,4 +1,4 @@
-import { Button, Card } from "@radix-ui/themes";
+import { Button, Card, TextField } from "@radix-ui/themes";
 import { MetaFunction } from "@remix-run/node";
 import { css } from "styled-system/css";
 
@@ -44,7 +44,7 @@ const OnboardingCard = () => {
             fontSize: "lg",
           })}
         >
-          Start generating your og templates in fews clics
+          Start generating your og images in fews clics
         </p>
         <div
           className={css({
@@ -66,13 +66,20 @@ const OnboardingCard = () => {
           />
           <Step
             number={2}
-            disabled
             title="Call the render API with variables"
             description={
-              "Your can choose between an example template or your own design"
+              "You can pass variables to your template to customize the content of your image"
             }
             content={
-              <div>
+              <div
+                className={css({
+                  spaceY: "2",
+                })}
+              >
+                <TextField.Input
+                  disabled
+                  value={`https://dev.rendless.com/api/render/my-template?name=davendrix`}
+                />
                 <Button>Render the Image</Button>
               </div>
             }
@@ -176,11 +183,13 @@ const Step = ({
           className={css({
             spaceY: "4",
             pb: "24px",
+            width: "100%",
           })}
         >
           <p
             className={css({
               color: "var(--gray-a11)",
+              maxWidth: "400px",
             })}
           >
             {description}
