@@ -1,4 +1,4 @@
-import { Card } from "@radix-ui/themes";
+import { Button, Card } from "@radix-ui/themes";
 import { MetaFunction } from "@remix-run/node";
 import { css } from "styled-system/css";
 
@@ -11,7 +11,7 @@ export default function AppHome() {
 }
 
 export const handle = {
-  pageTitle: "home",
+  pageTitle: "Welcome to Rendless",
 };
 
 export const meta: MetaFunction = () => {
@@ -46,49 +46,38 @@ const OnboardingCard = () => {
         >
           Start generating your og templates in fews clics
         </p>
-
         <div
           className={css({
-            display: "flex",
-            alignItems: "center",
-            spaceX: "14px",
+            spaceY: "2",
             mt: "24px",
           })}
         >
-          <div
-            className={css({
-              rounded: "100%",
-              width: "40px",
-              height: "40px",
-              color: "var(--accent-9-contrast)",
-              position: "relative",
-              zIndex: 0,
-              boxShadow:
-                "var(--base-button-classic-box-shadow-top), inset 0 0 0 1px #636465, var(--base-button-classic-box-shadow-bottom)",
-              fontSize: "xl",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            })}
-          >
-            1
-          </div>
-          <div
-            className={css({
-              fontSize: "xl",
-              fontWeight: "medium",
-            })}
-          >
-            Generate a template
-          </div>
+          <Step
+            number={1}
+            title="Create a new template"
+            description={
+              "Your can choose between an example template or your own design"
+            }
+            content={
+              <div>
+                <Button>Generate a template</Button>
+              </div>
+            }
+          />
+          <Step
+            number={2}
+            disabled
+            title="Call the render API with variables"
+            description={
+              "Your can choose between an example template or your own design"
+            }
+            content={
+              <div>
+                <Button>Render the Image</Button>
+              </div>
+            }
+          />
         </div>
-        <p
-          className={css({
-            color: "var(--gray-a11)",
-          })}
-        >
-          Your can choose between an example template or your own design
-        </p>
       </div>
       <div
         className={css({
@@ -102,5 +91,103 @@ const OnboardingCard = () => {
         })}
       ></div>
     </Card>
+  );
+};
+
+const Step = ({
+  number,
+  title,
+  description,
+  content,
+  disabled = false,
+}: {
+  number: number;
+  title: string;
+  description: string;
+  content: React.ReactNode;
+  disabled?: boolean;
+}) => {
+  return (
+    <div
+      aria-disabled={disabled}
+      className={css({
+        '&[aria-disabled="true"]': {
+          opacity: 0.4,
+          pointerEvents: "none",
+        },
+      })}
+    >
+      <div
+        className={css({
+          display: "flex",
+          alignItems: "center",
+          spaceX: "14px",
+        })}
+      >
+        <div
+          className={css({
+            rounded: "100%",
+            width: "40px",
+            height: "40px",
+            color: "var(--accent-9-contrast)",
+            position: "relative",
+            zIndex: 0,
+            boxShadow:
+              "var(--base-button-classic-box-shadow-top), inset 0 0 0 1px #636465, var(--base-button-classic-box-shadow-bottom)",
+            fontSize: "xl",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          })}
+        >
+          {number}
+        </div>
+        <div
+          className={css({
+            fontSize: "xl",
+            fontWeight: "medium",
+          })}
+        >
+          {title}
+        </div>
+      </div>
+      <div
+        className={css({
+          display: "flex",
+        })}
+      >
+        <div
+          className={css({
+            width: "40px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          })}
+        >
+          <div
+            className={css({
+              backgroundColor: "var(--gray-a7)",
+              width: "2px",
+              height: "100%",
+            })}
+          ></div>
+        </div>
+        <div
+          className={css({
+            spaceY: "4",
+            pb: "24px",
+          })}
+        >
+          <p
+            className={css({
+              color: "var(--gray-a11)",
+            })}
+          >
+            {description}
+          </p>
+          {content}
+        </div>
+      </div>
+    </div>
   );
 };
