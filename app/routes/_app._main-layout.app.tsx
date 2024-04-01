@@ -1,6 +1,7 @@
 import { Button, Card, TextField } from "@radix-ui/themes";
 import { MetaFunction } from "@remix-run/node";
 import { css } from "styled-system/css";
+import { Icon } from "~/components/Icon";
 
 export default function AppHome() {
   return (
@@ -70,17 +71,49 @@ const OnboardingCard = () => {
             description={
               "You can pass variables to your template to customize the content of your image"
             }
+            disabled
             content={
               <div
                 className={css({
-                  spaceY: "2",
+                  spaceY: "4",
                 })}
               >
-                <TextField.Input
-                  disabled
-                  value={`https://dev.rendless.com/api/render/my-template?name=davendrix`}
-                />
-                <Button>Render the Image</Button>
+                <div
+                  className={css({
+                    maxWidth: "482px",
+                  })}
+                >
+                  <TextField.Input
+                    disabled
+                    value={`https://dev.rendless.com/api/render/my-template?name=davendrix`}
+                  />
+                </div>
+                <div>
+                  <Button>Render the Image</Button>
+                </div>
+                <div
+                  className={css({
+                    border: "1px solid var(--gray-a7)",
+                    borderRadius: "6px",
+                    width: "348px",
+                    aspectRatio: "1.91 / 1",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    color: "var(--gray-a11)",
+                  })}
+                >
+                  <Icon name="image" size="4xl" />
+                  <div
+                    className={css({
+                      mt: "12px",
+                      fontSize: "14px",
+                    })}
+                  >
+                    Click on the button to render the image{" "}
+                  </div>
+                </div>
               </div>
             }
           />
