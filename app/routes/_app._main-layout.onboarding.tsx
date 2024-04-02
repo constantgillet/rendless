@@ -2,6 +2,7 @@ import { Button, Card, TextField } from "@radix-ui/themes";
 import { MetaFunction } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { css } from "styled-system/css";
 import { Icon } from "~/components/Icon";
 import { Spinner } from "~/components/Spinner";
@@ -23,6 +24,10 @@ export const meta: MetaFunction = () => {
 };
 
 const OnboardingCard = () => {
+  const [templateNameCreated, setTemplateNameCreated] = useState<string | null>(
+    null
+  );
+
   return (
     <Card
       className={css({
@@ -62,7 +67,9 @@ const OnboardingCard = () => {
             description={
               "Your can choose between an example template or your own design"
             }
-            content={<FirstStepComponent />}
+            content={
+              <FirstStepComponent onSuccessCreated={setTemplateNameCreated} />
+            }
           />
           <Step
             number={2}
@@ -70,7 +77,7 @@ const OnboardingCard = () => {
             description={
               "You can pass variables to your template to customize the content of your image"
             }
-            disabled
+            disabled={!templateNameCreated}
             content={
               <div
                 className={css({
@@ -150,6 +157,7 @@ const Step = ({
     <div
       aria-disabled={disabled}
       className={css({
+        transition: "opacity 0.6s  ease-in-out",
         '&[aria-disabled="true"]': {
           opacity: 0.4,
           pointerEvents: "none",
@@ -233,10 +241,21 @@ const Step = ({
   );
 };
 
-const FirstStepComponent = () => {
+const FirstStepComponent = ({
+  onSuccessCreated,
+}: {
+  onSuccessCreated?: (templateId: string) => void;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [templateIdCreated, setTemplateIdCreated] = useState<string | null>(
+    null
+  );
 
   const onClick = async () => {
+    if (isLoading || templateIdCreated) {
+      return;
+    }
+
     setIsLoading(true);
     const response = await fetch("/api/create-template?noredirect=true", {
       method: "POST",
@@ -250,13 +269,20 @@ const FirstStepComponent = () => {
     const data = await response.json();
 
     if (data.id) {
-      console.log(data);
+      toast.success("Template created");
+      setTemplateIdCreated(data.id);
+      onSuccessCreated?.(data.id);
     }
   };
 
   return (
-    <div>
-      <Button onClick={onClick}>
+    <div
+      className={css({
+        display: "flex",
+        alignItems: "center",
+      })}
+    >
+      <Button onClick={onClick} disabled={templateIdCreated ? true : false}>
         {isLoading && (
           <>
             <Spinner size={16} />
@@ -264,6 +290,33 @@ const FirstStepComponent = () => {
         )}
         Generate a template
       </Button>
+      {templateIdCreated && (
+        <div
+          className={css({
+            color: "var(--green-9)",
+            fontSize: "sm",
+            ml: "16px",
+          })}
+        >
+          <Icon
+            name="templates"
+            className={css({
+              mr: "4px",
+            })}
+          />
+          Template created! You can now edit it{" "}
+          <a
+            href={`/editor/${templateIdCreated}`}
+            rel="noreferrer"
+            target="_blank"
+            className={css({
+              textDecoration: "underline",
+            })}
+          >
+            here
+          </a>
+        </div>
+      )}
     </div>
   );
 };
