@@ -38,7 +38,7 @@ export default function AppHome() {
 }
 
 export const handle = {
-  pageTitle: "Welcome to Rendless",
+  pageTitle: "Home",
 };
 
 export const meta: MetaFunction = () => {
