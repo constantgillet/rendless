@@ -1,7 +1,10 @@
 import { Button, Card, TextField } from "@radix-ui/themes";
 import { MetaFunction } from "@remix-run/node";
+import { useFetcher } from "@remix-run/react";
+import { useState } from "react";
 import { css } from "styled-system/css";
 import { Icon } from "~/components/Icon";
+import { Spinner } from "~/components/Spinner";
 
 export default function AppHome() {
   return (
@@ -59,11 +62,7 @@ const OnboardingCard = () => {
             description={
               "Your can choose between an example template or your own design"
             }
-            content={
-              <div>
-                <Button>Generate a template</Button>
-              </div>
-            }
+            content={<FirstStepComponent />}
           />
           <Step
             number={2}
@@ -207,7 +206,7 @@ const Step = ({
           <div
             className={css({
               backgroundColor: "var(--gray-a7)",
-              width: "2px",
+              width: "1px",
               height: "100%",
             })}
           ></div>
@@ -230,6 +229,41 @@ const Step = ({
           {content}
         </div>
       </div>
+    </div>
+  );
+};
+
+const FirstStepComponent = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onClick = async () => {
+    setIsLoading(true);
+    const response = await fetch("/api/create-template?noredirect=true", {
+      method: "POST",
+    });
+
+    setIsLoading(false);
+    if (response.status === 401) {
+      return;
+    }
+
+    const data = await response.json();
+
+    if (data.id) {
+      console.log(data);
+    }
+  };
+
+  return (
+    <div>
+      <Button onClick={onClick}>
+        {isLoading && (
+          <>
+            <Spinner size={16} />
+          </>
+        )}
+        Generate a template
+      </Button>
     </div>
   );
 };

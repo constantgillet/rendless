@@ -84,7 +84,7 @@ export default function TemplatePage() {
           </Button>
         </div>
         {templates?.length > 0 ? (
-          <div>
+          <div className={grid({ columns: 12, gap: 6 })}>
             {templates?.map((template) => {
               const onClickCopyName = (name: string) => {
                 navigator.clipboard.writeText(name);
