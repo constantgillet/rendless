@@ -1,5 +1,6 @@
 import "@remix-run/server-runtime";
 import { availableLanguageTags } from "~/paraglide/runtime";
+import { PublicEnv } from "~/utils/getPublicEnv";
 
 type Context = {
   user?: null | {
@@ -22,6 +23,9 @@ declare global {
     interface NextFunction {
       locales: Context;
     }
+  }
+  interface Window {
+    ENV: PublicEnv;
   }
 }
 

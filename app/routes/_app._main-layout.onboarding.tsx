@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { css } from "styled-system/css";
 import { Icon } from "~/components/Icon";
 import { Spinner } from "~/components/Spinner";
+import { getPublicEnv } from "~/utils/getPublicEnv";
 
 export default function AppHome() {
   return (
@@ -91,7 +92,9 @@ const OnboardingCard = () => {
                 >
                   <TextField.Input
                     disabled
-                    value={`https://dev.rendless.com/api/render/my-template?name=davendrix`}
+                    value={`${getPublicEnv(
+                      "WEBSITE_URL"
+                    )}/api/render/my-template?name=davendrix`}
                   />
                 </div>
                 <div>

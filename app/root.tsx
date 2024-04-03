@@ -13,9 +13,16 @@ import { Theme } from "@radix-ui/themes";
 import styles from "./index.css";
 import radixStyles from "@radix-ui/themes/styles.css";
 import { Toaster } from "react-hot-toast";
+import { environment } from "./libs/environment.server";
 
 export const loader = ({ context: { user, lang } }: LoaderFunctionArgs) => {
-  return { user, lang };
+  return {
+    user,
+    lang,
+    ENV: {
+      WEBSITE_URL: environment().WEBSITE_URL,
+    },
+  };
 };
 
 export const links: LinksFunction = () => [
@@ -24,7 +31,7 @@ export const links: LinksFunction = () => [
 ];
 
 export default function App() {
-  const { lang } = useLoaderData<typeof loader>();
+  const { lang, ENV } = useLoaderData<typeof loader>();
 
   return (
     <html lang={lang}>
@@ -41,6 +48,11 @@ export default function App() {
           <Outlet />
         </Theme>
         <ScrollRestoration />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+          }}
+        />
         <Scripts />
         <LiveReload />
       </body>
