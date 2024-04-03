@@ -32,7 +32,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
 
   //If search params contains noredirect, return the template id
   if (searchParams.get("noredirect")) {
-    return json({ id: template.id });
+    return json({ id: template.id, name: template.name });
   }
 
   return redirect(`/editor/${template.id}`);

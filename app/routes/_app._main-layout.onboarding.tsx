@@ -1,11 +1,11 @@
 import { Button, Card, TextField } from "@radix-ui/themes";
 import { MetaFunction } from "@remix-run/node";
-import { useFetcher } from "@remix-run/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { css } from "styled-system/css";
 import { Icon } from "~/components/Icon";
 import { Spinner } from "~/components/Spinner";
+import { useUser } from "~/hooks/useUser";
 import { getPublicEnv } from "~/utils/getPublicEnv";
 
 export default function AppHome() {
@@ -25,9 +25,10 @@ export const meta: MetaFunction = () => {
 };
 
 const OnboardingCard = () => {
-  const [templateNameCreated, setTemplateNameCreated] = useState<string | null>(
-    null
-  );
+  const [templateNameCreated, setTemplateNameCreated] = useState<{
+    templateId: string;
+    templateName: string;
+  } | null>(null);
 
   return (
     <Card
@@ -80,50 +81,9 @@ const OnboardingCard = () => {
             }
             disabled={!templateNameCreated}
             content={
-              <div
-                className={css({
-                  spaceY: "4",
-                })}
-              >
-                <div
-                  className={css({
-                    maxWidth: "482px",
-                  })}
-                >
-                  <TextField.Input
-                    disabled
-                    value={`${getPublicEnv(
-                      "WEBSITE_URL"
-                    )}/api/render/my-template?name=davendrix`}
-                  />
-                </div>
-                <div>
-                  <Button>Render the Image</Button>
-                </div>
-                <div
-                  className={css({
-                    border: "1px solid var(--gray-a7)",
-                    borderRadius: "6px",
-                    width: "348px",
-                    aspectRatio: "1.91 / 1",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    color: "var(--gray-a11)",
-                  })}
-                >
-                  <Icon name="image" size="4xl" />
-                  <div
-                    className={css({
-                      mt: "12px",
-                      fontSize: "14px",
-                    })}
-                  >
-                    Click on the button to render the image{" "}
-                  </div>
-                </div>
-              </div>
+              <SecondStepComponent
+                templateName={templateNameCreated?.templateName || null}
+              />
             }
           />
         </div>
@@ -247,7 +207,13 @@ const Step = ({
 const FirstStepComponent = ({
   onSuccessCreated,
 }: {
-  onSuccessCreated?: (templateId: string) => void;
+  onSuccessCreated?: ({
+    templateId,
+    templateName,
+  }: {
+    templateId: string;
+    templateName: string;
+  }) => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [templateIdCreated, setTemplateIdCreated] = useState<string | null>(
@@ -274,7 +240,10 @@ const FirstStepComponent = ({
     if (data.id) {
       toast.success("Template created");
       setTemplateIdCreated(data.id);
-      onSuccessCreated?.(data.id);
+      onSuccessCreated?.({
+        templateId: data.id,
+        templateName: data.name,
+      });
     }
   };
 
@@ -302,7 +271,7 @@ const FirstStepComponent = ({
           })}
         >
           <Icon
-            name="templates"
+            name="checkmark-circle"
             className={css({
               mr: "4px",
             })}
@@ -318,6 +287,110 @@ const FirstStepComponent = ({
           >
             here
           </a>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const SecondStepComponent = ({
+  templateName,
+}: {
+  templateName: string | null;
+}) => {
+  const user = useUser();
+  const [hasClickedRender, setHasClickedRender] = useState(false);
+
+  const imageRenderUrl = `${getPublicEnv("WEBSITE_URL")}/api/render/${
+    templateName || "your-template"
+  }?name=${user?.username}`;
+
+  return (
+    <div
+      className={css({
+        spaceY: "4",
+      })}
+    >
+      <div
+        className={css({
+          maxWidth: "482px",
+        })}
+      >
+        <TextField.Input disabled value={imageRenderUrl} />
+      </div>
+      <div
+        className={css({
+          display: "flex",
+          alignItems: "center",
+        })}
+      >
+        <Button
+          onClick={() => {
+            toast.success("Image rendered");
+            setHasClickedRender(true);
+          }}
+          disabled={hasClickedRender}
+        >
+          Render the Image
+        </Button>
+        {hasClickedRender && (
+          <div
+            className={css({
+              color: "var(--green-9)",
+              fontSize: "sm",
+              ml: "16px",
+            })}
+          >
+            <Icon
+              name="checkmark-circle"
+              className={css({
+                mr: "4px",
+              })}
+            />
+            You have rendered the image! You can use it in your website <head />{" "}
+            as og:image
+          </div>
+        )}
+      </div>
+      {hasClickedRender ? (
+        <img
+          src={imageRenderUrl}
+          alt="Rendered "
+          className={css({
+            border: "1px solid var(--gray-a7)",
+            borderRadius: "6px",
+            width: "348px",
+            aspectRatio: "1.91 / 1",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            color: "var(--gray-a11)",
+          })}
+        />
+      ) : (
+        <div
+          className={css({
+            border: "1px solid var(--gray-a7)",
+            borderRadius: "6px",
+            width: "348px",
+            aspectRatio: "1.91 / 1",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            color: "var(--gray-a11)",
+          })}
+        >
+          <Icon name="image" size="4xl" />
+          <div
+            className={css({
+              mt: "12px",
+              fontSize: "14px",
+            })}
+          >
+            Click on the button to render the image{" "}
+          </div>
         </div>
       )}
     </div>

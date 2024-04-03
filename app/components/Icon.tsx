@@ -31,7 +31,8 @@ export type IconName =
   | "text-case-title"
   | "text-case-lowercase"
   | "image"
-  | "arrow-upload";
+  | "arrow-upload"
+  | "checkmark-circle";
 
 export const iconStyle = cva({
   base: {
