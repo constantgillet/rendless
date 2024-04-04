@@ -276,17 +276,7 @@ const FirstStepComponent = ({
               mr: "4px",
             })}
           />
-          Template created! You can now edit it{" "}
-          <a
-            href={`/editor/${templateIdCreated}`}
-            rel="noreferrer"
-            target="_blank"
-            className={css({
-              textDecoration: "underline",
-            })}
-          >
-            here
-          </a>
+          Template created! You can now edit it.
         </div>
       )}
     </div>
@@ -347,7 +337,8 @@ const SecondStepComponent = ({
                 mr: "4px",
               })}
             />
-            You have rendered the image! You can use it in your website <head />{" "}
+            You have rendered the image! You can use it in your website{" "}
+            {"<head /> "}
             as og:image
           </div>
         )}
