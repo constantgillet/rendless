@@ -126,6 +126,11 @@ const AssetLine = (props: AssetLineProps) => {
     srcInputRef.current?.blur();
   };
 
+  const onChangeFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //send the file to the server with a POST request
+    const file = e.target.files?.[0];
+  };
+
   return (
     <div
       className={css({
@@ -166,6 +171,20 @@ const AssetLine = (props: AssetLineProps) => {
         ref={uploadInputRef}
         accept="image/png, image/gif, image/jpeg"
         multiple={false}
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const dataUrl = e.target?.result;
+              if (typeof dataUrl === "string") {
+                setSrcInputValue(dataUrl);
+                applySrc(dataUrl);
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        }}
       />
     </div>
   );
