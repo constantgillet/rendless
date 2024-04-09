@@ -14,6 +14,7 @@ import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty
 import toast from "react-hot-toast";
 import { useParams } from "@remix-run/react";
 import { Spinner } from "./Spinner";
+import { MAX_IMAGE_SIZE } from "~/constants/s3Constants";
 
 type ImagePropertiesProps = {
   properties: {
@@ -210,7 +211,7 @@ const AssetLine = (props: AssetLineProps) => {
         hidden
         ref={uploadInputRef}
         accept="image/png, image/gif, image/jpeg"
-        max={5_000_000}
+        max={MAX_IMAGE_SIZE}
         multiple={false}
         onChange={onChangeFileInput}
       />

@@ -9,7 +9,7 @@ import {
 } from "@remix-run/node";
 import { uploadToS3 } from "~/libs/s3";
 import { v4 as uuidv4 } from "uuid";
-import { bucketURL } from "~/constants/s3Constants";
+import { MAX_IMAGE_SIZE, bucketURL } from "~/constants/s3Constants";
 import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import { validationError } from "remix-validated-form";
@@ -24,7 +24,7 @@ export const assetUploadValidator = withZod(
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   const uploadHandler = unstable_composeUploadHandlers(
     unstable_createFileUploadHandler({
-      maxPartSize: 5_000_000,
+      maxPartSize: MAX_IMAGE_SIZE,
       file: ({ filename }) => filename,
     }),
     // parse everything else into memory
@@ -60,7 +60,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   const file = formData.get("asset") as NodeOnDiskFile;
 
   //Max file size is 5MB
-  if (file.size > 5_000_000) {
+  if (file.size > MAX_IMAGE_SIZE) {
     return new Response("File is too large", { status: 400 });
   }
 
