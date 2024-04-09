@@ -97,9 +97,9 @@ export default function AccountPage() {
         onSubmit={(data) => {
           console.log(data);
 
-          // fetcher.submit(data, {
-          //   method: "post",
-          // });
+          fetcher.submit(data, {
+            method: "post",
+          });
         }}
       >
         <Card variant="surface">

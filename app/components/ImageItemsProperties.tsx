@@ -11,6 +11,9 @@ import { PropertyTextField } from "./PropertyTextField";
 import { getVarFromString } from "~/utils/getVarFromString";
 import { updateElementsVariables } from "~/stores/actions/updateElementsVariables";
 import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
+import toast from "react-hot-toast";
+import { useParams } from "@remix-run/react";
+import { Spinner } from "./Spinner";
 
 type ImagePropertiesProps = {
   properties: {
@@ -91,6 +94,8 @@ const AssetLine = (props: AssetLineProps) => {
   const srcInputRef = useRef<HTMLInputElement>(null);
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const updateElements = useEditorStore((state) => state.updateElements);
+  const [isUploading, setIsUploading] = useState(false);
+  const { templateId } = useParams();
 
   const [srcInputValue, setSrcInputValue] = useState(
     props.src.variable ? `{{${props.src.variable}}}` : props.src.value
@@ -126,6 +131,39 @@ const AssetLine = (props: AssetLineProps) => {
     srcInputRef.current?.blur();
   };
 
+  const onChangeFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsUploading(true);
+    //send the file to the server with a POST request
+    const file = e.target.files?.[0];
+
+    //Post the file to the server and get the url
+    const formData = new FormData();
+    formData.append("asset", file as Blob);
+    formData.append("templateId", templateId || "");
+
+    fetch("/api/assets-upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const newSrcValue = data?.imageUrl;
+        setIsUploading(false);
+
+        if (!newSrcValue) {
+          toast.error("Error uploading image");
+          return;
+        }
+
+        setSrcInputValue(newSrcValue);
+        applySrc(newSrcValue);
+      })
+      .catch((error) => {
+        setIsUploading(false);
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <div
       className={css({
@@ -156,16 +194,25 @@ const AssetLine = (props: AssetLineProps) => {
         onClick={() => {
           uploadInputRef.current?.click();
         }}
+        disabled={isUploading}
       >
-        <Icon name="arrow-upload" />
-        Upload
+        {isUploading ? (
+          <Spinner size={16} />
+        ) : (
+          <>
+            <Icon name="arrow-upload" />
+            Upload
+          </>
+        )}
       </Button>
       <input
         type="file"
         hidden
         ref={uploadInputRef}
         accept="image/png, image/gif, image/jpeg"
+        max={5_000_000}
         multiple={false}
+        onChange={onChangeFileInput}
       />
     </div>
   );

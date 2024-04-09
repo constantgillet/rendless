@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "panda codegen",
     "build": "paraglide-js compile --project ./project.inlang --outdir ./app/paraglide && npm run build:remix && npm run build:server",
-    "build:remix": "remix build",
+    "build:remix": "prisma generate && prisma migrate deploy && remix build",
     "build:server": "esbuild --format=esm --platform=node --bundle ./server.ts --outfile=build/server.js --packages=external",
     "build:paraglide": "paraglide-js compile --project ./project.inlang --outdir ./app/paraglide",
     "dev": "concurrently --names PARAGLIDE,SERVER,REMIX --prefix-colors bgMagenta.gray.bold,bgGreen.gray.bold,bgBlue.gray.bold \"npm run dev:paraglide\" \"npm run dev:build\" \"npm run dev:remix\"",
