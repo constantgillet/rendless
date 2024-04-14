@@ -4,6 +4,7 @@ import { validationError } from "remix-validated-form";
 import { z } from "zod";
 import { ensureAuthenticated } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
+import { multipleDeleteFromS3 } from "~/libs/s3";
 
 export const validator = withZod(
   z.object({
@@ -39,6 +40,21 @@ export async function action({ context, request }: ActionFunctionArgs) {
 
     if (template.userId !== context.user.id) {
       return json({ data: "unauthorized" }, { status: 401 });
+    }
+
+    const assets = await prisma.asset.findMany({ where: { templateId } });
+
+    //Delete the assets
+    await prisma.asset.deleteMany({
+      where: {
+        templateId,
+      },
+    });
+
+    //Delete the assets from S3
+    if (assets.length > 0) {
+      const keys = assets.map((asset) => new URL(asset.url).pathname);
+      await multipleDeleteFromS3(keys);
     }
 
     //Delete the template

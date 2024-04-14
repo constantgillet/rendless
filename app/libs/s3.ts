@@ -2,6 +2,8 @@ import {
   S3Client,
   PutObjectCommand,
   type PutObjectCommandInput,
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
 } from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({
@@ -37,5 +39,43 @@ export const uploadToS3 = async (fileContent: Buffer, key: string) => {
   } catch (error) {
     console.error(error);
     throw new Error("Error uploading file to S3");
+  }
+};
+
+/**
+ * Delete a file from S3
+ * @param key ex "ogimages/generated/test.png"
+ */
+export const deleteFromS3 = async (key: string) => {
+  const params = {
+    Bucket: "cgbucket",
+    Key: key,
+  };
+
+  try {
+    await s3.send(new DeleteObjectCommand(params));
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error deleting file from S3");
+  }
+};
+
+/**
+ * Delete multiple files from S3
+ * @param keys ex ["ogimages/generated/test.png", "ogimages/generated/test2.png"]
+ */
+export const multipleDeleteFromS3 = async (keys: string[]) => {
+  const params = {
+    Bucket: "cgbucket",
+    Delete: {
+      Objects: keys.map((key) => ({ Key: key })),
+    },
+  };
+
+  try {
+    await s3.send(new DeleteObjectsCommand(params));
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error deleting files from S3");
   }
 };
