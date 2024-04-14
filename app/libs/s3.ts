@@ -73,7 +73,13 @@ export const multipleDeleteFromS3 = async (keys: string[]) => {
   };
 
   try {
-    await s3.send(new DeleteObjectsCommand(params));
+    const status = await s3.send(new DeleteObjectsCommand(params));
+
+    // Check if there are any errors
+    if (status.Errors) {
+      console.error(status.Errors);
+      throw new Error("Error deleting files from S3");
+    }
   } catch (error) {
     console.error(error);
     throw new Error("Error deleting files from S3");
