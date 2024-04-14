@@ -73,6 +73,13 @@ export const ImageElement = (props: ImageElementProps) => {
       {...{
         [DATA_SCENA_ELEMENT_ID]: props.id,
       }}
+      className={css({
+        position: "absolute",
+        _hover: {
+          outline: "1px solid #4af",
+          outlineOffset: "-1px",
+        },
+      })}
       style={{
         transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
         width: props.width,
