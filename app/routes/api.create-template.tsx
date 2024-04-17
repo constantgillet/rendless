@@ -18,7 +18,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
 
   const defaultTreeValue = defaultTree as unknown as Prisma.JsonArray;
 
-  const templateName = "template-" + Math.floor(Math.random() * 1000);
+  const templateName = "template " + Math.floor(Math.random() * 1000);
 
   //Check if template name already exists
   const id = nanoid(8);

@@ -12,16 +12,16 @@ const bucketURL = "https://cgbucket.ams3.digitaloceanspaces.com";
 
 //TODO prevent duplicated templateName
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const { templateName } = params;
+  const { templateId } = params;
 
-  console.log("RENDER TEMPLATE", templateName);
-  if (!templateName) {
+  console.log("RENDER TEMPLATE", templateId);
+  if (!templateId) {
     throw json(
       {
         ok: false,
         error: {
-          message: "Template name is required",
-          code: "TEMPLATE_NAME_REQUIRED",
+          message: "Template id is required",
+          code: "TEMPLATE_IS_REQUIRED",
         },
       },
       { status: 405 }
@@ -65,7 +65,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   try {
     const template = await prisma.template.findFirst({
       where: {
-        name: templateName,
+        id: templateId,
       },
     });
 
