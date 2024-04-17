@@ -82,7 +82,7 @@ const OnboardingCard = () => {
             disabled={!templateNameCreated}
             content={
               <SecondStepComponent
-                templateName={templateNameCreated?.templateName || null}
+                templateId={templateNameCreated?.templateId || null}
               />
             }
           />
@@ -283,16 +283,12 @@ const FirstStepComponent = ({
   );
 };
 
-const SecondStepComponent = ({
-  templateName,
-}: {
-  templateName: string | null;
-}) => {
+const SecondStepComponent = ({ templateId }: { templateId: string | null }) => {
   const user = useUser();
   const [hasClickedRender, setHasClickedRender] = useState(false);
 
   const imageRenderUrl = `${getPublicEnv("WEBSITE_URL")}/api/render/${
-    templateName || "your-template"
+    templateId || "your-template-id"
   }?name=${user?.username}`;
 
   return (
