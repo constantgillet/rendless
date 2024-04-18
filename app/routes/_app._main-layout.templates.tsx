@@ -114,7 +114,7 @@ export default function TemplatePage() {
                       >
                         <Link to={`/editor/${template.id}`}>
                           <img
-                            src={`/api/render/${template.name}`}
+                            src={`/api/render/${template.id}`}
                             width={"full"}
                             height={"full"}
                             alt="Og  template"
