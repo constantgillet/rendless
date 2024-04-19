@@ -121,9 +121,9 @@ export default function TemplatePage() {
     </>
   );
 }
-const onClickCopyName = (name: string) => {
-  navigator.clipboard.writeText(name);
-  toast.success(`Copied ${name} to clipboard`);
+const onClickCopyId = (id: string) => {
+  navigator.clipboard.writeText(id);
+  toast.success(`Copied ${id} to clipboard`);
 };
 
 const TemplateCard = ({
@@ -189,10 +189,7 @@ const TemplateCard = ({
                 color="gray"
                 variant="ghost"
               >
-                <Icon
-                  name="copy"
-                  onClick={() => onClickCopyName(template.name)}
-                />
+                <Icon name="copy" onClick={() => onClickCopyId(template.id)} />
               </IconButton>{" "}
             </div>
             <div></div>
