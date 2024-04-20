@@ -55,7 +55,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
   const searchParams = url.searchParams;
 
   const defaultTreeValue =
-    (defaultTree as unknown as Prisma.JsonArray) || duplicatedTemplateTree;
+    duplicatedTemplateTree || (defaultTree as unknown as Prisma.JsonArray);
 
   const templateName = "template " + Math.floor(Math.random() * 1000);
 

@@ -204,7 +204,7 @@ const TemplateCard = ({
                   <Link to={`/editor/${template.id}`}>
                     <DropdownMenu.Item>Edit</DropdownMenu.Item>
                   </Link>
-                  <DropdownMenu.Item>Duplicate</DropdownMenu.Item>
+                  <DuplicateTemplateDropdownItem templateId={template.id} />
                   <DropdownMenu.Separator />
                   <DropdownMenu.Item
                     color="red"
@@ -228,6 +228,45 @@ const TemplateCard = ({
         </div>
       </Inset>
     </Card>
+  );
+};
+
+const DuplicateTemplateDropdownItem = ({
+  templateId,
+}: {
+  templateId: string;
+}) => {
+  const duplicateTemplateFetcher = useFetcher();
+
+  const duplicateTemplate = async () => {
+    toast(`Duplicating template ${templateId}`);
+    duplicateTemplateFetcher.submit(
+      {
+        fromTemplateId: templateId,
+      },
+      {
+        action: "/api/create-template",
+        method: "POST",
+      }
+    );
+  };
+
+  const onClickDuplicateButton = () => {
+    if (
+      duplicateTemplateFetcher.state === "loading" ||
+      duplicateTemplateFetcher.state === "submitting"
+    )
+      return;
+
+    duplicateTemplate();
+  };
+
+  return (
+    <DropdownMenu.Item onClick={onClickDuplicateButton}>
+      {duplicateTemplateFetcher.state === "loading" ||
+        (duplicateTemplateFetcher.state === "submitting" && <Spinner />)}
+      Duplicate
+    </DropdownMenu.Item>
   );
 };
 
