@@ -239,7 +239,6 @@ const DuplicateTemplateDropdownItem = ({
   const duplicateTemplateFetcher = useFetcher();
 
   const duplicateTemplate = async () => {
-    toast(`Duplicating template ${templateId}`);
     duplicateTemplateFetcher.submit(
       {
         fromTemplateId: templateId,

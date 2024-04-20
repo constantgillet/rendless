@@ -226,8 +226,13 @@ const FirstStepComponent = ({
     }
 
     setIsLoading(true);
+    //Add empty form data
+
+    const formData = new FormData();
+
     const response = await fetch("/api/create-template?noredirect=true", {
       method: "POST",
+      body: formData,
     });
 
     setIsLoading(false);
