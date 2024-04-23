@@ -4,6 +4,7 @@ import { useEditorStore } from "~/stores/EditorStore";
 import { useDebounceValue } from "usehooks-ts";
 import { useEffect, useState } from "react";
 import { Icon } from "./Icon";
+import { defaultTree } from "~/constants/defaultTree";
 
 type SaveTreeIndicatorProps = {
   templateId: string;
@@ -20,6 +21,9 @@ export const SaveTreeIndicator = (props: SaveTreeIndicatorProps) => {
   const [debouncedTree, setValue] = useDebounceValue(tree, 1500);
 
   const saveTree = () => {
+    //Prevent save of the initial default tree
+    if (tree === defaultTree) return;
+
     setIsSaving(true);
     const formData = new FormData();
 
