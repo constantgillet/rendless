@@ -14,10 +14,6 @@ export const editTemplateNamevalidator = withZod(
       .min(1, { message: "Template name is required" })
       .max(100, {
         message: "Template name can't be longer than 100 characters",
-      })
-      .regex(/^[a-zA-Z0-9_.-]*$/, {
-        message:
-          "Template name can only contain letters, numbers, and the characters . _ -",
       }),
   })
 );
