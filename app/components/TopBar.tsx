@@ -1,6 +1,13 @@
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
-import { Button, Callout, Dialog, IconButton, Tooltip } from "@radix-ui/themes";
+import {
+  Badge,
+  Button,
+  Callout,
+  Dialog,
+  IconButton,
+  Tooltip,
+} from "@radix-ui/themes";
 import { Tool, useEditorStore } from "../stores/EditorStore";
 
 import { ValidatedForm, useFormContext } from "remix-validated-form";
@@ -128,8 +135,10 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
           })}
         >
           <SaveTreeIndicator templateId={templateId} />
-          <Button variant="outline">Use image</Button>
-          <Button>Deploy</Button>
+          <Tooltip content="Click on the Deploy button for setting it in production">
+            <Badge color="gray">Draft</Badge>
+          </Tooltip>
+          <Button>Deploy to prod</Button>
         </div>
       </div>
     </header>
@@ -189,6 +198,13 @@ const TemplateNameButton = ({
           {templateName}
         </button>
       </Dialog.Trigger>
+      <Badge
+        className={css({
+          userSelect: "text!important",
+        })}
+      >
+        {templateId}
+      </Badge>
       <Dialog.Content style={{ maxWidth: 460 }}>
         <Dialog.Title>Edit template name</Dialog.Title>
         <ValidatedForm
