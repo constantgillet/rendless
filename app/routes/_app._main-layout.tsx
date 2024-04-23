@@ -82,12 +82,14 @@ export default function MainLayout() {
                 mr: "24px",
               })}
             >
-              <img
-                src="/images/rendless-logo.png"
-                alt="Logo"
-                width={120}
-                height={"auto"}
-              />
+              <Link to={"/app"}>
+                <img
+                  src="/images/rendless-logo.png"
+                  alt="Logo"
+                  width={120}
+                  height={"auto"}
+                />
+              </Link>
             </div>
             <div
               className={css({
