@@ -4,6 +4,7 @@ import {
   type PutObjectCommandInput,
   DeleteObjectCommand,
   DeleteObjectsCommand,
+  HeadObjectCommand,
 } from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({
@@ -84,5 +85,25 @@ export const multipleDeleteFromS3 = async (keys: string[]) => {
   } catch (error) {
     console.error(error);
     throw new Error("Error deleting files from S3");
+  }
+};
+
+export const fileExists = async (filePath: string) => {
+  const command = new HeadObjectCommand({
+    Bucket: "cgbucket",
+    Key: filePath,
+  });
+
+  try {
+    await s3.send(command);
+    console.log(`File exists: ${filePath}`);
+    return { exists: true, error: null };
+  } catch (error) {
+    if (error.name === "NotFound") {
+      console.log(`File does not exist: ${filePath}`);
+      return { exists: false, error: null };
+    }
+    console.error(`Error checking file existence: ${error}`);
+    return { exists: false, error };
   }
 };
