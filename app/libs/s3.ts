@@ -88,6 +88,11 @@ export const multipleDeleteFromS3 = async (keys: string[]) => {
   }
 };
 
+/**
+ * Check if a file exists in S3
+ * @param filePath ex "ogimages/generated/test.png"
+ * @returns
+ */
 export const fileExists = async (filePath: string) => {
   const command = new HeadObjectCommand({
     Bucket: "cgbucket",
@@ -96,14 +101,11 @@ export const fileExists = async (filePath: string) => {
 
   try {
     await s3.send(command);
-    console.log(`File exists: ${filePath}`);
     return { exists: true, error: null };
   } catch (error) {
     if (error.name === "NotFound") {
-      console.log(`File does not exist: ${filePath}`);
       return { exists: false, error: null };
     }
-    console.error(`Error checking file existence: ${error}`);
     return { exists: false, error };
   }
 };

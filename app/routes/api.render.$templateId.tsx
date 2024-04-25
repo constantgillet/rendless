@@ -5,6 +5,7 @@ import { Resvg } from "@resvg/resvg-js";
 import CryptoJS from "crypto-js";
 import { getCacheData, setCacheData } from "~/libs/redis.server";
 import { SvgGenerate } from "~/utils/svgGenerate";
+import { fileExists, uploadToS3 } from "~/libs/s3";
 
 const cacheEnabled = true;
 
@@ -37,6 +38,28 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   searchParams.forEach((value, key) => {
     variablesValues.push({ name: key, value });
   });
+
+  //create a hash of the params
+  const templateIdHashed = CryptoJS.SHA256(templateId).toString();
+  const variablesValuesHashed = CryptoJS.SHA256(
+    JSON.stringify(variablesValues)
+  ).toString();
+
+  const cacheKey = `og-image-render-${templateIdHashed}-${variablesValuesHashed}`;
+
+  const imageLocation = `ogimages/cached/${cacheKey}.png`;
+
+  const resFileExists = await fileExists(imageLocation);
+
+  //If the exit 307 the image is cached
+  if (resFileExists.exists) {
+    return new Response(null, {
+      status: 307,
+      headers: {
+        Location: `${bucketURL}/${imageLocation}`,
+      },
+    });
+  }
 
   //Get query params
   //   const url = new URL(`https://og-image/render/${templateName}`);
@@ -137,6 +160,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   try {
     const pngData = resvg.render();
     const pngBuffer = pngData.asPng();
+
+    //Save the image to S3 as a cache
+    uploadToS3(pngBuffer, imageLocation);
 
     return new Response(pngBuffer, {
       headers: {
