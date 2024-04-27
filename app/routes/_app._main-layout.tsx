@@ -132,7 +132,7 @@ export default function MainLayout() {
                   Doc
                   <Icon
                     name="open"
-                    size="md"
+                    size="sm"
                     className={css({
                       transform: "translateY(-8px)",
                       ml: "1",
