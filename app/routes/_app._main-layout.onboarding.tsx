@@ -385,6 +385,18 @@ const SecondStepComponent = ({ templateId }: { templateId: string | null }) => {
           </div>
         </div>
       )}
+      <div>
+        If you need more information, you can check the{" "}
+        <a
+          href="https://docs.rendless.com"
+          className={css({
+            color: "var(--accent-9)",
+            textDecoration: "underline",
+          })}
+        >
+          documentation
+        </a>
+      </div>
     </div>
   );
 };

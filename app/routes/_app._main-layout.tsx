@@ -120,11 +120,16 @@ export default function MainLayout() {
           </div>
           <div className={css({ display: "flex", gap: 4 })}>
             <div className={css({ display: "flex", gap: "2" })}>
-              <Link to={"/"} className={linkClassName}>
-                {m.help()}
-              </Link>
-              <Link to={"/"} className={linkClassName}>
-                Docs
+              <Link to={"https://doc.rendless.com"} className={linkClassName}>
+                Doc
+                <Icon
+                  name="open"
+                  size="md"
+                  className={css({
+                    transform: "translateY(-8px)",
+                    ml: "1",
+                  })}
+                />
               </Link>
             </div>
             <DropdownMenu.Root>
