@@ -134,7 +134,7 @@ export default function MainLayout() {
                     name="open"
                     size="sm"
                     className={css({
-                      transform: "translateY(-8px)",
+                      transform: "translateY(-6px)",
                       ml: "1",
                     })}
                   />
