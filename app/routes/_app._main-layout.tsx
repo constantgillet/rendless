@@ -120,7 +120,7 @@ export default function MainLayout() {
           </div>
           <div className={css({ display: "flex", gap: 4 })}>
             <div className={css({ display: "flex", gap: "2" })}>
-              <Link to={"https://doc.rendless.com"} className={linkClassName}>
+              <Link to={"https://docs.rendless.com"} className={linkClassName}>
                 Doc
                 <Icon
                   name="open"
