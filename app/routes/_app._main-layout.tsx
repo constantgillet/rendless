@@ -129,7 +129,7 @@ export default function MainLayout() {
                   to={"https://docs.rendless.com"}
                   className={linkClassName}
                 >
-                  Doc
+                  Docs
                   <Icon
                     name="open"
                     size="sm"
@@ -276,7 +276,7 @@ export default function MainLayout() {
               Contact
             </Link>
             <Link to={"https://docs.rendless.com"} className={linkClassName}>
-              Doc
+              Docs
             </Link>
           </div>
         </div>
