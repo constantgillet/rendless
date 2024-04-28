@@ -1,10 +1,12 @@
 import { css } from "styled-system/css";
 import { Icon } from "./Icon";
 import {
+  AlertDialog,
   Badge,
   Button,
   Callout,
   Dialog,
+  Flex,
   IconButton,
   Tooltip,
 } from "@radix-ui/themes";
@@ -138,7 +140,7 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
           <Tooltip content="Click on the Deploy button for setting it in production">
             <Badge color="gray">Draft</Badge>
           </Tooltip>
-          <Button>Deploy to prod</Button>
+          <DeployButton templateId={templateId} />
         </div>
       </div>
     </header>
@@ -260,5 +262,40 @@ const TemplateNameButton = ({
         </ValidatedForm>
       </Dialog.Content>
     </Dialog.Root>
+  );
+};
+
+export const DeployButton = ({ templateId }: { templateId: string }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <AlertDialog.Root>
+      <AlertDialog.Trigger>
+        <Button>Deploy to prod</Button>
+      </AlertDialog.Trigger>
+      <AlertDialog.Content maxWidth="450px">
+        <AlertDialog.Title>Deploy template to production</AlertDialog.Title>
+        <AlertDialog.Description size="2">
+          Are you sure you want to deploy this template to production?
+        </AlertDialog.Description>
+        <AlertDialog.Description size="2">
+          Be sure to check if the template integration is correct and variables
+          are set.
+        </AlertDialog.Description>
+        <Flex gap="3" mt="4" justify="end">
+          <AlertDialog.Cancel>
+            <Button variant="soft" color="gray">
+              Cancel
+            </Button>
+          </AlertDialog.Cancel>
+          {/* <AlertDialog.Action> */}
+          <Button variant="solid">
+            <Spinner />
+            Continue
+          </Button>
+          {/* </AlertDialog.Action> */}
+        </Flex>
+      </AlertDialog.Content>
+    </AlertDialog.Root>
   );
 };
