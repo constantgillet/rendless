@@ -13,7 +13,7 @@ import { Tool, useEditorStore } from "../stores/EditorStore";
 import { ValidatedForm, useFormContext } from "remix-validated-form";
 import { FormInput, FormSubmitButton } from "./Form";
 import { useEffect, useState } from "react";
-import { editTemplateNamevalidator } from "~/routes/api.update-template-name";
+import { editTemplateNameValidator } from "~/routes/api.update-template-name";
 import { Link, useFetcher } from "@remix-run/react";
 import { action as updateTemplateNameAction } from "~/routes/api.update-template-name";
 import { Spinner } from "./Spinner";
@@ -209,7 +209,7 @@ const TemplateNameButton = ({
         <Dialog.Title>Edit template name</Dialog.Title>
         <ValidatedForm
           id={formId}
-          validator={editTemplateNamevalidator}
+          validator={editTemplateNameValidator}
           defaultValues={{
             templateName: templateName,
           }}
@@ -235,11 +235,11 @@ const TemplateNameButton = ({
                 <Icon name="info" size="lg" />
               </Callout.Icon>
               <Callout.Text>
-                Please change the template name in your code after you changed
-                it here.
+                The template name is used to identify your template in the
+                dashboard.
               </Callout.Text>
             </Callout.Root>{" "}
-            <FormInput name="templateName" placeholder="template-name" />
+            <FormInput name="templateName" placeholder="template name" />
           </div>
 
           <div
