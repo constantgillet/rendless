@@ -1,11 +1,11 @@
 import { TextField, Tooltip } from "@radix-ui/themes";
 import { Icon } from "./Icon";
 import { css } from "styled-system/css";
-import { TextFieldInputProps } from "node_modules/@radix-ui/themes/dist/esm/components/text-field";
+import { RootProps } from "node_modules/@radix-ui/themes/dist/esm/components/text-field";
 import { forwardRef } from "react";
 
 //Get default props of input
-type PropertyTextFieldProps = TextFieldInputProps & {
+type PropertyTextFieldProps = RootProps & {
   hasVariable: boolean;
   icon?: React.ReactNode;
 };
@@ -19,7 +19,7 @@ export const PropertyTextField = forwardRef(function PropertyTextFieldComponent(
   return (
     <TextField.Root>
       {icon ? <TextField.Slot>{icon}</TextField.Slot> : null}
-      <TextField.Input ref={ref} {...inputProps} />
+      <TextField.Root ref={ref} {...inputProps} />
       {hasVariable ? (
         <TextField.Slot
           style={{

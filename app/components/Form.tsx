@@ -1,11 +1,11 @@
-import { Button, TextFieldInput } from "@radix-ui/themes";
+import { Button, TextField } from "@radix-ui/themes";
 import { ButtonProps } from "node_modules/@radix-ui/themes/dist/esm/components/button";
-import { TextFieldInputProps } from "node_modules/@radix-ui/themes/dist/esm/components/text-field";
 import { useField, useIsSubmitting } from "remix-validated-form";
 import { css } from "styled-system/css";
 import { Spinner } from "./Spinner";
+import { RootProps } from "@radix-ui/themes/src/components/text-field.js";
 
-type FormInputProps = TextFieldInputProps & {
+type FormInputProps = RootProps & {
   name: string;
 };
 
@@ -19,7 +19,7 @@ export const FormInput = ({ name, ...props }: FormInputProps) => {
 
   return (
     <div>
-      <TextFieldInput
+      <TextField.Root
         {...textFieldInputProps}
         color={error ? "red" : props.color}
       />
