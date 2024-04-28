@@ -93,7 +93,7 @@ export default function LoginPage() {
           <FormSubmitButton
             size="3"
             className={css({
-              w: "full",
+              w: "full!important",
             })}
             variant="classic"
           >

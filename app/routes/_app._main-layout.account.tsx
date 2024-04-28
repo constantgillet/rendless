@@ -54,7 +54,7 @@ export default function SettingsLayout() {
                 color="gray"
                 disabled={link.disabled}
                 className={css({
-                  w: "100%",
+                  w: "full!important",
                   textAlign: "left",
                 })}
                 style={{
@@ -64,7 +64,7 @@ export default function SettingsLayout() {
               >
                 <div
                   className={css({
-                    w: "100%",
+                    w: "full!important",
                     textAlign: "left",
                   })}
                 >
