@@ -40,14 +40,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   });
 
   //create a hash of the params
-  const templateIdHashed = CryptoJS.SHA256(templateId).toString();
   const variablesValuesHashed = CryptoJS.SHA256(
     JSON.stringify(variablesValues)
   ).toString();
 
-  const cacheKey = `og-image-render-${templateIdHashed}-${variablesValuesHashed}`;
+  const cacheKey = `render-${variablesValuesHashed}`;
 
-  const imageLocation = `ogimages/cached/${cacheKey}.png`;
+  const imageLocation = `ogimages/cached/${templateId}/${cacheKey}.png`;
 
   const resFileExists = await fileExists(imageLocation);
 

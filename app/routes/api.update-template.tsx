@@ -5,6 +5,7 @@ import { validationError } from "remix-validated-form";
 import { z } from "zod";
 import { ensureAuthenticated } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
+import { deleteFolder } from "~/libs/s3";
 import { Tree } from "~/stores/EditorStore";
 
 export const editTemplateNamevalidator = withZod(
@@ -53,6 +54,13 @@ export async function action({ context, request }: ActionFunctionArgs) {
       return json({ data: "unauthorized" }, { status: 401 });
     }
 
+    //Check if the new tree is different from the old tree return ok
+    if (JSON.stringify(template.tree) === JSON.stringify(result.data.tree)) {
+      console.log("TREE IS THE SAME");
+
+      return json({ ok: true });
+    }
+
     await prisma.template.update({
       where: {
         id: templateId,
@@ -61,6 +69,13 @@ export async function action({ context, request }: ActionFunctionArgs) {
         tree: result.data.tree as unknown as Prisma.JsonArray,
       },
     });
+
+    //Template folder cached
+    const folder = `ogimages/cached/${templateId}/`;
+
+    //Delete all the files cached
+    deleteFolder(folder);
+    console.log("TREE IS DIFFERENT, DELETING CACHE");
 
     return json({ ok: true });
   } catch (error) {
