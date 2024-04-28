@@ -307,7 +307,7 @@ const SecondStepComponent = ({ templateId }: { templateId: string | null }) => {
           maxWidth: "482px",
         })}
       >
-        <TextField.Input disabled value={imageRenderUrl} />
+        <TextField.Root disabled value={imageRenderUrl} />
       </div>
       <div
         className={css({
