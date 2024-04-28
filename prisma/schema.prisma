@@ -28,6 +28,7 @@ model Template {
   id     String  @id @unique
   name   String  @unique //Slugname
   tree   Json
+  prodTree Json @default("null")
   user   User    @relation(fields: [userId], references: [id])
   userId String
   Asset  Asset[]
