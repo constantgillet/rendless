@@ -2,9 +2,10 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { validationError } from "remix-validated-form";
 import { z } from "zod";
+import { CACHED_FOLDER } from "~/constants/s3Constants";
 import { ensureAuthenticated } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
-import { multipleDeleteFromS3 } from "~/libs/s3";
+import { deleteFolder, multipleDeleteFromS3 } from "~/libs/s3";
 
 export const validator = withZod(
   z.object({
@@ -63,6 +64,8 @@ export async function action({ context, request }: ActionFunctionArgs) {
         id: templateId,
       },
     });
+
+    deleteFolder(CACHED_FOLDER + templateId);
 
     return json({ ok: true });
   } catch (error) {

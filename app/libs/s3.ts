@@ -8,6 +8,7 @@ import {
   ListObjectsCommand,
   ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
+import { BUCKET_NAME } from "~/constants/s3Constants";
 
 const s3 = new S3Client({
   forcePathStyle: false, // Configures to use subdomain/virtual calling format.
@@ -27,7 +28,7 @@ const s3 = new S3Client({
  */
 export const uploadToS3 = async (fileContent: Buffer, key: string) => {
   const params: PutObjectCommandInput = {
-    Bucket: "cgbucket",
+    Bucket: BUCKET_NAME,
     Key: key,
     Body: fileContent,
     ACL: "public-read",
@@ -51,7 +52,7 @@ export const uploadToS3 = async (fileContent: Buffer, key: string) => {
  */
 export const deleteFromS3 = async (key: string) => {
   const params = {
-    Bucket: "cgbucket",
+    Bucket: BUCKET_NAME,
     Key: key,
   };
 
@@ -69,7 +70,7 @@ export const deleteFromS3 = async (key: string) => {
  */
 export const multipleDeleteFromS3 = async (keys: string[]) => {
   const params = {
-    Bucket: "cgbucket",
+    Bucket: BUCKET_NAME,
     Delete: {
       Objects: keys.map((key) => ({ Key: key })),
     },
@@ -97,7 +98,7 @@ export const multipleDeleteFromS3 = async (keys: string[]) => {
  */
 export const fileExists = async (filePath: string) => {
   const command = new HeadObjectCommand({
-    Bucket: "cgbucket",
+    Bucket: BUCKET_NAME,
     Key: filePath,
   });
 
@@ -121,7 +122,7 @@ export async function deleteFolder(location: string) {
   async function recursiveDelete(token: string | undefined = undefined) {
     // get the files
     const listCommand = new ListObjectsV2Command({
-      Bucket: "cgbucket",
+      Bucket: BUCKET_NAME,
       Prefix: location,
       ContinuationToken: token,
     });
@@ -130,7 +131,7 @@ export async function deleteFolder(location: string) {
       // if items to delete
       // delete the files
       const deleteCommand = new DeleteObjectsCommand({
-        Bucket: "cgbucket",
+        Bucket: BUCKET_NAME,
         Delete: {
           Objects: list.Contents?.map((item) => ({ Key: item.Key })),
           Quiet: false,

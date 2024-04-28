@@ -3,6 +3,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { validationError } from "remix-validated-form";
 import { z } from "zod";
+import { CACHED_FOLDER } from "~/constants/s3Constants";
 import { ensureAuthenticated } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
 import { deleteFolder } from "~/libs/s3";
@@ -71,7 +72,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
     });
 
     //Template folder cached
-    const folder = `ogimages/cached/${templateId}/`;
+    const folder = `${CACHED_FOLDER}${templateId}/`;
 
     //Delete all the files cached
     deleteFolder(folder);

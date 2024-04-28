@@ -6,6 +6,7 @@ import CryptoJS from "crypto-js";
 import { getCacheData, setCacheData } from "~/libs/redis.server";
 import { SvgGenerate } from "~/utils/svgGenerate";
 import { fileExists, uploadToS3 } from "~/libs/s3";
+import { CACHED_FOLDER } from "~/constants/s3Constants";
 
 const cacheEnabled = true;
 
@@ -46,7 +47,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   const cacheKey = `render-${variablesValuesHashed}`;
 
-  const imageLocation = `ogimages/cached/${templateId}/${cacheKey}.png`;
+  const imageLocation = `${CACHED_FOLDER}${templateId}/${cacheKey}.png`;
 
   const resFileExists = await fileExists(imageLocation);
 
