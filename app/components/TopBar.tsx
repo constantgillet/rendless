@@ -15,12 +15,15 @@ import { Tool, useEditorStore } from "../stores/EditorStore";
 import { ValidatedForm, useFormContext } from "remix-validated-form";
 import { FormInput, FormSubmitButton } from "./Form";
 import { useEffect, useState } from "react";
-import { editTemplateNameValidator } from "~/routes/api.update-template-name";
+import {
+  editTemplateNameValidator,
+  action as updateTemplateNameAction,
+} from "~/routes/api.update-template-name";
 import { Link, useFetcher } from "@remix-run/react";
-import { action as updateTemplateNameAction } from "~/routes/api.update-template-name";
 import { Spinner } from "./Spinner";
 import { SaveTreeIndicator } from "./SaveTreeIndicator";
 import toast from "react-hot-toast";
+import { action as updateTemplateToProdAction } from "~/routes/api.update-template-to-prod";
 
 const toolsData = [
   {
@@ -267,9 +270,17 @@ const TemplateNameButton = ({
 
 export const DeployButton = ({ templateId }: { templateId: string }) => {
   const [open, setOpen] = useState(false);
+  const fetcher = useFetcher<typeof updateTemplateToProdAction>();
+
+  useEffect(() => {
+    if (fetcher.data?.ok) {
+      setOpen(false);
+      toast.success("Template set in production");
+    }
+  }, [fetcher.data]);
 
   return (
-    <AlertDialog.Root>
+    <AlertDialog.Root open={open} onOpenChange={setOpen}>
       <AlertDialog.Trigger>
         <Button>Deploy to prod</Button>
       </AlertDialog.Trigger>
@@ -289,8 +300,28 @@ export const DeployButton = ({ templateId }: { templateId: string }) => {
             </Button>
           </AlertDialog.Cancel>
           {/* <AlertDialog.Action> */}
-          <Button variant="solid">
-            <Spinner />
+          <Button
+            variant="solid"
+            disabled={
+              fetcher.state === "loading" || fetcher.state === "submitting"
+            }
+            onClick={(e) => {
+              e.preventDefault();
+
+              fetcher.submit(
+                {
+                  templateId,
+                },
+                {
+                  method: "POST",
+                  action: "/api/update-template-to-prod",
+                }
+              );
+            }}
+          >
+            {fetcher.state === "loading" || fetcher.state === "submitting" ? (
+              <Spinner />
+            ) : null}
             Continue
           </Button>
           {/* </AlertDialog.Action> */}
