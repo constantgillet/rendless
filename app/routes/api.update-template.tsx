@@ -78,7 +78,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
     deleteFolder(folder);
     console.log("TREE IS DIFFERENT, DELETING CACHE");
 
-    return json({ ok: true });
+    return json({ ok: true, changed: true });
   } catch (error) {
     console.error(error);
     return json({ data: "error" }, { status: 500 });

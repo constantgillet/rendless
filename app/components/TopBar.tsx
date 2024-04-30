@@ -51,11 +51,18 @@ const toolsData = [
 type TopBarProps = {
   initalName: string;
   templateId: string;
+  isDraft: boolean;
 };
 
-export const TopBar = ({ initalName, templateId }: TopBarProps) => {
+export const TopBar = ({
+  initalName,
+  templateId,
+  isDraft: defaultIsDraft,
+}: TopBarProps) => {
   const selectedTool = useEditorStore((state) => state.selectedTool);
   const setSelectedTool = useEditorStore((state) => state.setSelectedTool);
+
+  const [isDraft, setIsDraft] = useState(defaultIsDraft);
 
   return (
     <header
@@ -139,11 +146,19 @@ export const TopBar = ({ initalName, templateId }: TopBarProps) => {
             alignItems: "center",
           })}
         >
-          <SaveTreeIndicator templateId={templateId} />
-          <Tooltip content="Click on the Deploy button for setting it in production">
-            <Badge color="gray">Draft</Badge>
-          </Tooltip>
-          <DeployButton templateId={templateId} />
+          <SaveTreeIndicator
+            templateId={templateId}
+            onSave={() => setIsDraft(true)}
+          />
+          {isDraft && (
+            <Tooltip content="Click on the Deploy button for setting it in production">
+              <Badge color="gray">Draft</Badge>
+            </Tooltip>
+          )}
+          <DeployButton
+            templateId={templateId}
+            onDeploy={() => setIsDraft(false)}
+          />
         </div>
       </div>
     </header>
@@ -268,7 +283,13 @@ const TemplateNameButton = ({
   );
 };
 
-export const DeployButton = ({ templateId }: { templateId: string }) => {
+export const DeployButton = ({
+  templateId,
+  onDeploy,
+}: {
+  templateId: string;
+  onDeploy?: () => void;
+}) => {
   const [open, setOpen] = useState(false);
   const fetcher = useFetcher<typeof updateTemplateToProdAction>();
 
@@ -276,6 +297,7 @@ export const DeployButton = ({ templateId }: { templateId: string }) => {
     if (fetcher.data?.ok) {
       setOpen(false);
       toast.success("Template set in production");
+      onDeploy();
     }
   }, [fetcher.data]);
 

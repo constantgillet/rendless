@@ -8,10 +8,11 @@ import { defaultTree } from "~/constants/defaultTree";
 
 type SaveTreeIndicatorProps = {
   templateId: string;
+  onSave?: () => void;
 };
 
 export const SaveTreeIndicator = (props: SaveTreeIndicatorProps) => {
-  const { templateId } = props;
+  const { templateId, onSave } = props;
 
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(true);
@@ -37,6 +38,11 @@ export const SaveTreeIndicator = (props: SaveTreeIndicatorProps) => {
       .then((response) => response.json())
       .then((data) => {
         setIsSaved(true);
+
+        if (data.changed) {
+          onSave?.();
+        }
+
         setIsSaving(false);
       })
       .catch((error) => {

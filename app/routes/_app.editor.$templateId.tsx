@@ -57,7 +57,10 @@ export async function loader({
       tree: templateData?.tree as unknown as Tree,
     };
 
-    return json({ template });
+    const isDraft =
+      JSON.stringify(template.tree) !== JSON.stringify(template.prodTree);
+
+    return json({ template, isDraft });
   } catch (error) {
     console.error(error);
     throw new Error("Error fetching template");
@@ -66,7 +69,7 @@ export async function loader({
 
 export default function Index() {
   const container = useRef<HTMLDivElement>(null);
-  const { template } = useLoaderData<typeof loader>();
+  const { template, isDraft } = useLoaderData<typeof loader>();
 
   const infiniteViewer = useRef<InfiniteViewer>(null);
 
@@ -89,7 +92,11 @@ export default function Index() {
           overflow: "hidden",
         }}
       >
-        <TopBar initalName={template.name} templateId={template.id} />
+        <TopBar
+          initalName={template.name}
+          templateId={template.id}
+          isDraft={isDraft}
+        />
         <div
           className={css({
             flex: 1,
