@@ -73,8 +73,6 @@ export default function Index() {
 
   const infiniteViewer = useRef<InfiniteViewer>(null);
 
-  console.log(template);
-
   if (typeof document === "undefined") {
     return null;
   }

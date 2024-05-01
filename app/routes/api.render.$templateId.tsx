@@ -49,7 +49,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   const cacheKey = `render-${variablesValuesHashed}`;
 
-  const imageLocation = `${CACHED_FOLDER}${templateId}/${cacheKey}.png`;
+  const imageLocation = `${CACHED_FOLDER}${templateId}/${
+    isDraft ? "draft" : "prod"
+  }/${cacheKey}.png`;
 
   const resFileExists = await fileExists(imageLocation);
 

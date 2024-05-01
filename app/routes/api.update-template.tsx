@@ -72,7 +72,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
     });
 
     //Template folder cached
-    const folder = `${CACHED_FOLDER}${templateId}/`;
+    const folder = `${CACHED_FOLDER}${templateId}/draft/`;
 
     //Delete all the files cached
     deleteFolder(folder);
