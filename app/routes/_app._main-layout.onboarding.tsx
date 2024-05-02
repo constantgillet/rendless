@@ -292,7 +292,7 @@ const SecondStepComponent = ({ templateId }: { templateId: string | null }) => {
   const user = useUser();
   const [hasClickedRender, setHasClickedRender] = useState(false);
 
-  const imageRenderUrl = `${getPublicEnv("WEBSITE_URL")}/api/render/${
+  const imageRenderUrl = `${getPublicEnv("WEBSITE_URL")}/api/simple-url/${
     templateId || "your-template-id"
   }?name=${user?.username}`;
 

@@ -160,7 +160,7 @@ const TemplateCard = ({
           >
             <Link to={`/editor/${template.id}`}>
               <img
-                src={`/api/render/${template.id}?draft=true`}
+                src={`/api/simple-url/${template.id}?draft=true`}
                 width={"full"}
                 height={"full"}
                 alt="Og  template"
