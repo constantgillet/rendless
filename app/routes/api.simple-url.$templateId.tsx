@@ -173,6 +173,19 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     //Save the image to S3 as a cache
     uploadToS3(pngBuffer, imageLocation);
 
+    //Add redis log for doing analytics
+    const monitorKey = `simple-render-${templateId}-${
+      isDraft ? "draft" : "prod"
+    }:${new Date().getTime()}`;
+
+    //Save the log to redis
+    setCacheData(
+      monitorKey,
+      JSON.stringify({
+        values: variablesValues,
+      })
+    );
+
     return new Response(pngBuffer, {
       headers: {
         "Content-Type": "image/png",
