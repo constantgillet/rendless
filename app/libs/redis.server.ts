@@ -1,5 +1,4 @@
 import redis, { RedisClientType } from "redis";
-
 let redisClient: RedisClientType | null;
 
 (async () => {
@@ -27,4 +26,24 @@ export const getCacheData = async (key: string) => {
   } catch (error) {
     console.error("Error fetching cached data", error);
   }
+};
+
+export const scanAll = async (pattern: string) => {
+  if (!redisClient) {
+    throw new Error("Redis client not initialized");
+  }
+
+  const keys: string[] = [];
+  let cursor = 0;
+
+  do {
+    const res = await redisClient.scan(cursor, {
+      MATCH: pattern,
+      COUNT: 1000,
+    });
+    cursor = res.cursor;
+    keys.push(...res.keys);
+  } while (cursor !== 0);
+
+  return keys;
 };

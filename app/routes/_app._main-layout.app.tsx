@@ -19,6 +19,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { scanAll } from "~/libs/redis.server";
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const userId = context.user?.id;
@@ -36,6 +37,47 @@ export async function loader({ context }: LoaderFunctionArgs) {
   if (templates.length === 0) {
     throw redirect("/onboarding");
   }
+
+  //Scan all render calls
+  const keys = await scanAll("render:*");
+
+  console.log("KEYS", keys);
+
+  //Format is render:type:templateId:draft:timestamp
+
+  const renderData = keys.map((key) => {
+    const [type, templateId, draft, timestamp] = key.split(":");
+
+    return {
+      type,
+      templateId,
+      draft,
+      timestamp,
+    };
+  });
+
+  //Group by same day and set the render count
+  const renderCount = renderData.reduce((acc, curr) => {
+    const date = new Date(parseInt(curr.timestamp));
+    const day = date.toDateString();
+
+    if (!acc[day]) {
+      acc[day] = 0;
+    }
+
+    acc[day] += 1;
+
+    return acc;
+  }, {} as Record<string, number>);
+
+  const data = Object.keys(renderCount).map((key) => {
+    return {
+      name: key,
+      rendercount: renderCount[key],
+    };
+  });
+
+  console.log("DATA", data);
 
   return json({ ok: true });
 }
@@ -59,37 +101,37 @@ export const meta: MetaFunction = () => {
 const data = [
   {
     name: "Page A",
-    uv: 4000,
+    rendercount: 4000,
     amt: 2400,
   },
   {
     name: "Page B",
-    uv: 3000,
+    rendercount: 3000,
     amt: 2210,
   },
   {
     name: "Page C",
-    uv: 2000,
+    rendercount: 2000,
     amt: 2290,
   },
   {
     name: "Page D",
-    uv: 2780,
+    rendercount: 2780,
     amt: 2000,
   },
   {
     name: "Page E",
-    uv: 1890,
+    rendercount: 1890,
     amt: 2181,
   },
   {
     name: "Page F",
-    uv: 2390,
+    rendercount: 2390,
     amt: 2500,
   },
   {
     name: "Page G",
-    uv: 3490,
+    rendercount: 3490,
     amt: 2100,
   },
 ];
@@ -132,7 +174,7 @@ const HomeCard = () => {
               bottom: 5,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" opacity={0.6} />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip
@@ -146,11 +188,12 @@ const HomeCard = () => {
             />
             <Legend />
             <Bar
-              dataKey="uv"
+              dataKey="rendercount"
               fill="var(--accent-9)"
               activeBar={
                 <Rectangle fill="var(--accent-7)" stroke="var(--accent-12)" />
               }
+              name={"Renders"}
             />
           </BarChart>
         </div>

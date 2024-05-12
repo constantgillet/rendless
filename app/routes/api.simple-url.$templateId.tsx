@@ -174,7 +174,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     uploadToS3(pngBuffer, imageLocation);
 
     //Add redis log for doing analytics
-    const monitorKey = `simple-render-${templateId}-${
+    const monitorKey = `render:simple:${templateId}:${
       isDraft ? "draft" : "prod"
     }:${new Date().getTime()}`;
 
