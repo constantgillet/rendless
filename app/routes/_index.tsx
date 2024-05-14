@@ -12,6 +12,8 @@ export default function Index() {
 }
 
 export function loader({ context: { user } }: LoaderFunctionArgs) {
+  throw redirect("/app");
+
   if (user) {
     throw redirect("/app");
   }

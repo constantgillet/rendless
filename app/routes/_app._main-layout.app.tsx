@@ -1,12 +1,6 @@
-import { Button, Card, TextField } from "@radix-ui/themes";
-import {
-  LoaderFunctionArgs,
-  MetaFunction,
-  json,
-  redirect,
-} from "@remix-run/node";
+import { Card } from "@radix-ui/themes";
+import { LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { css } from "styled-system/css";
-import { Icon } from "~/components/Icon";
 import { prisma } from "~/libs/prisma";
 import {
   BarChart,
@@ -17,9 +11,8 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from "recharts";
-import { scanAll } from "~/libs/redis.server";
+// import { scanAll } from "~/libs/redis.server";
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const userId = context.user?.id;
@@ -38,48 +31,11 @@ export async function loader({ context }: LoaderFunctionArgs) {
     throw redirect("/onboarding");
   }
 
-  //Scan all render calls
-  const keys = await scanAll("render:*");
+  //Disable this page
 
-  console.log("KEYS", keys);
+  throw redirect("/templates");
 
-  //Format is render:type:templateId:draft:timestamp
-
-  const renderData = keys.map((key) => {
-    const [type, templateId, draft, timestamp] = key.split(":");
-
-    return {
-      type,
-      templateId,
-      draft,
-      timestamp,
-    };
-  });
-
-  //Group by same day and set the render count
-  const renderCount = renderData.reduce((acc, curr) => {
-    const date = new Date(parseInt(curr.timestamp));
-    const day = date.toDateString();
-
-    if (!acc[day]) {
-      acc[day] = 0;
-    }
-
-    acc[day] += 1;
-
-    return acc;
-  }, {} as Record<string, number>);
-
-  const data = Object.keys(renderCount).map((key) => {
-    return {
-      name: key,
-      rendercount: renderCount[key],
-    };
-  });
-
-  console.log("DATA", data);
-
-  return json({ ok: true });
+  // return json({ ok: true });
 }
 
 export default function AppHome() {

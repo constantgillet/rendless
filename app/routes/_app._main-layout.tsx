@@ -14,11 +14,11 @@ const links: {
   iconName: IconName;
   disabled?: boolean;
 }[] = [
-  {
-    label: "Home",
-    href: "/app",
-    iconName: "home",
-  },
+  // {
+  //   label: "Home",
+  //   href: "/app",
+  //   iconName: "home",
+  // },
   {
     label: "Templates",
     href: "/templates",
