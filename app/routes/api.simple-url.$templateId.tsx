@@ -53,7 +53,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     isDraft ? "draft" : "prod"
   }/${cacheKey}.png`;
 
-  const resFileExists = await fileExists(imageLocation);
+  // const resFileExists = await fileExists(imageLocation);
+  const resFileExists = false;
 
   //If the exit 307 the image is cached
   if (resFileExists.exists) {

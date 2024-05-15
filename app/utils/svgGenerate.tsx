@@ -1,8 +1,17 @@
-import satori, { Font } from "satori";
+import { Font } from "satori";
+import satori, { init } from "satori/wasm";
 import { ImageElementRendered } from "~/render-components/ImageElementRendered";
 import { RectElementRendered } from "~/render-components/RectElementRendered";
 import { TextElementRendered } from "~/render-components/TextElementRendered";
 import { Tree } from "~/stores/EditorStore";
+import initYoga from "yoga-wasm-web";
+import fs from "fs";
+
+const yoga = await initYoga(
+  fs.readFileSync("./node_modules/yoga-wasm-web/dist/yoga.wasm")
+);
+
+init(yoga);
 
 async function fetchFont(font: string): Promise<ArrayBuffer | null> {
   const API = `https://fonts.googleapis.com/css2?family=${font}`;
