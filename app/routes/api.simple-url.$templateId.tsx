@@ -53,8 +53,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     isDraft ? "draft" : "prod"
   }/${cacheKey}.png`;
 
-  // const resFileExists = await fileExists(imageLocation);
-  const resFileExists = false;
+  const resFileExists = await fileExists(imageLocation);
 
   //If the exit 307 the image is cached
   if (resFileExists.exists) {
@@ -175,17 +174,17 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     uploadToS3(pngBuffer, imageLocation);
 
     //Add redis log for doing analytics
-    const monitorKey = `render:simple:${templateId}:${
-      isDraft ? "draft" : "prod"
-    }:${new Date().getTime()}`;
+    // const monitorKey = `render:simple:${templateId}:${
+    //   isDraft ? "draft" : "prod"
+    // }:${new Date().getTime()}`;
 
-    //Save the log to redis
-    setCacheData(
-      monitorKey,
-      JSON.stringify({
-        values: variablesValues,
-      })
-    );
+    // //Save the log to redis
+    // setCacheData(
+    //   monitorKey,
+    //   JSON.stringify({
+    //     values: variablesValues,
+    //   })
+    // );
 
     return new Response(pngBuffer, {
       headers: {
