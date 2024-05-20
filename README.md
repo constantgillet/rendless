@@ -1,3 +1,5 @@
+<img src="public\images\rendless-logo.png" width="200px" height="auto">
+
 # Rendless
 
 **Description**: Rendless is an open source Image to API editor. The main usecase is rendering dynamic OG image
@@ -22,9 +24,9 @@
 
 ## Installation
 
-Detailed instructions on how to install, configure, and get the project running.
-This should be frequently tested to ensure reliability. Alternatively, link to
-a separate [INSTALL](INSTALL.md) document.
+- `npm i` : install the required packages
+- `npm run build` : compile the application for production
+- `npm start`: Once the application is build you can start it
 
 ## Configuration
 
@@ -39,31 +41,15 @@ Make sure to set these environment variables before running the application.
 
 ## Usage
 
-Show users how to use the software.
-Be specific.
-Use appropriate formatting when showing code snippets.
-
-## How to test the software
-
-If the software includes automated tests, detail how to run those tests.
+Take a look at the [documenation](https://docs.rendless.com) for using learning how to use the rendering API.
 
 ## Known issues
 
-Document any known significant shortcomings with the software.
+//TODO
 
 ## Getting help
 
 Just open an Issue or [contact me](https://x.com/CypherGolem) on x.com
-
-## Getting involved
-
-This section should detail why people should get involved and describe key areas you are
-currently focusing on; e.g., trying to get feedback on features, fixing certain bugs, building
-important pieces, etc.
-
-General instructions on _how_ to contribute should be stated with a link to [CONTRIBUTING](CONTRIBUTING.md).
-
----
 
 ## Open source licensing info
 
