@@ -38,8 +38,8 @@ export const CanvasContextMenu = (props: CanvasContextMenuProps) => {
         {props.children}
       </ContextMenu.Trigger>
       <ContextMenu.Content>
-        <ContextMenu.Item shortcut="⌘ C">Copy</ContextMenu.Item>
-        <ContextMenu.Item shortcut="⌘ D">Duplicate</ContextMenu.Item>
+        {/* <ContextMenu.Item shortcut="⌘ C">Copy</ContextMenu.Item>
+        <ContextMenu.Item shortcut="⌘ D">Duplicate</ContextMenu.Item> */}
         <ContextMenu.Separator />
         <ContextMenu.Item shortcut="]" onClick={onClickBringToFront}>
           Bring to front
