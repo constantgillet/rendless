@@ -6,10 +6,9 @@ import { uploadToS3 } from "~/libs/s3";
 import CryptoJS from "crypto-js";
 import { getCacheData, setCacheData } from "~/libs/redis.server";
 import { SvgGenerate } from "~/utils/svgGenerate";
+import { bucketURL } from "~/constants/s3Constants";
 
 const cacheEnabled = true;
-
-const bucketURL = "https://cgbucket.ams3.digitaloceanspaces.com";
 
 //TODO prevent duplicated templateName
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
