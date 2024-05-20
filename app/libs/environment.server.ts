@@ -6,7 +6,7 @@ const environmentSchema = z.object({
     .default("development"),
   WEBSITE_URL: z.string().min(1),
   DATABASE_URL: z.string().min(1),
-  REDIS_URL: z.string().min(1),
+  REDIS_URL: z.string().optional(),
   SPACES_KEY: z.string().min(1),
   SPACES_SECRET: z.string().min(1),
 });

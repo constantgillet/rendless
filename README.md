@@ -28,7 +28,14 @@ a separate [INSTALL](INSTALL.md) document.
 
 ## Configuration
 
-If the software is configurable, describe it in detail, either here or in other documentation to which you link.
+Some environment variables are required:
+
+- `DATABASE_URL`: URL of the postgresql database.
+- `WEBSITE_URL`: URL of the website.
+- `SPACES_KEY`: accessKeyId of the s3 bucket
+- `SPACES_SECRET`: Secret key of the s3 bucket
+
+Make sure to set these environment variables before running the application.
 
 ## Usage
 
