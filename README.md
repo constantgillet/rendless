@@ -47,6 +47,7 @@ Take a look at the [documenation](https://docs.rendless.com) for using learning 
 
 - Language selection
 - Text responsive when rendering
+- Fonts bug when rendering with satori
 
 ## Getting help
 
