@@ -9,7 +9,7 @@ import {
 } from "@remix-run/node";
 import { uploadToS3 } from "~/libs/s3";
 import { v4 as uuidv4 } from "uuid";
-import { MAX_IMAGE_SIZE, bucketURL } from "~/constants/s3Constants";
+import { MAX_IMAGE_SIZE, BUCKET_URL } from "~/constants/s3Constants";
 import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import { validationError } from "remix-validated-form";
@@ -78,7 +78,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
   await uploadToS3(imageBuffer, imageLocation);
 
-  const imageUrl = `${bucketURL}/${imageLocation}`;
+  const imageUrl = `${BUCKET_URL}/${imageLocation}`;
 
   //Save the image url to the database
   try {

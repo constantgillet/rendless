@@ -6,7 +6,7 @@ import CryptoJS from "crypto-js";
 import { getCacheData, setCacheData } from "~/libs/redis.server";
 import { SvgGenerate } from "~/utils/svgGenerate";
 import { fileExists, uploadToS3 } from "~/libs/s3";
-import { CACHED_FOLDER, bucketURL } from "~/constants/s3Constants";
+import { CACHED_FOLDER, BUCKET_URL } from "~/constants/s3Constants";
 
 const cacheEnabled = true;
 
@@ -58,7 +58,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     return new Response(null, {
       status: 307,
       headers: {
-        Location: `${bucketURL}/${imageLocation}`,
+        Location: `${BUCKET_URL}/${imageLocation}`,
       },
     });
   }
@@ -70,7 +70,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   //   const cacheKey = `og-image-render-${urlHashed}`;
 
   //   const imageLocation = `ogimages/generated/${urlHashed}.png`;
-  //   const imageUrl = `${bucketURL}/${imageLocation}`;
+  //   const imageUrl = `${BUCKET_URL}/${imageLocation}`;
 
   //   try {
   //     const cachedData = await getCacheData(cacheKey);
