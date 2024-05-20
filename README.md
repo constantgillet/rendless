@@ -45,7 +45,8 @@ Take a look at the [documenation](https://docs.rendless.com) for using learning 
 
 ## Known issues
 
-//TODO
+- Language selection
+- Text responsive when rendering
 
 ## Getting help
 
