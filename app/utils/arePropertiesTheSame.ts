@@ -1,4 +1,4 @@
-import { ValueType } from "~/components/PropertiesPanel";
+import type { ValueType } from "~/components/PropertiesPanel";
 
 /**
  * Checks if all properties have the same value

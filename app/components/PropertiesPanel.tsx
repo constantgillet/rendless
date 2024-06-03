@@ -1,6 +1,6 @@
 import { Text, Grid, Separator as RadixSeparator } from "@radix-ui/themes";
 import { css } from "styled-system/css";
-import { ElementType, useEditorStore } from "../stores/EditorStore";
+import { type ElementType, useEditorStore } from "../stores/EditorStore";
 import { BackgroundColorProperties } from "./BackgroundColorProperties";
 import { TextColorProperties } from "./TextColorProperties";
 import { TextProperties } from "./TextProperties";

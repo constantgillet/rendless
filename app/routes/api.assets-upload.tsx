@@ -1,6 +1,6 @@
 import {
-  ActionFunctionArgs,
-  NodeOnDiskFile,
+  type ActionFunctionArgs,
+  type NodeOnDiskFile,
   json,
   unstable_composeUploadHandlers,
   unstable_createFileUploadHandler,

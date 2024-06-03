@@ -16,8 +16,8 @@ import { FontLoader } from "~/components/FontLoader";
 import { MoveableManager } from "~/components/MoveableManager";
 import { prisma } from "~/libs/prisma";
 import { ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
-import { Tree, useEditorStore } from "~/stores/EditorStore";
-import InfiniteViewer from "react-infinite-viewer";
+import { type Tree, useEditorStore } from "~/stores/EditorStore";
+import type InfiniteViewer from "react-infinite-viewer";
 import { useScaleStore } from "~/stores/ScaleStore";
 import { defaultTree } from "~/constants/defaultTree";
 

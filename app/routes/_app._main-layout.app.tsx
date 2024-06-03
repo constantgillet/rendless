@@ -1,5 +1,9 @@
 import { Card } from "@radix-ui/themes";
-import { LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import {
+  type LoaderFunctionArgs,
+  type MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import { css } from "styled-system/css";
 import { prisma } from "~/libs/prisma";
 import {
@@ -12,6 +16,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+
 // import { scanAll } from "~/libs/redis.server";
 
 export async function loader({ context }: LoaderFunctionArgs) {
@@ -154,7 +159,6 @@ const HomeCard = () => {
           </BarChart>
         </div>
       </div>
-
       <div
         className={css({
           position: "absolute",
@@ -165,7 +169,7 @@ const HomeCard = () => {
           background:
             "linear-gradient(90deg, rgba(56, 189, 248, 0) 0%, rgba(56, 189, 248, 0) 0%, rgba(232, 232, 232, 0.2) 33.02%, rgba(143, 143, 143, 0.67) 64.41%, rgba(236, 72, 153, 0) 98.93%)",
         })}
-      ></div>
+      />
     </Card>
   );
 };

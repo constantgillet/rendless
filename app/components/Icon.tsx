@@ -1,5 +1,5 @@
-import { RecipeVariantProps, css, cva, cx } from "styled-system/css";
-import { SVGProps } from "react";
+import { type RecipeVariantProps, css, cva, cx } from "styled-system/css";
+import type { SVGProps } from "react";
 
 export type IconName =
   | "text"

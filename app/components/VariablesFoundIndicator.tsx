@@ -1,7 +1,7 @@
 import { Badge, Callout } from "@radix-ui/themes";
 import { PanelGroup } from "./PropertiesPanel";
 import { Icon } from "./Icon";
-import { Tree, useEditorStore } from "~/stores/EditorStore";
+import { type Tree, useEditorStore } from "~/stores/EditorStore";
 import { useMemo } from "react";
 import { css } from "styled-system/css";
 import toast from "react-hot-toast";

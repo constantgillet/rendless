@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet, useRouteLoaderData } from "@remix-run/react";
 import { ensureAuthenticated } from "~/libs/lucia";
 

@@ -10,7 +10,7 @@ import {
   TextFieldInput,
   Tooltip,
 } from "@radix-ui/themes";
-import { PanelGroup, ValueType } from "./PropertiesPanel";
+import { PanelGroup, type ValueType } from "./PropertiesPanel";
 import { useMemo } from "react";
 import { useEditorStore } from "../stores/EditorStore";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";

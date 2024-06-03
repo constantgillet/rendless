@@ -10,20 +10,20 @@ import {
   IconButton,
   Tooltip,
 } from "@radix-ui/themes";
-import { Tool, useEditorStore } from "../stores/EditorStore";
+import { type Tool, useEditorStore } from "../stores/EditorStore";
 
 import { ValidatedForm, useFormContext } from "remix-validated-form";
 import { FormInput, FormSubmitButton } from "./Form";
 import { useEffect, useState } from "react";
 import {
   editTemplateNameValidator,
-  action as updateTemplateNameAction,
+  type action as updateTemplateNameAction,
 } from "~/routes/api.update-template-name";
 import { Link, useFetcher } from "@remix-run/react";
 import { Spinner } from "./Spinner";
 import { SaveTreeIndicator } from "./SaveTreeIndicator";
 import toast from "react-hot-toast";
-import { action as updateTemplateToProdAction } from "~/routes/api.update-template-to-prod";
+import type { action as updateTemplateToProdAction } from "~/routes/api.update-template-to-prod";
 
 const toolsData = [
   {

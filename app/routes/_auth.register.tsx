@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import { type ActionFunctionArgs, type MetaFunction, redirect } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { generateId } from "lucia";
 import { ValidatedForm, validationError } from "remix-validated-form";

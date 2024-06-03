@@ -14,7 +14,7 @@
 
 **Screenshot**:
 
-![](reendless-screenshot.png)
+![](rendless-screenshot.png)
 
 ## Requirements
 

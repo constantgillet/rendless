@@ -1,5 +1,5 @@
-import { VariablesValues } from "~/utils/svgGenerate";
-import { ElementText } from "../stores/EditorStore";
+import type { VariablesValues } from "~/utils/svgGenerate";
+import type { ElementText } from "../stores/EditorStore";
 import { addAlphaToHex } from "~/utils/addAlphaToHex";
 
 type TextElementProps = ElementText & {

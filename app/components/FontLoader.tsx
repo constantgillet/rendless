@@ -1,4 +1,4 @@
-import { Tree, useEditorStore } from "../stores/EditorStore";
+import { type Tree, useEditorStore } from "../stores/EditorStore";
 import fontContent from "../contents/fontInfo.json";
 import { useEffect, useMemo, useRef } from "react";
 

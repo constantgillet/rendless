@@ -1,5 +1,5 @@
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
-import { PanelGroup, ValueType } from "./PropertiesPanel";
+import { PanelGroup, type ValueType } from "./PropertiesPanel";
 import { useMemo, useRef, useState } from "react";
 import { PropertyLine } from "./PropertyLine";
 import { Button, Select, TextField } from "@radix-ui/themes";

@@ -1,7 +1,7 @@
 import { Card, Select } from "@radix-ui/themes";
 import {
-  ActionFunctionArgs,
-  MetaFunction,
+  type ActionFunctionArgs,
+  type MetaFunction,
   json,
   redirect,
 } from "@remix-run/node";

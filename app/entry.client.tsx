@@ -8,22 +8,22 @@ import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import {
-  isAvailableLanguageTag,
-  setLanguageTag,
-  sourceLanguageTag,
+	isAvailableLanguageTag,
+	setLanguageTag,
+	sourceLanguageTag,
 } from "./paraglide/runtime";
 
 setLanguageTag(() => {
-  return isAvailableLanguageTag(document.documentElement.lang)
-    ? document.documentElement.lang
-    : sourceLanguageTag;
+	return isAvailableLanguageTag(document.documentElement.lang)
+		? document.documentElement.lang
+		: sourceLanguageTag;
 });
 
 startTransition(() => {
-  hydrateRoot(
-    document,
-    <StrictMode>
-      <RemixBrowser />
-    </StrictMode>
-  );
+	hydrateRoot(
+		document,
+		<StrictMode>
+			<RemixBrowser />
+		</StrictMode>,
+	);
 });

@@ -1,6 +1,6 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
 import { prisma } from "~/libs/prisma";
-import { Tree } from "~/stores/EditorStore";
+import type { Tree } from "~/stores/EditorStore";
 import { Resvg } from "@resvg/resvg-js";
 import CryptoJS from "crypto-js";
 import { getCacheData, setCacheData } from "~/libs/redis.server";

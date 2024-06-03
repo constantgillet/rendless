@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, TextField } from "@radix-ui/themes";
-import { PanelGroup, ValueType } from "./PropertiesPanel";
+import { PanelGroup, type ValueType } from "./PropertiesPanel";
 import { Icon } from "./Icon";
 import { useEffect, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";

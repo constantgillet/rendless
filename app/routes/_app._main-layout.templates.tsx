@@ -6,7 +6,7 @@ import {
   IconButton,
   Inset,
 } from "@radix-ui/themes";
-import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -16,7 +16,7 @@ import { DeleteTemplateModal } from "~/components/DeleteTemplateModal";
 import { Icon } from "~/components/Icon";
 import { Spinner } from "~/components/Spinner";
 import { prisma } from "~/libs/prisma";
-import { Tree } from "~/stores/EditorStore";
+import type { Tree } from "~/stores/EditorStore";
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const userId = context.user?.id;

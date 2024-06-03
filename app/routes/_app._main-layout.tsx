@@ -2,7 +2,7 @@ import { Avatar, Button, DropdownMenu, IconButton } from "@radix-ui/themes";
 import { Link, Outlet, useLocation } from "@remix-run/react";
 import { css, cx } from "styled-system/css";
 import { container } from "styled-system/patterns";
-import { Icon, IconName } from "~/components/Icon";
+import { Icon, type IconName } from "~/components/Icon";
 import { useMatchPageTitle } from "~/hooks/useMatchPageTitle";
 import { useSignout } from "~/hooks/useSignout";
 import { useUser } from "~/hooks/useUser";

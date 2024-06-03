@@ -1,5 +1,5 @@
 import { Flex, Popover } from "@radix-ui/themes";
-import { PanelGroup, ValueType } from "./PropertiesPanel";
+import { PanelGroup, type ValueType } from "./PropertiesPanel";
 import { useEffect, useState } from "react";
 import { useEditorStore } from "../stores/EditorStore";
 import { css } from "styled-system/css";

@@ -2,7 +2,7 @@ import { css, cx } from "styled-system/css";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 import { useScaleStore } from "../stores/ScaleStore";
 import { useEffect, useRef, useState } from "react";
-import { ElementText, useEditorStore } from "../stores/EditorStore";
+import { type ElementText, useEditorStore } from "../stores/EditorStore";
 import { useDebounce } from "~/hooks/useDebounce";
 import { addAlphaToHex } from "~/utils/addAlphaToHex";
 

@@ -1,5 +1,5 @@
 import { css, cx } from "styled-system/css";
-import { ElementImage } from "~/stores/EditorStore";
+import type { ElementImage } from "~/stores/EditorStore";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
 
 type ImageElementProps = ElementImage;

@@ -1,4 +1,4 @@
-import { ElementRect } from "../stores/EditorStore";
+import type { ElementRect } from "../stores/EditorStore";
 import { addAlphaToHex } from "~/utils/addAlphaToHex";
 
 type RectElementProps = ElementRect;

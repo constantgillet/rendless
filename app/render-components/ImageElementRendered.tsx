@@ -1,4 +1,4 @@
-import { ElementImage } from "~/stores/EditorStore";
+import type { ElementImage } from "~/stores/EditorStore";
 
 type ImageElementProps = ElementImage;
 

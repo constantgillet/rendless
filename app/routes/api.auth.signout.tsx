@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { lucia } from "~/libs/lucia";
 
 export async function action({ context }: ActionFunctionArgs) {

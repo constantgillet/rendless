@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client";
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import type { Prisma } from "@prisma/client";
+import { type ActionFunctionArgs, json } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { validationError } from "remix-validated-form";
 import { z } from "zod";

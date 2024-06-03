@@ -1,21 +1,22 @@
-import React, { HTMLProps, forwardRef, useEffect, useRef } from "react";
+import type React from "react";
+import { type HTMLProps, forwardRef, useEffect, useRef } from "react"
 import { css, cx } from "styled-system/css";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
-import { ElementType, useEditorStore } from "../stores/EditorStore";
+import { type ElementType, useEditorStore } from "../stores/EditorStore";
 import { useScaleStore } from "../stores/ScaleStore";
 import { TextElement } from "./TextElement";
 import { CanvasContextMenu } from "./CanvasContextMenu";
 import InfiniteViewer from "react-infinite-viewer";
 import Moveable, {
-  OnDragGroup,
-  OnResize,
-  OnDrag,
-  OnResizeGroup,
-  OnRotateGroup,
+  type OnDragGroup,
+  type OnResize,
+  type OnDrag,
+  type OnResizeGroup,
+  type OnRotateGroup,
 } from "react-moveable";
 import Selecto from "react-selecto";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
-import { Rect } from "selecto";
+import type { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
 import { RectElement } from "./RectElement";
 import { defaultElements } from "~/constants/defaultElements";

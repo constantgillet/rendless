@@ -1,4 +1,4 @@
-import { Tree, useEditorStore } from "../EditorStore";
+import { type Tree, useEditorStore } from "../EditorStore";
 
 const duplicateElements = () => {
   const selectedItems = useEditorStore.getState().selected;

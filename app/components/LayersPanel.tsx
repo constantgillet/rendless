@@ -1,6 +1,6 @@
 import { css, cx } from "styled-system/css";
 import { useEditorStore } from "../stores/EditorStore";
-import { Icon, IconName } from "./Icon";
+import { Icon, type IconName } from "./Icon";
 import { useEffect, useState } from "react";
 
 const elementTypeIconMap = {

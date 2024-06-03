@@ -1,20 +1,21 @@
 import { useEffect, useRef } from "react";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
-import { ElementType, useEditorStore } from "../stores/EditorStore";
+import { type ElementType, useEditorStore } from "../stores/EditorStore";
 import { useScaleStore } from "../stores/ScaleStore";
-import Moveable, {
+import type Moveable from "react-moveable";
+import {type 
   OnDrag,
-  OnDragEnd,
-  OnDragGroup,
-  OnDragGroupEnd,
+  OnDragEnd,type 
+  OnDragGroup,type 
+  OnDragGroupEnd,type 
   OnResize,
   OnScale,
-} from "react-moveable";
-import Selecto from "react-selecto";
-import { Rect } from "selecto";
+} from "react-moveable"
+import type Selecto from "react-selecto";
+import type { Rect } from "selecto";
 import { v4 as uuidv4 } from "uuid";
 import { useKeepRatioStore } from "~/stores/KeepRatioStore";
-import InfiniteViewer from "react-infinite-viewer";
+import type InfiniteViewer from "react-infinite-viewer";
 
 type MoveableManagerProps = {
   container: React.RefObject<HTMLDivElement>;

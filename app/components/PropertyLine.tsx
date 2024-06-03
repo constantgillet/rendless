@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { css, cva, RecipeVariantProps } from "styled-system/css";
+import type { ReactNode } from "react";
+import { css, cva, type RecipeVariantProps } from "styled-system/css";
 
 const style = cva({
   base: {

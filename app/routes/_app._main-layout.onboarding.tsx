@@ -1,5 +1,5 @@
 import { Button, Card, TextField } from "@radix-ui/themes";
-import { MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { css } from "styled-system/css";
@@ -98,7 +98,7 @@ const OnboardingCard = () => {
           background:
             "linear-gradient(90deg, rgba(56, 189, 248, 0) 0%, rgba(56, 189, 248, 0) 0%, rgba(232, 232, 232, 0.2) 33.02%, rgba(143, 143, 143, 0.67) 64.41%, rgba(236, 72, 153, 0) 98.93%)",
         })}
-      ></div>
+      />
     </Card>
   );
 };
@@ -180,7 +180,7 @@ const Step = ({
               width: "1px",
               height: "100%",
             })}
-          ></div>
+          />
         </div>
         <div
           className={css({

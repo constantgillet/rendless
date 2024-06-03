@@ -1,7 +1,7 @@
 import { Lucia, TimeSpan } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { PrismaClient } from "@prisma/client";
-import { Context } from "types/app";
+import type { Context } from "types/app";
 import { redirect } from "@remix-run/node";
 
 const prisma = new PrismaClient();

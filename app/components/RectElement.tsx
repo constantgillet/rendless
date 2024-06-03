@@ -1,6 +1,6 @@
 import { css, cx } from "styled-system/css";
 import { DATA_SCENA_ELEMENT_ID } from "~/utils/consts";
-import { ElementRect } from "../stores/EditorStore";
+import type { ElementRect } from "../stores/EditorStore";
 import { addAlphaToHex } from "~/utils/addAlphaToHex";
 
 type ReactElementProps = ElementRect;

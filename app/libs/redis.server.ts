@@ -1,4 +1,4 @@
-import redis, { RedisClientType } from "redis";
+import redis, { type RedisClientType } from "redis";
 let redisClient: RedisClientType | null;
 
 (async () => {

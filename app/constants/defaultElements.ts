@@ -1,4 +1,4 @@
-import { ElementImage, ElementRect, ElementText } from "~/stores/EditorStore";
+import type { ElementImage, ElementRect, ElementText } from "~/stores/EditorStore";
 
 export const defaultElements = {
   rect: {

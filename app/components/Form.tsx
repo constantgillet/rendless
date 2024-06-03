@@ -1,9 +1,9 @@
 import { Button, TextField } from "@radix-ui/themes";
-import { ButtonProps } from "node_modules/@radix-ui/themes/dist/esm/components/button";
+import type { ButtonProps } from "node_modules/@radix-ui/themes/dist/esm/components/button";
 import { useField, useIsSubmitting } from "remix-validated-form";
 import { css } from "styled-system/css";
 import { Spinner } from "./Spinner";
-import { RootProps } from "@radix-ui/themes/src/components/text-field.js";
+import type { RootProps } from "@radix-ui/themes/src/components/text-field.js";
 
 type FormInputProps = RootProps & {
   name: string;

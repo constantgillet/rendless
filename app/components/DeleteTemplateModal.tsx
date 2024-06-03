@@ -1,7 +1,7 @@
 import { AlertDialog, Button } from "@radix-ui/themes";
 import { useFetcher } from "@remix-run/react";
 import { css } from "styled-system/css";
-import { action as deleteAction } from "~/routes/api.delete-template";
+import type { action as deleteAction } from "~/routes/api.delete-template";
 import { Spinner } from "./Spinner";
 
 type DeleteTemplateModalProps = {

@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client";
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import type { Prisma } from "@prisma/client";
+import { type ActionFunctionArgs, json } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { validationError } from "remix-validated-form";
 import { z } from "zod";
@@ -7,7 +7,7 @@ import { CACHED_FOLDER } from "~/constants/s3Constants";
 import { ensureAuthenticated } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
 import { deleteFolder } from "~/libs/s3";
-import { Tree } from "~/stores/EditorStore";
+import type { Tree } from "~/stores/EditorStore";
 
 export const editTemplateNamevalidator = withZod(
   z.object({

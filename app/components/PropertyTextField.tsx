@@ -1,7 +1,7 @@
 import { TextField, Tooltip } from "@radix-ui/themes";
 import { Icon } from "./Icon";
 import { css } from "styled-system/css";
-import { RootProps } from "node_modules/@radix-ui/themes/dist/esm/components/text-field";
+import type { RootProps } from "node_modules/@radix-ui/themes/dist/esm/components/text-field";
 
 //Get default props of input
 type PropertyTextFieldProps = RootProps & {

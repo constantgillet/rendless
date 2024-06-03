@@ -1,4 +1,4 @@
-import { ValueType } from "~/components/PropertiesPanel";
+import type { ValueType } from "~/components/PropertiesPanel";
 
 export const groupBySameColor = (
   colorProperties: ValueType[],

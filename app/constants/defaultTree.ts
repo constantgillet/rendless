@@ -1,4 +1,4 @@
-import { Tree } from "~/stores/EditorStore";
+import type { Tree } from "~/stores/EditorStore";
 
 export const defaultTree: Tree = {
   x: 0,
