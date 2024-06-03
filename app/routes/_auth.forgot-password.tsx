@@ -20,9 +20,6 @@ export const validator = withZod(
 			.string()
 			.min(1, { message: "Email is required" })
 			.email("Must be a valid email"),
-		password: z
-			.string()
-			.min(6, { message: "Password must be at least 6 characters" }),
 	}),
 );
 
@@ -46,7 +43,7 @@ export default function LoginPage() {
 						color: "var(--gray-12)",
 					})}
 				>
-					{m.login()}
+					Forgot Password
 				</h1>
 				<p
 					className={css({
@@ -54,7 +51,7 @@ export default function LoginPage() {
 						fontSize: "md",
 					})}
 				>
-					{m.missing_account_text()}{" "}
+					Remember your password?{" "}
 					<Link
 						to="/register"
 						className={css({
@@ -64,7 +61,7 @@ export default function LoginPage() {
 							},
 						})}
 					>
-						{m.register()}
+						Login
 					</Link>
 					.
 				</p>
@@ -85,30 +82,6 @@ export default function LoginPage() {
 						size="3"
 						variant="classic"
 					/>
-					<div
-						className={css({
-							spaceY: "2",
-						})}
-					>
-						<Link
-							to="/forgot-password"
-							className={css({
-								color: "var(--accent-a11)",
-								_hover: {
-									textDecoration: "underline",
-								},
-							})}
-						>
-							Forgot your password?
-						</Link>
-						<FormInput
-							name="password"
-							placeholder={m.password()}
-							type="password"
-							size="3"
-							variant="classic"
-						/>
-					</div>
 				</div>
 				<div>
 					<FormSubmitButton
@@ -118,7 +91,7 @@ export default function LoginPage() {
 						})}
 						variant="classic"
 					>
-						{m.login()}
+						Send Email
 					</FormSubmitButton>
 				</div>
 			</ValidatedForm>
@@ -139,30 +112,8 @@ export default function LoginPage() {
 					textAlign: "center",
 				})}
 			>
-				By registering, you agree to our{" "}
-				<Link
-					to="/terms"
-					className={css({
-						color: "var(--accent-a11)",
-						_hover: {
-							textDecoration: "underline",
-						},
-					})}
-				>
-					Terms of Service
-				</Link>{" "}
-				and{" "}
-				<Link
-					to="/privacy"
-					className={css({
-						color: "var(--accent-a11)",
-						_hover: {
-							textDecoration: "underline",
-						},
-					})}
-				>
-					Privacy Policy
-				</Link>
+				We will send you a link to reset your password, please check your email
+				and spam folder.
 			</div>
 		</div>
 	);
@@ -220,5 +171,5 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const meta: MetaFunction = () => {
-	return [{ title: "Login - Rendless" }];
+	return [{ title: "Forgot password - Rendless" }];
 };
