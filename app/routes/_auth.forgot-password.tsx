@@ -127,7 +127,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return validationError(result.error);
 	}
 
-	const { email, password } = result.data;
+	const { email } = result.data;
 
 	const findUserByEmail = await prisma.user.findUnique({
 		where: {
@@ -136,38 +136,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	});
 
 	if (!findUserByEmail) {
-		return validationError(
-			{
-				fieldErrors: {
-					email: "Wrong email or password",
-				},
-			},
-			result.data,
-		);
-	}
-	const validPassword = await new Argon2id().verify(
-		findUserByEmail.hashedPassword,
-		password,
-	);
-
-	if (!validPassword) {
-		return validationError(
-			{
-				fieldErrors: {
-					email: "Wrong email or password",
-				},
-			},
-			result.data,
-		);
+		return {
+			ok: true,
+		};
 	}
 
-	const session = await lucia.createSession(findUserByEmail.id, {});
+	// Generate a token
 
-	const sessionCookie = lucia.createSessionCookie(session.id);
+	// Save the token to the user
 
-	return redirect("/app", {
-		headers: { "Set-Cookie": sessionCookie.serialize() },
-	});
+	// Send the email
+
+	return {
+		ok: true,
+	};
 };
 
 export const meta: MetaFunction = () => {
