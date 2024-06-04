@@ -54,3 +54,10 @@ model Token {
 
     @@index([userId])
 }
+
+model ResetPassword {
+    id        String   @id @default(cuid())
+    token     String   @unique
+    expiresAt DateTime
+    userId    String
+}

@@ -2,9 +2,14 @@ import {
 	type ActionFunctionArgs,
 	type MetaFunction,
 	redirect,
+	json,
 } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
-import { ValidatedForm, validationError } from "remix-validated-form";
+import {
+	ValidatedForm,
+	useFormContext,
+	validationError,
+} from "remix-validated-form";
 import { css } from "styled-system/css";
 import { z } from "zod";
 import { FormInput, FormSubmitButton } from "~/components/Form";
@@ -12,7 +17,10 @@ import { lucia } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
 import { Argon2id } from "~/libs/olso";
 import * as m from "~/paraglide/messages";
-import { Link } from "@remix-run/react";
+import { Link, useActionData } from "@remix-run/react";
+import { generateRandomString, alphabet } from "oslo/crypto";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export const validator = withZod(
 	z.object({
@@ -20,13 +28,20 @@ export const validator = withZod(
 			.string()
 			.min(1, { message: "Email is required" })
 			.email("Must be a valid email"),
-		password: z
-			.string()
-			.min(6, { message: "Password must be at least 6 characters" }),
 	}),
 );
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
+	const data = useActionData<typeof action>();
+	const formContext = useFormContext("forgot-password");
+
+	useEffect(() => {
+		if (data?.ok) {
+			toast.success("Email sent, please check your inbox and spam folder");
+			formContext.reset();
+		}
+	}, [data, formContext.reset]);
+
 	return (
 		<div
 			className={css({
@@ -46,7 +61,7 @@ export default function LoginPage() {
 						color: "var(--gray-12)",
 					})}
 				>
-					{m.login()}
+					Forgot Password
 				</h1>
 				<p
 					className={css({
@@ -54,7 +69,7 @@ export default function LoginPage() {
 						fontSize: "md",
 					})}
 				>
-					{m.missing_account_text()}{" "}
+					Remember your password?{" "}
 					<Link
 						to="/register"
 						className={css({
@@ -64,12 +79,13 @@ export default function LoginPage() {
 							},
 						})}
 					>
-						{m.register()}
+						Login
 					</Link>
 					.
 				</p>
 			</div>
 			<ValidatedForm
+				id="forgot-password"
 				validator={validator}
 				method="post"
 				className={css({ spaceY: "18px" })}
@@ -85,30 +101,6 @@ export default function LoginPage() {
 						size="3"
 						variant="classic"
 					/>
-					<div
-						className={css({
-							spaceY: "2",
-						})}
-					>
-						<Link
-							to="/forgot-password"
-							className={css({
-								color: "var(--accent-a11)",
-								_hover: {
-									textDecoration: "underline",
-								},
-							})}
-						>
-							Forgot your password?
-						</Link>
-						<FormInput
-							name="password"
-							placeholder={m.password()}
-							type="password"
-							size="3"
-							variant="classic"
-						/>
-					</div>
 				</div>
 				<div>
 					<FormSubmitButton
@@ -118,7 +110,7 @@ export default function LoginPage() {
 						})}
 						variant="classic"
 					>
-						{m.login()}
+						Send Email
 					</FormSubmitButton>
 				</div>
 			</ValidatedForm>
@@ -139,30 +131,8 @@ export default function LoginPage() {
 					textAlign: "center",
 				})}
 			>
-				By registering, you agree to our{" "}
-				<Link
-					to="/terms"
-					className={css({
-						color: "var(--accent-a11)",
-						_hover: {
-							textDecoration: "underline",
-						},
-					})}
-				>
-					Terms of Service
-				</Link>{" "}
-				and{" "}
-				<Link
-					to="/privacy"
-					className={css({
-						color: "var(--accent-a11)",
-						_hover: {
-							textDecoration: "underline",
-						},
-					})}
-				>
-					Privacy Policy
-				</Link>
+				We will send you a link to reset your password, please check your email
+				and spam folder.
 			</div>
 		</div>
 	);
@@ -173,10 +143,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	if (result.error) {
 		// validationError comes from `remix-validated-form`
-		return validationError(result.error);
+		return json({
+			...validationError(result.error),
+		});
 	}
 
-	const { email, password } = result.data;
+	const { email } = result.data;
 
 	const findUserByEmail = await prisma.user.findUnique({
 		where: {
@@ -185,40 +157,39 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	});
 
 	if (!findUserByEmail) {
-		return validationError(
-			{
-				fieldErrors: {
-					email: "Wrong email or password",
-				},
-			},
-			result.data,
-		);
-	}
-	const validPassword = await new Argon2id().verify(
-		findUserByEmail.hashedPassword,
-		password,
-	);
-
-	if (!validPassword) {
-		return validationError(
-			{
-				fieldErrors: {
-					email: "Wrong email or password",
-				},
-			},
-			result.data,
-		);
+		return json({
+			ok: true,
+		});
 	}
 
-	const session = await lucia.createSession(findUserByEmail.id, {});
+	// Generate a token
+	const tokenGenerated = generateRandomString(20, alphabet("a-z", "0-9"));
 
-	const sessionCookie = lucia.createSessionCookie(session.id);
+	// Delete all the tokens for the user
+	await prisma.resetPassword.deleteMany({
+		where: {
+			userId: findUserByEmail.id,
+		},
+	});
 
-	return redirect("/app", {
-		headers: { "Set-Cookie": sessionCookie.serialize() },
+	// Save the token to the user
+	await prisma.resetPassword.create({
+		data: {
+			token: tokenGenerated,
+			userId: findUserByEmail.id,
+			//Expire in 1 hour
+			expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+		},
+	});
+
+	// Send the email
+	console.log("Send email to", email, "with token:", tokenGenerated);
+
+	return json({
+		ok: true,
 	});
 };
 
 export const meta: MetaFunction = () => {
-	return [{ title: "Login - Rendless" }];
+	return [{ title: "Forgot password - Rendless" }];
 };
