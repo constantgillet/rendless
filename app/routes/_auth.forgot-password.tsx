@@ -2,9 +2,14 @@ import {
 	type ActionFunctionArgs,
 	type MetaFunction,
 	redirect,
+	json,
 } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
-import { ValidatedForm, validationError } from "remix-validated-form";
+import {
+	ValidatedForm,
+	useFormContext,
+	validationError,
+} from "remix-validated-form";
 import { css } from "styled-system/css";
 import { z } from "zod";
 import { FormInput, FormSubmitButton } from "~/components/Form";
@@ -12,8 +17,10 @@ import { lucia } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
 import { Argon2id } from "~/libs/olso";
 import * as m from "~/paraglide/messages";
-import { Link } from "@remix-run/react";
+import { Link, useActionData } from "@remix-run/react";
 import { generateRandomString, alphabet } from "oslo/crypto";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export const validator = withZod(
 	z.object({
@@ -24,7 +31,17 @@ export const validator = withZod(
 	}),
 );
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
+	const data = useActionData<typeof action>();
+	const formContext = useFormContext("forgot-password");
+
+	useEffect(() => {
+		if (data?.ok) {
+			toast.success("Email sent, please check your inbox and spam folder");
+			formContext.reset();
+		}
+	}, [data, formContext.reset]);
+
 	return (
 		<div
 			className={css({
@@ -68,6 +85,7 @@ export default function LoginPage() {
 				</p>
 			</div>
 			<ValidatedForm
+				id="forgot-password"
 				validator={validator}
 				method="post"
 				className={css({ spaceY: "18px" })}
@@ -125,7 +143,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	if (result.error) {
 		// validationError comes from `remix-validated-form`
-		return validationError(result.error);
+		return json({
+			...validationError(result.error),
+		});
 	}
 
 	const { email } = result.data;
@@ -137,9 +157,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	});
 
 	if (!findUserByEmail) {
-		return {
+		return json({
 			ok: true,
-		};
+		});
 	}
 
 	// Generate a token
@@ -165,9 +185,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	// Send the email
 	console.log("Send email to", email, "with token:", tokenGenerated);
 
-	return {
+	return json({
 		ok: true,
-	};
+	});
 };
 
 export const meta: MetaFunction = () => {
