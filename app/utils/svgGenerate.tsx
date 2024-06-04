@@ -4,6 +4,7 @@ import { ImageElementRendered } from "~/render-components/ImageElementRendered";
 import { RectElementRendered } from "~/render-components/RectElementRendered";
 import { TextElementRendered } from "~/render-components/TextElementRendered";
 import type { Tree } from "~/stores/EditorStore";
+import fetch from "node-fetch-cache";
 
 async function fetchFont(
 	font: string,
