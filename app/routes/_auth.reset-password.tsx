@@ -8,19 +8,15 @@ import { ValidatedForm, validationError } from "remix-validated-form";
 import { css } from "styled-system/css";
 import { z } from "zod";
 import { FormInput, FormSubmitButton } from "~/components/Form";
-import { lucia } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
 import { Argon2id } from "~/libs/olso";
-import * as m from "~/paraglide/messages";
-import { Link } from "@remix-run/react";
-import { generateRandomString, alphabet } from "oslo/crypto";
 
 export const validator = withZod(
 	z.object({
-		email: z
+		token: z.string().min(1, { message: "Token is required" }),
+		password: z
 			.string()
-			.min(1, { message: "Email is required" })
-			.email("Must be a valid email"),
+			.min(6, { message: "Password must be at least 6 characters" }),
 	}),
 );
 
@@ -44,28 +40,8 @@ export default function LoginPage() {
 						color: "var(--gray-12)",
 					})}
 				>
-					Forgot Password
+					Reset Password
 				</h1>
-				<p
-					className={css({
-						color: "var(--gray-11)",
-						fontSize: "md",
-					})}
-				>
-					Remember your password?{" "}
-					<Link
-						to="/register"
-						className={css({
-							color: "var(--accent-a11)",
-							_hover: {
-								textDecoration: "underline",
-							},
-						})}
-					>
-						Login
-					</Link>
-					.
-				</p>
 			</div>
 			<ValidatedForm
 				validator={validator}
@@ -77,9 +53,10 @@ export default function LoginPage() {
 						spaceY: "12px",
 					})}
 				>
+					<input type="hidden" name="token" />
 					<FormInput
-						name="email"
-						placeholder="Email"
+						name="password"
+						placeholder=" New password"
 						size="3"
 						variant="classic"
 					/>
@@ -92,7 +69,7 @@ export default function LoginPage() {
 						})}
 						variant="classic"
 					>
-						Send Email
+						Reset Password
 					</FormSubmitButton>
 				</div>
 			</ValidatedForm>
@@ -107,15 +84,6 @@ export default function LoginPage() {
             Signin with Github
           </Button>
         </div> */}
-			<div
-				className={css({
-					fontSize: "sm",
-					textAlign: "center",
-				})}
-			>
-				We will send you a link to reset your password, please check your email
-				and spam folder.
-			</div>
 		</div>
 	);
 }
@@ -128,48 +96,50 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return validationError(result.error);
 	}
 
-	const { email } = result.data;
+	const { token, password } = result.data;
 
-	const findUserByEmail = await prisma.user.findUnique({
+	//Check if token is valid
+	const resetToken = await prisma.resetPassword.findUnique({
 		where: {
-			email,
+			token: token,
 		},
 	});
 
-	if (!findUserByEmail) {
+	if (!resetToken) {
 		return {
-			ok: true,
+			status: 403,
+			message: "Invalid token",
 		};
 	}
 
-	// Generate a token
-	const tokenGenerated = generateRandomString(20, alphabet("a-z", "0-9"));
+	//Check if token is expired
+	if (resetToken.expiresAt < new Date()) {
+		return {
+			status: 403,
+			message: "Token expired",
+		};
+	}
 
-	// Delete all the tokens for the user
-	await prisma.resetPassword.deleteMany({
+	const hashedPassword = await new Argon2id().hash(password);
+
+	await prisma.user.update({
 		where: {
-			userId: findUserByEmail.id,
+			id: resetToken.userId,
 		},
-	});
-
-	// Save the token to the user
-	await prisma.resetPassword.create({
 		data: {
-			token: tokenGenerated,
-			userId: findUserByEmail.id,
-			//Expire in 1 hour
-			expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+			hashedPassword: hashedPassword,
 		},
 	});
 
-	// Send the email
-	console.log("Send email to", email, "with token:", tokenGenerated);
+	await prisma.resetPassword.delete({
+		where: {
+			token: token,
+		},
+	});
 
-	return {
-		ok: true,
-	};
+	redirect("/login");
 };
 
 export const meta: MetaFunction = () => {
-	return [{ title: "Forgot password - Rendless" }];
+	return [{ title: "Reset password - Rendless" }];
 };
