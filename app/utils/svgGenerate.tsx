@@ -4,7 +4,17 @@ import { ImageElementRendered } from "~/render-components/ImageElementRendered";
 import { RectElementRendered } from "~/render-components/RectElementRendered";
 import { TextElementRendered } from "~/render-components/TextElementRendered";
 import type { Tree } from "~/stores/EditorStore";
-import fetch from "node-fetch-cache";
+import NodeFetchCache, { FileSystemCache } from "node-fetch-cache";
+
+const fetch = NodeFetchCache.create({
+	cache: new FileSystemCache({
+		cacheDirectory: "./.cache/fetch",
+		// Time to live. How long (in ms) responses remain cached before being
+		// automatically ejected. If undefined, responses are never
+		// automatically ejected from the cache.
+		ttl: 1000 * 60 * 60 * 24 * 7, // 1 week
+	}),
+});
 
 async function fetchFont(
 	font: string,
