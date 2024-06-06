@@ -60,4 +60,5 @@ model ResetPassword {
     token     String   @unique
     expiresAt DateTime
     userId    String
+    createdAt DateTime @default(now())
 }

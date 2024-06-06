@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
   const formContext = useFormContext("forgot-password");
 
   useEffect(() => {
-    if (data?.ok) {
+    if (data?.success) {
       toast.success("Email sent, please check your inbox and spam folder");
       formContext.reset();
     }
@@ -142,9 +142,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (result.error) {
     // validationError comes from `remix-validated-form`
-    return json({
-      ...validationError(result.error),
-    });
+    throw validationError(result.error);
   }
 
   const { email } = result.data;
@@ -157,7 +155,30 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (!findUserByEmail) {
     return json({
-      ok: true,
+      success: true,
+    });
+  }
+
+  // Get tokens for the user
+  const tokensSaved = await prisma.resetPassword.findMany({
+    where: {
+      userId: findUserByEmail.id,
+    },
+  });
+
+  //Check if one has been sent in the last minute and return an error rate limit
+  const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
+
+  const hasATokenGeneratedOneMinuteAgo = tokensSaved.some(
+    (token) => token.createdAt > oneMinuteAgo
+  );
+
+  if (hasATokenGeneratedOneMinuteAgo) {
+    return json({
+      success: false,
+      fieldErrors: {
+        email: "Too many requests, please try again in a minute",
+      },
     });
   }
 
@@ -200,7 +221,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   return json({
-    ok: true,
+    success: true,
   });
 };
 
