@@ -23,7 +23,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { environment } from "~/libs/environment.server";
 import { Resend } from "resend";
-import { StripeWelcomeEmail } from "@/../emails/stripe-welcome";
+import ResetPasswordEmail from "@/../emails/reset-password";
 
 export const validator = withZod(
   z.object({
@@ -187,14 +187,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const resend = new Resend(environment().RESEND_API_KEY);
 
-  // Send the email
-  console.log("Send email to", email, "with token:", tokenGenerated);
+  const reszetLink = `${
+    environment().WEBSITE_URL
+  }/reset-password?token=${tokenGenerated}`;
 
   await resend.emails.send({
-    from: "you@example.com",
+    from: environment().EMAIL_FROM,
     to: email,
-    subject: "hello world",
-    react: <StripeWelcomeEmail />,
+    subject: "Reset your password - Rendless",
+    react: (
+      <ResetPasswordEmail
+        username={findUserByEmail.username}
+        resetLink={reszetLink}
+      />
+    ),
   });
 
   return json({

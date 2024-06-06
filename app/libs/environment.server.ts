@@ -13,6 +13,7 @@ const environmentSchema = z.object({
   SPACES_KEY: z.string().min(1),
   SPACES_SECRET: z.string().min(1),
   RESEND_API_KEY: z.string().min(1),
+  EMAIL_FROM: z.string().email().default("noreply@rendless.com")
 });
 
 const environment = () => environmentSchema.parse(process.env);
