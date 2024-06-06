@@ -1,7 +1,6 @@
 import {
   type ActionFunctionArgs,
   type MetaFunction,
-  redirect,
   json,
 } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
@@ -13,17 +12,14 @@ import {
 import { css } from "styled-system/css";
 import { z } from "zod";
 import { FormInput, FormSubmitButton } from "~/components/Form";
-import { lucia } from "~/libs/lucia";
 import { prisma } from "~/libs/prisma";
-import { Argon2id } from "~/libs/olso";
-import * as m from "~/paraglide/messages";
 import { Link, useActionData } from "@remix-run/react";
 import { generateRandomString, alphabet } from "oslo/crypto";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { environment } from "~/libs/environment.server";
 import { Resend } from "resend";
-import ResetPasswordEmail from "@/../emails/reset-password";
+import ResetPasswordEmail from "~emails/reset-password";
 
 export const validator = withZod(
   z.object({
