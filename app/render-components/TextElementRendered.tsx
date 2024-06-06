@@ -27,8 +27,6 @@ export const TextElementRendered = (props: TextElementProps) => {
 		},
 	);
 
-	console.log(props);
-
 	return (
 		<p
 			style={{
@@ -39,14 +37,19 @@ export const TextElementRendered = (props: TextElementProps) => {
 				fontWeight: props.fontWeight,
 				fontSize: `${props.fontSize}px`,
 				textTransform: props.textTransform,
-				textAlign: props.textAlign,
 				width: `${props.width}px`,
 				height: `${props.height}px`,
 				color: addAlphaToHex(props.color, props.textColorOpacity),
 				overflowWrap: "break-word",
 				whiteSpace: "pre-wrap",
-				backgroundColor: "rgba(255, 255, 255, 0.4)",
 				wordBreak: "break-word",
+				textAlign: props.textAlign,
+				justifyContent:
+					props.textAlign === "center"
+						? "center"
+						: props.textAlign === "right"
+							? "flex-end"
+							: "flex-start",
 			}}
 		>
 			{contentWithVariables}
