@@ -38,12 +38,14 @@ Some environment variables are required:
 - `BUCKET_NAME`: name of the s3 bucket
 - `SPACES_KEY`: accessKeyId of the s3 bucket
 - `SPACES_SECRET`: Secret key of the s3 bucket
+- `RESEND_API_KEY`: API key of resend
 
 Make sure to set these environment variables before running the application.
 
 Optionnal environment variables
 
 - `IMAGES_FOLDER`: The folder where images will be saved: default value is "ogimages/cached/"
+- `EMAIL_FROM`: The email that will send email: default is "noreply@rendless.com"
 
 ## Usage
 
