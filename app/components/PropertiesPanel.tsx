@@ -8,6 +8,7 @@ import { RadiusProperties } from "./RadiusProperties";
 import { PositionAndSizeProperties } from "./PositionAndSizeProperties";
 import { VariablesFoundIndicator } from "./VariablesFoundIndicator";
 import { ImageItemsProperties } from "./ImageItemsProperties";
+import { defaultElements } from "~/stores/elementTypes";
 
 const Separator = () => {
   return (
@@ -29,11 +30,29 @@ export type ValueType = {
   variableName?: string;
 };
 
+/**
+ * Group the properties of the selected nodes by property name
+ * @param nodes
+ * @returns GroupedPropertiesType
+ */
 const GroupProperties = (nodes: ElementType[]) => {
   const propertieFlatList: Array<ValueType> = [];
 
   for (const node of nodes) {
-    Object.entries(node).forEach(([key, value]) => {
+    //Check if node has the default properties of the type
+    const defaultElement = defaultElements[node.type];
+
+    //Add the missing properties to the node
+    if (defaultElement) {
+      for (const [key, value] of Object.entries(defaultElement)) {
+        if (node[key] === undefined) {
+          node[key] = value;
+        }
+      }
+    }
+
+    //Use for of loop to iterate over the object
+    for (const [key, value] of Object.entries(node)) {
       //ignore if value is undefined
       if (value === undefined) {
         return;
@@ -51,7 +70,7 @@ const GroupProperties = (nodes: ElementType[]) => {
         variable: variable ? true : false,
         variableName: variable ? variable.name : undefined,
       });
-    });
+    }
   }
 
   //group by property by name
@@ -83,6 +102,8 @@ export const PropertiesPanel = () => {
 
   //Get the properties list of the selected node
   const properties = GroupProperties(selectedNodes);
+
+  console.log(properties);
 
   return (
     <aside
@@ -145,20 +166,22 @@ export const PropertiesPanel = () => {
           <Separator />
         </>
       )}
-      {properties["fontSize"] &&
-        properties["textAlign"] &&
-        properties["fontWeight"] &&
-        properties["fontStyle"] &&
-        properties["textTransform"] && (
+      {properties?.fontSize &&
+        properties?.textAlign &&
+        properties?.fontWeight &&
+        properties?.fontStyle &&
+        properties?.textTransform &&
+        properties?.lineHeight && (
           <>
             <TextProperties
               properties={{
-                fontFamily: properties["fontFamily"],
-                fontSize: properties["fontSize"],
-                textAlign: properties["textAlign"],
-                fontWeight: properties["fontWeight"],
-                fontStyle: properties["fontStyle"],
-                textTransform: properties["textTransform"],
+                fontFamily: properties.fontFamily,
+                fontSize: properties.fontSize,
+                textAlign: properties.textAlign,
+                fontWeight: properties.fontWeight,
+                fontStyle: properties.fontStyle,
+                textTransform: properties.textTransform,
+                lineHeight: properties.lineHeight,
               }}
             />
             <Separator />

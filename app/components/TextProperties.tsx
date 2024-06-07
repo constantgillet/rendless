@@ -1,17 +1,6 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  IconButton,
-  Popover,
-  Select,
-  TextField,
-  TextFieldInput,
-  Tooltip,
-} from "@radix-ui/themes";
+import { Box, Flex, Grid, IconButton, Tooltip } from "@radix-ui/themes";
 import { PanelGroup, type ValueType } from "./PropertiesPanel";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useEditorStore } from "../stores/EditorStore";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { Icon } from "./Icon";
@@ -19,8 +8,9 @@ import { FontPicker } from "./FontPicker";
 import { FontSizePicker } from "./FontSizePicker";
 import { FontVariantPicker } from "./FontVariantPicker";
 import fontsContent from "../contents/fontInfo.json";
-import { css } from "styled-system/css";
 import { PropertyLine } from "./PropertyLine";
+import { PropertyTextField } from "./PropertyTextField";
+import { css } from "styled-system/css";
 
 type TextPropertiesProps = {
   properties: {
@@ -30,11 +20,26 @@ type TextPropertiesProps = {
     fontWeight: ValueType[];
     fontStyle: ValueType[];
     textTransform: ValueType[];
+    lineHeight: ValueType[];
   };
 };
 
 export const TextProperties = (props: TextPropertiesProps) => {
   const updateElements = useEditorStore((state) => state.updateElements);
+
+  const [lineHeight, setLineHeight] = useState(
+    arePropertiesTheSame(props.properties.lineHeight)
+      ? props.properties.lineHeight[0].value.toString()
+      : "Mixed"
+  );
+
+  useEffect(() => {
+    setLineHeight(
+      arePropertiesTheSame(props.properties.lineHeight)
+        ? props.properties.lineHeight[0].value.toString()
+        : "Mixed"
+    );
+  }, [props.properties.lineHeight]);
 
   const fontSizePropety = useMemo(
     () =>
@@ -108,6 +113,12 @@ export const TextProperties = (props: TextPropertiesProps) => {
     );
   };
 
+  const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      applyPropertyLineHeight(e);
+    }
+  };
+
   return (
     <PanelGroup title="Text">
       <Flex direction="column" gap="2">
@@ -167,6 +178,19 @@ export const TextProperties = (props: TextPropertiesProps) => {
                 true
               );
             }}
+          />
+        </PropertyLine>
+        <PropertyLine label="Line height">
+          <PropertyTextField
+            icon={<>x</>}
+            hasVariable={props.properties.lineHeight[0].variable || false}
+            placeholder="Horizontal"
+            className={css({
+              maxW: "60px",
+            })}
+            value={lineHeight}
+            onChange={(e) => setLineHeight(e.target.value)}
+            onKeyUp={onKeyUp}
           />
         </PropertyLine>
         <PropertyLine label="Align">
