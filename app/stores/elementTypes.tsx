@@ -12,13 +12,14 @@ const BaseElementSchema = z.object({
 	y: z.number(),
 	width: z.number(),
 	height: z.number(),
-	rotation: z.number(),
+	rotate: z.number(),
 });
 
 export const RectElementSchema = BaseElementSchema.merge(
 	z.object({
 		type: z.enum(["rect"]),
 		backgroundColor: z.string(),
+		backgroundOpacity: z.number(),
 		borderColor: z.string(),
 		borderWidth: z.number(),
 		borderTopLeftRadius: z.number(),

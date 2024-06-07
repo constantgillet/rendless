@@ -3,6 +3,7 @@ import { devtools } from "zustand/middleware";
 import type {} from "@redux-devtools/extension"; // required for devtools typing
 import { v4 as uuidv4 } from "uuid";
 import { defaultTree } from "~/constants/defaultTree";
+import type { ImageElement, RectElement, TextElement } from "./elementTypes";
 
 export type Tool = "select" | "text" | "rect" | "image";
 
@@ -32,46 +33,12 @@ interface Element<T extends ObjectType> {
 	}[];
 }
 
-export type ElementRect = Element<"rect"> & {
-	backgroundColor: string;
-	backgroundOpacity: number;
-	borderWidth: number;
-	borderColor: string;
-	borderStyle: string;
-	borderTopLeftRadius: number;
-	borderTopRightRadius: number;
-	borderBottomLeftRadius: number;
-	borderBottomRightRadius: number;
-};
-
-export type ElementText = Element<"text"> & {
-	content: string;
-	fontSize: number;
-	color: string;
-	textColorOpacity: number;
-	fontFamily: string;
-	fontWeight: number;
-	fontStyle: "normal" | "italic";
-	textAlign: "left" | "center" | "right" | "justify";
-	textTransform: "none" | "uppercase" | "lowercase" | "capitalize";
-	lineHeight: number;
-};
-
 export type ElementPage = Element<"page"> & {
 	backgroundColor: string;
 	backgroundOpacity: number;
 };
 
-export type ElementImage = Element<"image"> & {
-	src: string | null;
-	objectFit: "fill" | "contain" | "cover" | "none" | "scale-down";
-	borderTopLeftRadius: number;
-	borderTopRightRadius: number;
-	borderBottomLeftRadius: number;
-	borderBottomRightRadius: number;
-};
-
-export type ElementType = ElementText | ElementRect | ElementImage;
+export type ElementType = TextElement | RectElement | ImageElement;
 
 //Update element param is the same as the element type but with optional properties, only the id is required
 export type UpdateElementParam = Partial<ElementType> & { id: string };
