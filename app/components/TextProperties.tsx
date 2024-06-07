@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, IconButton, Tooltip } from "@radix-ui/themes";
 import { PanelGroup, type ValueType } from "./PropertiesPanel";
-import { useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useEditorStore } from "../stores/EditorStore";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { Icon } from "./Icon";
@@ -11,6 +11,10 @@ import fontsContent from "../contents/fontInfo.json";
 import { PropertyLine } from "./PropertyLine";
 import { PropertyTextField } from "./PropertyTextField";
 import { css } from "styled-system/css";
+import type React from "react";
+import { getVarFromString } from "~/utils/getVarFromString";
+import { getElementVariables } from "~/stores/actions/getElementVariables";
+import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
 
 type TextPropertiesProps = {
 	properties: {
@@ -114,9 +118,70 @@ export const TextProperties = (props: TextPropertiesProps) => {
 	};
 
 	const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key == "Enter") {
-			applyPropertyLineHeight(e);
+		if (e.key === "Enter") {
+			applyPropertyLineHeight(e as unknown as ChangeEvent<HTMLInputElement>);
 		}
+	};
+
+	const applyPropertyLineHeight = (
+		event: React.ChangeEvent<HTMLInputElement>,
+	) => {
+		const newValue = event.target.value;
+
+		const variableName = getVarFromString(newValue);
+
+		if (variableName && variableName.length > 0) {
+			updateElements(
+				props.properties.lineHeight.map((property) => {
+					const currentVariables = getElementVariables(property.nodeId);
+
+					//Create new vaiables with the new variable if it doesn't exist
+					const newVariablesWithoutProperty = currentVariables.filter(
+						(variable) => variable.property !== property.propertyName,
+					);
+
+					const newVariables = [
+						...newVariablesWithoutProperty,
+						{
+							property: property.propertyName,
+							name: variableName,
+						},
+					];
+
+					return {
+						id: property.nodeId,
+						variables: newVariables,
+					};
+				}),
+				true,
+			);
+
+			return;
+		}
+
+		if (Number.isNaN(Number(newValue))) {
+			return;
+		}
+
+		const value = Number(newValue);
+
+		updateElements(
+			props.properties.lineHeight.map((property) => {
+				const newVariablesWithoutProperty = getVariablesWithoutProperty(
+					property.propertyName,
+					property.nodeId,
+				);
+
+				return {
+					id: property.nodeId,
+					[property.propertyName]: value,
+					variables: newVariablesWithoutProperty,
+				};
+			}),
+			true,
+		);
+
+		event.target.blur();
 	};
 
 	return (
@@ -191,6 +256,7 @@ export const TextProperties = (props: TextPropertiesProps) => {
 						value={lineHeight}
 						onChange={(e) => setLineHeight(e.target.value)}
 						onKeyUp={onKeyUp}
+						onBlur={applyPropertyLineHeight}
 					/>
 				</PropertyLine>
 				<PropertyLine label="Align">

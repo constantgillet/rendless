@@ -50,6 +50,7 @@ export const TextElementRendered = (props: TextElementProps) => {
 						: props.textAlign === "right"
 							? "flex-end"
 							: "flex-start",
+				lineHeight: props.lineHeight,
 			}}
 		>
 			{contentWithVariables}
