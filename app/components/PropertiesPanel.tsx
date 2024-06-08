@@ -1,6 +1,6 @@
 import { Text, Grid, Separator as RadixSeparator } from "@radix-ui/themes";
 import { css } from "styled-system/css";
-import { type ElementType, useEditorStore } from "../stores/EditorStore";
+import { useEditorStore } from "../stores/EditorStore";
 import { BackgroundColorProperties } from "./BackgroundColorProperties";
 import { TextColorProperties } from "./TextColorProperties";
 import { TextProperties } from "./TextProperties";
@@ -8,7 +8,7 @@ import { RadiusProperties } from "./RadiusProperties";
 import { PositionAndSizeProperties } from "./PositionAndSizeProperties";
 import { VariablesFoundIndicator } from "./VariablesFoundIndicator";
 import { ImageItemsProperties } from "./ImageItemsProperties";
-import { defaultElements } from "~/stores/elementTypes";
+import { type Element, defaultElements } from "~/stores/elementTypes";
 
 const Separator = () => {
 	return (
@@ -35,7 +35,7 @@ export type ValueType = {
  * @param nodes
  * @returns GroupedPropertiesType
  */
-const GroupProperties = (nodes: ElementType[]) => {
+const GroupProperties = (nodes: Element[]) => {
 	const propertieFlatList: Array<ValueType> = [];
 
 	for (const node of nodes) {

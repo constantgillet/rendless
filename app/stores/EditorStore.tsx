@@ -3,45 +3,22 @@ import { devtools } from "zustand/middleware";
 import type {} from "@redux-devtools/extension"; // required for devtools typing
 import { v4 as uuidv4 } from "uuid";
 import { defaultTree } from "~/constants/defaultTree";
-import type { ImageElement, RectElement, TextElement } from "./elementTypes";
+import type { Element, PageElement } from "./elementTypes";
 
 export type Tool = "select" | "text" | "rect" | "image";
 
-export type ObjectType = "page" | "rect" | "text" | "image";
-
 export type Tree = {
 	id: string;
-	type: ObjectType;
-	children: ElementType[];
+	type: "page";
+	children: Element[];
 	x: number;
 	y: number;
 	width: number;
 	height: number;
-} & ElementPage;
-
-interface Element<T extends ObjectType> {
-	id: string;
-	type: T;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-	rotate: number;
-	variables: {
-		property: string;
-		name: string;
-	}[];
-}
-
-export type ElementPage = Element<"page"> & {
-	backgroundColor: string;
-	backgroundOpacity: number;
-};
-
-export type ElementType = TextElement | RectElement | ImageElement;
+} & PageElement;
 
 //Update element param is the same as the element type but with optional properties, only the id is required
-export type UpdateElementParam = Partial<ElementType> & { id: string };
+export type UpdateElementParam = Partial<Element> & { id: string };
 
 type HistoryState = {
 	id: string;
@@ -55,7 +32,7 @@ interface EditorState {
 	setTree: (tree: Tree) => void;
 	selectedTool: Tool;
 	setSelected: (selected: string[]) => void;
-	addElement: (element: ElementType) => void;
+	addElement: (element: Element) => void;
 	deleteElements: (elemenentIds: string[]) => void;
 	setSelectedTool: (tool: Tool) => void;
 	updateElement: (element: UpdateElementParam) => void;
@@ -83,7 +60,7 @@ export const useEditorStore = create<EditorState>()(
 		selected: [],
 		selectedTool: "select",
 		setSelected: (selected) => set({ selected }),
-		addElement: (element: ElementType) =>
+		addElement: (element: Element) =>
 			set((state) => {
 				const newTree = {
 					...state.tree,

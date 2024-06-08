@@ -65,6 +65,16 @@ export const ImageElementSchema = BaseElementSchema.merge(
 
 export type ImageElement = z.infer<typeof ImageElementSchema>;
 
+export const PageElementSchema = BaseElementSchema.merge(
+	z.object({
+		type: z.literal("page"),
+		backgroundColor: z.string(),
+		backgroundOpacity: z.number(),
+	}),
+);
+
+export type PageElement = z.infer<typeof PageElementSchema>;
+
 export const Variables = z.object({
 	property: z.string(),
 	name: z.string(),
@@ -104,8 +114,9 @@ export const defaultRectElement: RectElement = {
 	y: 0,
 	width: 100,
 	height: 100,
-	rotation: 0,
+	rotate: 0,
 	backgroundColor: "#fff",
+	backgroundOpacity: 1,
 	borderColor: "#000",
 	borderWidth: 1,
 	borderTopLeftRadius: 0,
@@ -121,7 +132,7 @@ export const defaultTextElement: TextElement = {
 	y: 0,
 	width: 100,
 	height: 100,
-	rotation: 0,
+	rotate: 0,
 	content: "Hello world",
 	fontSize: 16,
 	color: "#000",
@@ -141,7 +152,7 @@ export const defaultImageElement: ImageElement = {
 	y: 0,
 	width: 100,
 	height: 100,
-	rotation: 0,
+	rotate: 0,
 	src: "",
 	objectFit: "cover",
 	borderTopLeftRadius: 0,
@@ -155,3 +166,6 @@ export const defaultElements = {
 	text: defaultTextElement,
 	image: defaultImageElement,
 };
+
+//Element is type of RectElement, TextElement or ImageElement
+export type Element = RectElement | TextElement | ImageElement;
