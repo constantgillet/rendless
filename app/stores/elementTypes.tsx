@@ -20,8 +20,6 @@ export const RectElementSchema = BaseElementSchema.merge(
 		type: z.enum(["rect"]),
 		backgroundColor: z.string(),
 		backgroundOpacity: z.number(),
-		borderColor: z.string(),
-		borderWidth: z.number(),
 		borderTopLeftRadius: z.number(),
 		borderTopRightRadius: z.number(),
 		borderBottomLeftRadius: z.number(),
@@ -132,12 +130,14 @@ export const defaultRectElement: RectElement = {
 	rotate: 0,
 	backgroundColor: "#fff",
 	backgroundOpacity: 1,
-	borderColor: "#000",
-	borderWidth: 1,
 	borderTopLeftRadius: 0,
 	borderTopRightRadius: 0,
 	borderBottomLeftRadius: 0,
 	borderBottomRightRadius: 0,
+	outlineColor: "#000",
+	outlineWidth: 0,
+	outlineOffset: 0,
+	outlineStyle: "solid",
 };
 
 export const defaultTextElement: TextElement = {

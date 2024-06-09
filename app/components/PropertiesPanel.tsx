@@ -9,6 +9,7 @@ import { PositionAndSizeProperties } from "./PositionAndSizeProperties";
 import { VariablesFoundIndicator } from "./VariablesFoundIndicator";
 import { ImageItemsProperties } from "./ImageItemsProperties";
 import { type Element, defaultElements } from "~/stores/elementTypes";
+import { BorderProperties } from "./BorderProperties";
 
 const Separator = () => {
 	return (
@@ -187,6 +188,7 @@ export const PropertiesPanel = () => {
 						<Separator />
 					</>
 				)}
+
 			{properties?.borderTopLeftRadius &&
 				properties?.borderTopRightRadius &&
 				properties?.borderBottomLeftRadius &&
@@ -201,6 +203,21 @@ export const PropertiesPanel = () => {
 							}}
 						/>
 						<Separator />
+					</>
+				)}
+			{properties?.outlineColor &&
+				properties?.outlineWidth &&
+				properties?.outlineOffset &&
+				properties?.outlineStyle && (
+					<>
+						<BorderProperties
+							properties={{
+								outlineColor: properties.outlineColor,
+								outlineWidth: properties.outlineWidth,
+								outlineOffset: properties.outlineOffset,
+								outlineStyle: properties.outlineStyle,
+							}}
+						/>
 					</>
 				)}
 			{
