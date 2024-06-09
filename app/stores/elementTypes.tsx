@@ -26,6 +26,21 @@ export const RectElementSchema = BaseElementSchema.merge(
 		borderTopRightRadius: z.number(),
 		borderBottomLeftRadius: z.number(),
 		borderBottomRightRadius: z.number(),
+		outlineColor: z.string().optional(),
+		outlineWidth: z.number().optional(),
+		outlineOffset: z.number().optional(),
+		outlineStyle: z
+			.enum([
+				"solid",
+				"dashed",
+				"dotted",
+				"double",
+				"groove",
+				"ridge",
+				"inset",
+				"outset",
+			])
+			.optional(),
 	}),
 );
 

@@ -115,52 +115,52 @@ export const PropertiesPanel = () => {
 				borderLeft: "1px solid var(--gray-a5)",
 			})}
 		>
-			{properties["x"] &&
-				properties["y"] &&
-				properties["width"] &&
-				properties["height"] &&
-				properties["rotate"] && (
+			{properties?.x &&
+				properties?.y &&
+				properties?.width &&
+				properties?.height &&
+				properties?.rotate && (
 					<>
 						<PositionAndSizeProperties
 							properties={{
-								x: properties["x"],
-								y: properties["y"],
-								width: properties["width"],
-								height: properties["height"],
-								rotate: properties["rotate"],
+								x: properties.x,
+								y: properties.y,
+								width: properties.width,
+								height: properties.height,
+								rotate: properties.rotate,
 							}}
 						/>
 						<Separator />
 					</>
 				)}
-			{properties["backgroundColor"] && properties["backgroundOpacity"] && (
+			{properties?.backgroundColor && properties?.backgroundOpacity && (
 				<>
 					<BackgroundColorProperties
 						properties={{
-							backgroundColor: properties["backgroundColor"],
-							backgroundOpacity: properties["backgroundOpacity"],
+							backgroundColor: properties.backgroundColor,
+							backgroundOpacity: properties.backgroundOpacity,
 						}}
 					/>
 					<Separator />
 				</>
 			)}
-			{properties["src"] && properties["objectFit"] && (
+			{properties?.src && properties?.objectFit && (
 				<>
 					<ImageItemsProperties
 						properties={{
-							src: properties["src"],
-							objectFit: properties["objectFit"],
+							src: properties.src,
+							objectFit: properties.objectFit,
 						}}
 					/>
 					<Separator />
 				</>
 			)}
-			{properties["color"] && properties["textColorOpacity"] && (
+			{properties?.color && properties?.textColorOpacity && (
 				<>
 					<TextColorProperties
 						properties={{
-							color: properties["color"],
-							textColorOpacity: properties["textColorOpacity"],
+							color: properties.color,
+							textColorOpacity: properties.textColorOpacity,
 						}}
 					/>
 					<Separator />
@@ -187,17 +187,17 @@ export const PropertiesPanel = () => {
 						<Separator />
 					</>
 				)}
-			{properties["borderTopLeftRadius"] &&
-				properties["borderTopRightRadius"] &&
-				properties["borderBottomLeftRadius"] &&
-				properties["borderBottomRightRadius"] && (
+			{properties?.borderTopLeftRadius &&
+				properties?.borderTopRightRadius &&
+				properties?.borderBottomLeftRadius &&
+				properties?.borderBottomRightRadius && (
 					<>
 						<RadiusProperties
 							properties={{
-								borderTopLeftRadius: properties["borderTopLeftRadius"],
-								borderTopRightRadius: properties["borderTopRightRadius"],
-								borderBottomLeftRadius: properties["borderBottomLeftRadius"],
-								borderBottomRightRadius: properties["borderBottomRightRadius"],
+								borderTopLeftRadius: properties.borderTopLeftRadius,
+								borderTopRightRadius: properties.borderTopRightRadius,
+								borderBottomLeftRadius: properties.borderBottomLeftRadius,
+								borderBottomRightRadius: properties.borderBottomRightRadius,
 							}}
 						/>
 						<Separator />
