@@ -7,14 +7,25 @@ import type { RootProps } from "node_modules/@radix-ui/themes/dist/esm/component
 type PropertyTextFieldProps = RootProps & {
   hasVariable: boolean;
   icon?: React.ReactNode;
+  unit?: string;
 };
 
 export const PropertyTextField = (props: PropertyTextFieldProps) => {
-  const { hasVariable, icon, ...inputProps } = props;
+  const { hasVariable, icon, unit, ...inputProps } = props;
 
   return (
     <TextField.Root {...inputProps}>
       {icon ? <TextField.Slot>{icon}</TextField.Slot> : null}
+
+      {unit ? (
+        <TextField.Slot
+          style={{
+            paddingLeft: "2px",
+          }}
+        >
+          {unit}
+        </TextField.Slot>
+      ) : null}
       {hasVariable ? (
         <TextField.Slot
           style={{
