@@ -9,6 +9,8 @@ import { getElementVariables } from "~/stores/actions/getElementVariables";
 import { PropertyTextField } from "./PropertyTextField";
 import { groupBySameColor } from "~/utils/groupBySameColor";
 import { css } from "styled-system/css";
+import { Button, Select } from "@radix-ui/themes";
+import * as SelectPrimitive from "@radix-ui/react-select";
 
 type BorderPropertiesProps = {
   properties: {
@@ -42,6 +44,10 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
     setDefaultValueFromProps("outlineWidth")
   );
 
+  useEffect(() => {
+    setOutlineWidth(setDefaultValueFromProps("outlineWidth"));
+  }, [props.properties.outlineWidth]);
+
   const outlineStyle = useMemo(
     () =>
       arePropertiesTheSame(props.properties.outlineStyle)
@@ -49,6 +55,8 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
         : "Mixed",
     [props.properties.outlineStyle]
   );
+
+  const outlineStyleDisabled = outlineStyle === "Mixed";
 
   return (
     <PanelGroup title="Border">
@@ -61,6 +69,50 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
           color
         </div>
       </div>
+      <Grid columns="2" gap="2" width="auto">
+        <Box>
+          <PropertyTextField
+            icon={<Icon name="border-outside" />}
+            placeholder="Border width"
+            hasVariable={props.properties.outlineWidth[0].variable || false}
+            value={outlineWidthValue}
+            // onChange={(e) => setBorderTopLeftRadius(e.target.value)}
+            // onBlur={(e) => applyProperty(e, "borderTopLeftRadius")}
+            // onKeyUp={(e) => onKeyUp(e, "borderTopLeftRadius")}
+          />
+        </Box>
+        <Box>
+          <Select.Root>
+            <SelectPrimitive.Trigger
+              className={css({
+                w: "full",
+              })}
+              disabled={outlineStyleDisabled}
+            >
+              <Button
+                variant="surface"
+                size={"2"}
+                color="gray"
+                className={css({
+                  w: "!full",
+                })}
+              >
+                <Icon name="border-bottom-double" />
+                {outlineStyleDisabled ? "Mixed" : outlineStyle}
+                <Icon name="chevron-down" />
+              </Button>
+            </SelectPrimitive.Trigger>
+            <Select.Content align="end" position="popper">
+              <Select.Item value="solid">Solid</Select.Item>
+              <Select.Item value="dashed">Dashed</Select.Item>
+              <Select.Item value="dotted">Dotted</Select.Item>
+              <Select.Item value="double">Double</Select.Item>
+              <Select.Item value="groove">Groove</Select.Item>
+              <Select.Item value="ridge">Ridge</Select.Item>
+            </Select.Content>
+          </Select.Root>
+        </Box>
+      </Grid>
     </PanelGroup>
   );
 };
