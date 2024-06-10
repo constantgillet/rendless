@@ -60,15 +60,6 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
 
   return (
     <PanelGroup title="Border">
-      <div>
-        <div
-          className={css({
-            fontSize: 14,
-          })}
-        >
-          color
-        </div>
-      </div>
       <Grid columns="2" gap="2" width="auto">
         <Box>
           <PropertyTextField
@@ -113,6 +104,47 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
           </Select.Root>
         </Box>
       </Grid>
+      <Grid columns="2" gap="2" width="auto">
+        <Box>
+          <Select.Root>
+            <SelectPrimitive.Trigger
+              className={css({
+                w: "full",
+              })}
+              disabled={outlineStyleDisabled}
+            >
+              <Button
+                variant="surface"
+                size={"2"}
+                color="gray"
+                className={css({
+                  w: "!full",
+                })}
+              >
+                Inside
+                <Icon name="chevron-down" />
+              </Button>
+            </SelectPrimitive.Trigger>
+            <Select.Content align="end" position="popper">
+              <Select.Item value="solid">Solid</Select.Item>
+              <Select.Item value="dashed">Dashed</Select.Item>
+              <Select.Item value="dotted">Dotted</Select.Item>
+              <Select.Item value="double">Double</Select.Item>
+              <Select.Item value="groove">Groove</Select.Item>
+              <Select.Item value="ridge">Ridge</Select.Item>
+            </Select.Content>
+          </Select.Root>
+        </Box>
+      </Grid>
+      <div>
+        <div
+          className={css({
+            fontSize: 14,
+          })}
+        >
+          color
+        </div>
+      </div>
     </PanelGroup>
   );
 };
