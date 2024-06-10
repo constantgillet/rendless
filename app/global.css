@@ -31,6 +31,15 @@
   color: var(--gray-a11) !important;
 }
 
+.hidde-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+}
+
+.hidde-scrollbar ::-webkit-scrollbar {
+  display: none;
+}
+
 .sketch-picker input {
   color: rgb(40, 40, 40) !important;
   /* background-color: var(--color-surface) !important;
