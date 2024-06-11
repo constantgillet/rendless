@@ -33,7 +33,10 @@ export const RectElement = (props: ReactElementProps) => {
         borderTopRightRadius: props.borderTopRightRadius,
         borderBottomLeftRadius: props.borderBottomLeftRadius,
         borderBottomRightRadius: props.borderBottomRightRadius,
-        boxShadow: "rgb(226, 68, 68) 0px 0px 0px 15px inset",
+        outlineStyle: props.outlineStyle,
+        outlineWidth: props.outlineWidth,
+        outlineColor: props.outlineColor,
+        outlineOffset: props.outlineOffset,
       }}
     />
   );
