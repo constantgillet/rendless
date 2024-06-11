@@ -33,7 +33,9 @@ export const RectElement = (props: ReactElementProps) => {
         borderTopRightRadius: props.borderTopRightRadius,
         borderBottomLeftRadius: props.borderBottomLeftRadius,
         borderBottomRightRadius: props.borderBottomRightRadius,
-        boxShadow: `0 0 0 ${props.borderWidth}px ${props.borderColor}`,
+        boxShadow: `${props.borderColor} 0px 0px 0px ${props.borderWidth}px ${
+          props.borderType === "inside" ? "inset" : ""
+        }`,
       }}
     />
   );

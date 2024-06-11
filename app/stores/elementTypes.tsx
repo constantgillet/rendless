@@ -26,7 +26,7 @@ export const RectElementSchema = BaseElementSchema.merge(
     borderBottomRightRadius: z.number(),
     borderColor: z.string().optional(),
     borderWidth: z.number().optional(),
-    borderOffset: z.number().optional(),
+    borderType: z.enum(["inside", "outside"]),
   })
 );
 
@@ -124,7 +124,7 @@ export const defaultRectElement: RectElement = {
   borderBottomRightRadius: 0,
   borderColor: "#000",
   borderWidth: 0,
-  borderOffset: 0,
+  borderType: "inside",
 };
 
 export const defaultTextElement: TextElement = {

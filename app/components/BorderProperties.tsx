@@ -21,7 +21,7 @@ type BorderPropertiesProps = {
   properties: {
     borderColor: ValueType[];
     borderWidth: ValueType[];
-    borderOffset: ValueType[];
+    borderType: ValueType[];
   };
 };
 
@@ -130,6 +130,16 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
     event.target.blur();
   };
 
+  const borderType = useMemo(
+    () =>
+      arePropertiesTheSame(props.properties.borderType)
+        ? props.properties.borderType[0].value.toString()
+        : "Mixed",
+    [props.properties.borderType]
+  );
+
+  const isBorderTypeMixed = borderType === "Mixed";
+
   return (
     <PanelGroup title="Border">
       <Grid columns="2" gap="2" width="auto">
@@ -145,7 +155,21 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
           />
         </Box>
         <Box>
-          <Select.Root>
+          <Select.Root
+            value={borderType}
+            onValueChange={(value) => {
+              if (value === "Mixed") {
+                return;
+              }
+              updateElements(
+                props.properties.borderType.map((property) => ({
+                  id: property.nodeId,
+                  borderType: value,
+                })),
+                true
+              );
+            }}
+          >
             <SelectPrimitive.Trigger
               className={css({
                 w: "full",
@@ -159,7 +183,7 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
                   w: "!full",
                 })}
               >
-                Inside
+                {borderType}
                 <Icon name="chevron-down" />
               </Button>
             </SelectPrimitive.Trigger>
