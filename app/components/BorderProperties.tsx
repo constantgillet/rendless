@@ -1,7 +1,7 @@
 import { Box, Flex, Grid, Popover, TextField } from "@radix-ui/themes";
 import { PanelGroup, type ValueType } from "./PropertiesPanel";
 import { Icon } from "./Icon";
-import { useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useState } from "react";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { useEditorStore } from "../stores/EditorStore";
 import { getVarFromString } from "~/utils/getVarFromString";
@@ -55,13 +55,80 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
       : "Mixed";
   };
 
-  const [borderWidthValue, setborderWidth] = useState(
+  const [borderWidthValue, setBorderWidth] = useState(
     setDefaultValueFromProps("borderWidth")
   );
 
   useEffect(() => {
-    setborderWidth(setDefaultValueFromProps("borderWidth"));
+    setBorderWidth(setDefaultValueFromProps("borderWidth"));
   }, [props.properties.borderWidth]);
+
+  const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      applyPropertyBorderWidth(e as unknown as ChangeEvent<HTMLInputElement>);
+    }
+  };
+
+  const applyPropertyBorderWidth = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newValue = event.target.value;
+
+    const variableName = getVarFromString(newValue);
+
+    if (variableName && variableName.length > 0) {
+      updateElements(
+        props.properties.borderWidth.map((property) => {
+          const currentVariables = getElementVariables(property.nodeId);
+
+          //Create new vaiables with the new variable if it doesn't exist
+          const newVariablesWithoutProperty = currentVariables.filter(
+            (variable) => variable.property !== property.propertyName
+          );
+
+          const newVariables = [
+            ...newVariablesWithoutProperty,
+            {
+              property: property.propertyName,
+              name: variableName,
+            },
+          ];
+
+          return {
+            id: property.nodeId,
+            variables: newVariables,
+          };
+        }),
+        true
+      );
+
+      return;
+    }
+
+    if (Number.isNaN(Number(newValue))) {
+      return;
+    }
+
+    const value = Number(newValue);
+
+    updateElements(
+      props.properties.borderWidth.map((property) => {
+        const newVariablesWithoutProperty = getVariablesWithoutProperty(
+          property.propertyName,
+          property.nodeId
+        );
+
+        return {
+          id: property.nodeId,
+          [property.propertyName]: value,
+          variables: newVariablesWithoutProperty,
+        };
+      }),
+      true
+    );
+
+    event.target.blur();
+  };
 
   return (
     <PanelGroup title="Border">
@@ -72,9 +139,9 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
             placeholder="Border width"
             hasVariable={props.properties.borderWidth[0].variable || false}
             value={borderWidthValue}
-            // onChange={(e) => setBorderTopLeftRadius(e.target.value)}
-            // onBlur={(e) => applyProperty(e, "borderTopLeftRadius")}
-            // onKeyUp={(e) => onKeyUp(e, "borderTopLeftRadius")}
+            onChange={(e) => setBorderWidth(e.target.value)}
+            onBlur={applyPropertyBorderWidth}
+            onKeyUp={onKeyUp}
           />
         </Box>
         <Box>
