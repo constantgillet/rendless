@@ -210,17 +210,17 @@ export const PropertiesPanel = () => {
             <Separator />
           </>
         )}
-      {properties?.outlineColor &&
-        properties?.outlineWidth &&
-        properties?.outlineOffset &&
-        properties?.outlineStyle && (
+      {properties?.borderColor &&
+        properties?.borderWidth &&
+        properties?.borderOffset &&
+        properties?.borderStyle && (
           <>
             <BorderProperties
               properties={{
-                outlineColor: properties.outlineColor,
-                outlineWidth: properties.outlineWidth,
-                outlineOffset: properties.outlineOffset,
-                outlineStyle: properties.outlineStyle,
+                borderColor: properties.borderColor,
+                borderWidth: properties.borderWidth,
+                borderOffset: properties.borderOffset,
+                borderStyle: properties.borderStyle,
               }}
             />
           </>

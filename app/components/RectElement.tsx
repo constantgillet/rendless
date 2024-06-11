@@ -33,10 +33,10 @@ export const RectElement = (props: ReactElementProps) => {
         borderTopRightRadius: props.borderTopRightRadius,
         borderBottomLeftRadius: props.borderBottomLeftRadius,
         borderBottomRightRadius: props.borderBottomRightRadius,
-        outlineStyle: props.outlineStyle,
-        outlineWidth: props.outlineWidth,
-        outlineColor: props.outlineColor,
-        outlineOffset: props.outlineOffset,
+        outlineStyle: props.borderStyle,
+        outlineWidth: props.borderWidth,
+        outlineColor: props.borderColor,
+        outlineOffset: props.borderOffset,
       }}
     />
   );

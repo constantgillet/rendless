@@ -19,10 +19,10 @@ import { grid, gridItem } from "styled-system/patterns";
 
 type BorderPropertiesProps = {
   properties: {
-    outlineColor: ValueType[];
-    outlineWidth: ValueType[];
-    outlineOffset: ValueType[];
-    outlineStyle: ValueType[];
+    borderColor: ValueType[];
+    borderWidth: ValueType[];
+    borderOffset: ValueType[];
+    borderStyle: ValueType[];
   };
 };
 
@@ -31,19 +31,19 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
 
   const [colorValues, setColorValues] = useState(
     groupBySameColor(
-      props.properties.outlineColor,
-      props.properties.outlineColor.map((property) => property.value)
+      props.properties.borderColor,
+      props.properties.borderColor.map((property) => property.value)
     )
   );
 
   useEffect(() => {
     setColorValues(
       groupBySameColor(
-        props.properties.outlineColor,
-        props.properties.outlineColor.map((property) => property.value)
+        props.properties.borderColor,
+        props.properties.borderColor.map((property) => property.value)
       )
     );
-  }, [props.properties.outlineColor]);
+  }, [props.properties.borderColor]);
 
   const setDefaultValueFromProps = (
     property: keyof BorderPropertiesProps["properties"]
@@ -56,23 +56,23 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
       : "Mixed";
   };
 
-  const [outlineWidthValue, setOutlineWidth] = useState(
-    setDefaultValueFromProps("outlineWidth")
+  const [borderWidthValue, setborderWidth] = useState(
+    setDefaultValueFromProps("borderWidth")
   );
 
   useEffect(() => {
-    setOutlineWidth(setDefaultValueFromProps("outlineWidth"));
-  }, [props.properties.outlineWidth]);
+    setborderWidth(setDefaultValueFromProps("borderWidth"));
+  }, [props.properties.borderWidth]);
 
-  const outlineStyle = useMemo(
+  const borderStyle = useMemo(
     () =>
-      arePropertiesTheSame(props.properties.outlineStyle)
-        ? props.properties.outlineStyle[0].value.toString()
+      arePropertiesTheSame(props.properties.borderStyle)
+        ? props.properties.borderStyle[0].value.toString()
         : "Mixed",
-    [props.properties.outlineStyle]
+    [props.properties.borderStyle]
   );
 
-  const outlineStyleDisabled = outlineStyle === "Mixed";
+  const borderStyleDisabled = borderStyle === "Mixed";
 
   return (
     <PanelGroup title="Border">
@@ -81,8 +81,8 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
           <PropertyTextField
             icon={<Icon name="border-outside" />}
             placeholder="Border width"
-            hasVariable={props.properties.outlineWidth[0].variable || false}
-            value={outlineWidthValue}
+            hasVariable={props.properties.borderWidth[0].variable || false}
+            value={borderWidthValue}
             // onChange={(e) => setBorderTopLeftRadius(e.target.value)}
             // onBlur={(e) => applyProperty(e, "borderTopLeftRadius")}
             // onKeyUp={(e) => onKeyUp(e, "borderTopLeftRadius")}
@@ -91,15 +91,15 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
         <Box>
           <Select.Root
             value={
-              outlineStyleDisabled
+              borderStyleDisabled
                 ? undefined
-                : (props.properties.outlineStyle[0].value as string)
+                : (props.properties.borderStyle[0].value as string)
             }
             onValueChange={(val) => {
               updateElements(
-                props.properties.outlineWidth.map((property) => ({
+                props.properties.borderWidth.map((property) => ({
                   id: property.nodeId,
-                  outlineStyle: val,
+                  borderStyle: val,
                 })),
                 true
               );
@@ -109,7 +109,7 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
               className={css({
                 w: "full",
               })}
-              disabled={outlineStyleDisabled}
+              disabled={borderStyleDisabled}
             >
               <Button
                 variant="surface"
@@ -120,7 +120,7 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
                 })}
               >
                 <Icon name="border-bottom-double" />
-                {outlineStyleDisabled ? "Mixed" : outlineStyle}
+                {borderStyleDisabled ? "Mixed" : borderStyle}
                 <Icon name="chevron-down" />
               </Button>
             </SelectPrimitive.Trigger>
@@ -142,7 +142,7 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
               className={css({
                 w: "full",
               })}
-              disabled={outlineStyleDisabled}
+              disabled={borderStyleDisabled}
             >
               <Button
                 variant="surface"
@@ -204,7 +204,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
     updateElements(
       elementIds.map((elementId) => ({
         id: elementId,
-        outlineColor: newColor,
+        borderColor: newColor,
       })),
       saveToHistory
     );
@@ -216,7 +216,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
     const variableName = getVarFromString(newColorValue);
 
     if (variableName && variableName.length > 0) {
-      updateElementsVariables(elementIds, "outlineColor", variableName);
+      updateElementsVariables(elementIds, "borderColor", variableName);
       return;
     }
 
@@ -228,13 +228,13 @@ const ColorLine = ({ color }: ColorLineProps) => {
     updateElements(
       elementIds.map((elementId) => {
         const newVariablesWithoutProperty = getVariablesWithoutProperty(
-          "outlineColor",
+          "borderColor",
           elementId
         );
 
         return {
           id: elementId,
-          outlineColor: newColorValue,
+          borderColor: newColorValue,
           variables: newVariablesWithoutProperty,
         };
       }),
