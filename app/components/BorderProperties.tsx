@@ -22,7 +22,6 @@ type BorderPropertiesProps = {
     borderColor: ValueType[];
     borderWidth: ValueType[];
     borderOffset: ValueType[];
-    borderStyle: ValueType[];
   };
 };
 
@@ -64,16 +63,6 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
     setborderWidth(setDefaultValueFromProps("borderWidth"));
   }, [props.properties.borderWidth]);
 
-  const borderStyle = useMemo(
-    () =>
-      arePropertiesTheSame(props.properties.borderStyle)
-        ? props.properties.borderStyle[0].value.toString()
-        : "Mixed",
-    [props.properties.borderStyle]
-  );
-
-  const borderStyleDisabled = borderStyle === "Mixed";
-
   return (
     <PanelGroup title="Border">
       <Grid columns="2" gap="2" width="auto">
@@ -89,60 +78,11 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
           />
         </Box>
         <Box>
-          <Select.Root
-            value={
-              borderStyleDisabled
-                ? undefined
-                : (props.properties.borderStyle[0].value as string)
-            }
-            onValueChange={(val) => {
-              updateElements(
-                props.properties.borderWidth.map((property) => ({
-                  id: property.nodeId,
-                  borderStyle: val,
-                })),
-                true
-              );
-            }}
-          >
-            <SelectPrimitive.Trigger
-              className={css({
-                w: "full",
-              })}
-              disabled={borderStyleDisabled}
-            >
-              <Button
-                variant="surface"
-                size={"2"}
-                color="gray"
-                className={css({
-                  w: "!full",
-                })}
-              >
-                <Icon name="border-bottom-double" />
-                {borderStyleDisabled ? "Mixed" : borderStyle}
-                <Icon name="chevron-down" />
-              </Button>
-            </SelectPrimitive.Trigger>
-            <Select.Content align="end" position="popper">
-              <Select.Item value="solid">Solid</Select.Item>
-              <Select.Item value="dashed">Dashed</Select.Item>
-              <Select.Item value="dotted">Dotted</Select.Item>
-              <Select.Item value="double">Double</Select.Item>
-              <Select.Item value="groove">Groove</Select.Item>
-              <Select.Item value="ridge">Ridge</Select.Item>
-            </Select.Content>
-          </Select.Root>
-        </Box>
-      </Grid>
-      <Grid columns="2" gap="2" width="auto">
-        <Box>
           <Select.Root>
             <SelectPrimitive.Trigger
               className={css({
                 w: "full",
               })}
-              disabled={borderStyleDisabled}
             >
               <Button
                 variant="surface"

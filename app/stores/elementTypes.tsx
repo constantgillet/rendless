@@ -27,18 +27,6 @@ export const RectElementSchema = BaseElementSchema.merge(
     borderColor: z.string().optional(),
     borderWidth: z.number().optional(),
     borderOffset: z.number().optional(),
-    borderStyle: z
-      .enum([
-        "solid",
-        "dashed",
-        "dotted",
-        "double",
-        "groove",
-        "ridge",
-        "inset",
-        "outset",
-      ])
-      .optional(),
   })
 );
 
@@ -137,7 +125,6 @@ export const defaultRectElement: RectElement = {
   borderColor: "#000",
   borderWidth: 0,
   borderOffset: 0,
-  borderStyle: "solid",
 };
 
 export const defaultTextElement: TextElement = {

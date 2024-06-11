@@ -212,15 +212,13 @@ export const PropertiesPanel = () => {
         )}
       {properties?.borderColor &&
         properties?.borderWidth &&
-        properties?.borderOffset &&
-        properties?.borderStyle && (
+        properties?.borderOffset && (
           <>
             <BorderProperties
               properties={{
                 borderColor: properties.borderColor,
                 borderWidth: properties.borderWidth,
                 borderOffset: properties.borderOffset,
-                borderStyle: properties.borderStyle,
               }}
             />
           </>
