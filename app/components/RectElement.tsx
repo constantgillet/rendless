@@ -29,10 +29,10 @@ export const RectElement = (props: ReactElementProps) => {
 					props.backgroundColor,
 					props.backgroundOpacity,
 				),
-				borderTopLeftRadius: props.borderTopLeftRadius,
-				borderTopRightRadius: props.borderTopRightRadius,
-				borderBottomLeftRadius: props.borderBottomLeftRadius,
-				borderBottomRightRadius: props.borderBottomRightRadius,
+				borderTopLeftRadius: `${props.borderTopLeftRadius}px`,
+				borderTopRightRadius: `${props.borderTopRightRadius}px`,
+				borderBottomLeftRadius: `${props.borderBottomLeftRadius}px`,
+				borderBottomRightRadius: `${props.borderBottomRightRadius}px`,
 				boxShadow:
 					props.borderColor && props.borderType && props.borderWidth
 						? `0px 0px 0px ${props.borderWidth}px ${

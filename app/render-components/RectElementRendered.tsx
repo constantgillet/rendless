@@ -9,23 +9,23 @@ export const RectElementRendered = (props: RectElementProps) => {
 			style={{
 				position: "absolute",
 				transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
-				width: props.width,
-				height: props.height,
+				width: `${props.width}px`,
+				height: `${props.height}px`,
 				backgroundColor: addAlphaToHex(
 					props.backgroundColor,
 					props.backgroundOpacity,
 				),
-				borderTopLeftRadius: props.borderTopLeftRadius,
-				borderTopRightRadius: props.borderTopRightRadius,
-				borderBottomLeftRadius: props.borderBottomLeftRadius,
-				borderBottomRightRadius: props.borderBottomRightRadius,
-				// boxShadow:
-				// 	props.borderColor && props.borderType && props.borderWidth
-				// 		? `0px 0px 0px ${props.borderWidth}px ${
-				// 				props.borderType === "inside" ? "inset" : ""
-				// 			} ${props.borderColor}`
-				// 		: undefined,
-				// filter: props.blur ? `blur(${props.blur}px)` : undefined,
+				borderTopLeftRadius: `${props.borderTopLeftRadius}px`,
+				borderTopRightRadius: `${props.borderTopRightRadius}px`,
+				borderBottomLeftRadius: `${props.borderBottomLeftRadius}px`,
+				borderBottomRightRadius: `${props.borderBottomRightRadius}px`,
+				boxShadow:
+					props.borderColor && props.borderType && props.borderWidth
+						? `0px 0px 0px ${props.borderWidth}px ${
+								props.borderType === "inside" ? "inset" : ""
+							} ${props.borderColor}`
+						: "none",
+				filter: props.blur ? `blur(${props.blur}px)` : "none",
 			}}
 		/>
 	);

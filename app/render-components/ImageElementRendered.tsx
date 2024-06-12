@@ -10,8 +10,8 @@ export const ImageElementRendered = (props: ImageElementProps) => {
 				style={{
 					position: "absolute",
 					transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
-					width: props.width,
-					height: props.height,
+					width: `${props.width}px`,
+					height: `${props.height}px`,
 					borderTopLeftRadius: props.borderTopLeftRadius,
 					borderTopRightRadius: props.borderTopRightRadius,
 					borderBottomLeftRadius: props.borderBottomLeftRadius,
@@ -54,16 +54,16 @@ export const ImageElementRendered = (props: ImageElementProps) => {
 
 	return (
 		<img
+			width={props.width}
+			height={props.height}
 			src={props.src}
 			alt={""}
 			style={{
 				transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
-				width: props.width,
-				height: props.height,
-				borderTopLeftRadius: props.borderTopLeftRadius,
-				borderTopRightRadius: props.borderTopRightRadius,
-				borderBottomLeftRadius: props.borderBottomLeftRadius,
-				borderBottomRightRadius: props.borderBottomRightRadius,
+				borderTopLeftRadius: `${props.borderTopLeftRadius}px`,
+				borderTopRightRadius: `${props.borderTopRightRadius}px`,
+				borderBottomLeftRadius: `${props.borderBottomLeftRadius}px`,
+				borderBottomRightRadius: `${props.borderBottomRightRadius}px`,
 				objectFit: props.objectFit,
 			}}
 		/>
