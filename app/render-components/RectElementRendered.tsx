@@ -19,9 +19,12 @@ export const RectElementRendered = (props: RectElementProps) => {
         borderTopRightRadius: props.borderTopRightRadius,
         borderBottomLeftRadius: props.borderBottomLeftRadius,
         borderBottomRightRadius: props.borderBottomRightRadius,
-        boxShadow: `${props.borderColor} 0px 0px 0px ${props.borderWidth}px ${
-          props.borderType === "inside" ? "inset" : ""
-        }`,
+        boxShadow:
+          props.borderColor && props.borderType && props.borderWidth
+            ? `${props.borderColor} 0px 0px 0px ${props.borderWidth}px ${
+                props.borderType === "inside" ? "inset" : ""
+              }`
+            : "none",
       }}
     />
   );

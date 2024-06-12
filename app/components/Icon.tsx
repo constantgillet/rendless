@@ -36,7 +36,9 @@ export type IconName =
   | "open"
   | "text-line-spacing"
   | "border-bottom-double"
-  | "border-outside";
+  | "border-outside"
+  | "add"
+  | "remove";
 
 export const iconStyle = cva({
   base: {

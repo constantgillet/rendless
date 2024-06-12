@@ -1,4 +1,9 @@
-import { Text, Grid, Separator as RadixSeparator } from "@radix-ui/themes";
+import {
+  Text,
+  Grid,
+  Separator as RadixSeparator,
+  Tooltip,
+} from "@radix-ui/themes";
 import { css, cx } from "styled-system/css";
 import { useEditorStore } from "../stores/EditorStore";
 import { BackgroundColorProperties } from "./BackgroundColorProperties";
@@ -10,6 +15,7 @@ import { VariablesFoundIndicator } from "./VariablesFoundIndicator";
 import { ImageItemsProperties } from "./ImageItemsProperties";
 import { type Element, defaultElements } from "~/stores/elementTypes";
 import { BorderProperties } from "./BorderProperties";
+import { Icon } from "./Icon";
 
 const Separator = () => {
   return (
@@ -29,6 +35,26 @@ export type ValueType = {
   value: any;
   variable?: boolean;
   variableName?: string;
+};
+
+const panels = {
+  text: [
+    "positionAndSizeProperties",
+    "backgroundColorProperties",
+    "textProperties",
+  ],
+  rect: [
+    "positionAndSizeProperties",
+    "backgroundColorProperties",
+    "borderProperties",
+    "radiusProperties",
+  ],
+  image: [
+    "positionAndSizeProperties",
+    "imageItemsProperties",
+    "borderProperties",
+    "radiusProperties",
+  ],
 };
 
 /**
@@ -121,7 +147,7 @@ export const PropertiesPanel = () => {
         "hidde-scrollbar"
       )}
     >
-      {properties?.x &&
+      {!properties?.x === undefined &&
         properties?.y &&
         properties?.width &&
         properties?.height &&
@@ -210,9 +236,9 @@ export const PropertiesPanel = () => {
             <Separator />
           </>
         )}
-      {properties?.borderColor &&
-        properties?.borderWidth &&
-        properties?.borderType && (
+      {properties?.borderColor !== undefined &&
+        properties?.borderWidth !== undefined &&
+        properties?.borderType !== undefined && (
           <>
             <BorderProperties
               properties={{
@@ -258,6 +284,10 @@ export const PropertiesPanel = () => {
 type PanelGroupProps = {
   title: string;
   children: React.ReactNode;
+  isOptional?: boolean;
+  handleClickAdd?: () => void;
+  handleClickRemove?: () => void;
+  hasValues?: boolean;
 };
 
 export const PanelGroup = (props: PanelGroupProps) => {
@@ -270,9 +300,44 @@ export const PanelGroup = (props: PanelGroupProps) => {
         fontWeight: "medium",
       })}
     >
-      <Text size="2" className={css({})}>
-        {props.title}
-      </Text>
+      <div
+        className={css({
+          display: "flex",
+          justifyContent: "space-between",
+        })}
+      >
+        <Text
+          size="2"
+          className={css({
+            display: "flex",
+          })}
+        >
+          {props.title}
+        </Text>
+        {props.isOptional &&
+          (props.hasValues ? (
+            <Tooltip content="Delete property">
+              <Icon
+                name="remove"
+                className={css({
+                  cursor: "pointer",
+                })}
+                onClick={props.handleClickRemove}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip content="Add property">
+              <Icon
+                name="add"
+                className={css({
+                  cursor: "pointer",
+                })}
+                onClick={props.handleClickAdd}
+              />
+            </Tooltip>
+          ))}
+      </div>
+
       <Grid columns="1" gap="2" width="auto">
         {props.children}
       </Grid>

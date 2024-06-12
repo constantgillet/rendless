@@ -16,6 +16,7 @@ import { updateElementsVariables } from "~/stores/actions/updateElementsVariable
 import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
 import * as SelectPicker from "react-color";
 import { grid, gridItem } from "styled-system/patterns";
+import { defaultElements } from "~/stores/elementTypes";
 
 type BorderPropertiesProps = {
   properties: {
@@ -25,8 +26,16 @@ type BorderPropertiesProps = {
   };
 };
 
+//Check if properties values are different from null
+const propertiesHaveValues = (properties: ValueType[]) => {
+  return properties.some((property) => property.value !== null);
+};
 export const BorderProperties = (props: BorderPropertiesProps) => {
   const updateElements = useEditorStore((state) => state.updateElements);
+  const hasValues =
+    propertiesHaveValues(props.properties.borderWidth) &&
+    propertiesHaveValues(props.properties.borderType) &&
+    propertiesHaveValues(props.properties.borderColor);
 
   const [colorValues, setColorValues] = useState(
     groupBySameColor(
@@ -133,77 +142,113 @@ export const BorderProperties = (props: BorderPropertiesProps) => {
   const borderType = useMemo(
     () =>
       arePropertiesTheSame(props.properties.borderType)
-        ? props.properties.borderType[0].value.toString()
+        ? props.properties.borderType[0].value
         : "Mixed",
     [props.properties.borderType]
   );
 
-  const isBorderTypeMixed = borderType === "Mixed";
+  const addDefault = () => {
+    updateElements(
+      props.properties.borderWidth.map((property) => {
+        return {
+          id: property.nodeId,
+          borderWidth: 1,
+          borderType: "inside",
+          borderColor: "#000000",
+        };
+      }),
+      true
+    );
+  };
+
+  const removeDefault = () => {
+    updateElements(
+      props.properties.borderWidth.map((property) => {
+        return {
+          id: property.nodeId,
+          borderWidth: null,
+          borderType: null,
+          borderColor: null,
+        };
+      }),
+      true
+    );
+  };
 
   return (
-    <PanelGroup title="Border">
-      <Grid columns="2" gap="2" width="auto">
-        <Box>
-          <PropertyTextField
-            icon={<Icon name="border-outside" />}
-            placeholder="Border width"
-            hasVariable={props.properties.borderWidth[0].variable || false}
-            value={borderWidthValue}
-            onChange={(e) => setBorderWidth(e.target.value)}
-            onBlur={applyPropertyBorderWidth}
-            onKeyUp={onKeyUp}
-          />
-        </Box>
-        <Box>
-          <Select.Root
-            value={borderType}
-            onValueChange={(value) => {
-              if (value === "Mixed") {
-                return;
-              }
-              updateElements(
-                props.properties.borderType.map((property) => ({
-                  id: property.nodeId,
-                  borderType: value,
-                })),
-                true
-              );
-            }}
-          >
-            <SelectPrimitive.Trigger
-              className={css({
-                w: "full",
-              })}
-            >
-              <Button
-                variant="surface"
-                size={"2"}
-                color="gray"
-                className={css({
-                  w: "!full",
-                })}
+    <PanelGroup
+      title="Border"
+      isOptional
+      handleClickAdd={addDefault}
+      handleClickRemove={removeDefault}
+      hasValues={hasValues}
+    >
+      {hasValues ? (
+        <>
+          <Grid columns="2" gap="2" width="auto">
+            <Box>
+              <PropertyTextField
+                icon={<Icon name="border-outside" />}
+                placeholder="Border width"
+                hasVariable={props.properties.borderWidth[0].variable || false}
+                value={borderWidthValue}
+                onChange={(e) => setBorderWidth(e.target.value)}
+                onBlur={applyPropertyBorderWidth}
+                onKeyUp={onKeyUp}
+              />
+            </Box>
+            <Box>
+              <Select.Root
+                value={borderType}
+                onValueChange={(value) => {
+                  if (value === "Mixed") {
+                    return;
+                  }
+                  updateElements(
+                    props.properties.borderType.map((property) => ({
+                      id: property.nodeId,
+                      borderType: value,
+                    })),
+                    true
+                  );
+                }}
               >
-                {borderType}
-                <Icon name="chevron-down" />
-              </Button>
-            </SelectPrimitive.Trigger>
-            <Select.Content align="end" position="popper">
-              <Select.Item value="inside">Inside</Select.Item>
-              <Select.Item value="outside">Outside</Select.Item>
-            </Select.Content>
-          </Select.Root>
-        </Box>
-      </Grid>
-      {colorValues.map((color) => (
-        <ColorLine
-          key={color.elementIds[0]}
-          color={{
-            elementIds: color.elementIds,
-            value: color.value,
-            colorVariable: color.colorVariable,
-          }}
-        />
-      ))}
+                <SelectPrimitive.Trigger
+                  className={css({
+                    w: "full",
+                  })}
+                >
+                  <Button
+                    variant="surface"
+                    size={"2"}
+                    color="gray"
+                    className={css({
+                      w: "!full",
+                    })}
+                  >
+                    {borderType}
+                    <Icon name="chevron-down" />
+                  </Button>
+                </SelectPrimitive.Trigger>
+                <Select.Content align="end" position="popper">
+                  <Select.Item value="inside">Inside</Select.Item>
+                  <Select.Item value="outside">Outside</Select.Item>
+                </Select.Content>
+              </Select.Root>
+            </Box>
+          </Grid>
+          {colorValues.map((color) => (
+            <ColorLine
+              key={color.elementIds[0]}
+              color={{
+                elementIds: color.elementIds,
+                value: color.value,
+                colorVariable: color.colorVariable,
+              }}
+            />
+          ))}
+        </>
+      ) : null}
     </PanelGroup>
   );
 };
