@@ -19,13 +19,13 @@ export const RectElementRendered = (props: RectElementProps) => {
 				borderTopRightRadius: props.borderTopRightRadius,
 				borderBottomLeftRadius: props.borderBottomLeftRadius,
 				borderBottomRightRadius: props.borderBottomRightRadius,
-				boxShadow:
-					props.borderColor && props.borderType && props.borderWidth
-						? `0px 0px 0px ${props.borderWidth}px ${
-								props.borderType === "inside" ? "inset" : ""
-							} ${props.borderColor}`
-						: "none",
-				filter: props.blur ? `blur(${props.blur}px)` : undefined,
+				// boxShadow:
+				// 	props.borderColor && props.borderType && props.borderWidth
+				// 		? `0px 0px 0px ${props.borderWidth}px ${
+				// 				props.borderType === "inside" ? "inset" : ""
+				// 			} ${props.borderColor}`
+				// 		: undefined,
+				// filter: props.blur ? `blur(${props.blur}px)` : undefined,
 			}}
 		/>
 	);
