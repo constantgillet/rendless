@@ -26,6 +26,7 @@ export const defaultElements = {
 		borderWidth: null,
 		borderColor: null,
 		variables: [],
+		blur: null,
 	} as RectElementWithVariables,
 	text: {
 		id: "",

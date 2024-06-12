@@ -39,6 +39,7 @@ export const RectElement = (props: ReactElementProps) => {
 								props.borderType === "inside" ? "inset" : ""
 							} ${props.borderColor}`
 						: "none",
+				filter: props.blur ? `blur(${props.blur}px)` : "none",
 			}}
 		/>
 	);

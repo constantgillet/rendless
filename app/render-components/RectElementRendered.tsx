@@ -25,6 +25,7 @@ export const RectElementRendered = (props: RectElementProps) => {
 								props.borderType === "inside" ? "inset" : ""
 							} ${props.borderColor}`
 						: "none",
+				filter: props.blur ? `blur(${props.blur}px)` : undefined,
 			}}
 		/>
 	);

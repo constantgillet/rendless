@@ -27,6 +27,7 @@ export const RectElementSchema = BaseElementSchema.merge(
 		borderColor: z.string().nullish().default(null),
 		borderWidth: z.number().nullish().default(null),
 		borderType: z.enum(["inside", "outside"]).nullish().default(null),
+		blur: z.number().nullish().default(null),
 	}),
 );
 
@@ -125,6 +126,7 @@ export const defaultRectElement: RectElement = {
 	borderColor: null,
 	borderWidth: null,
 	borderType: null,
+	blur: null,
 };
 
 export const defaultTextElement: TextElement = {
