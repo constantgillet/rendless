@@ -202,7 +202,7 @@ export const EditorHotKeys = () => {
   useHotkeys("mod+s", (e) => {
     e.preventDefault();
 
-    toast.success("Rendless autosave your design");
+    toast.success("Rendless auto saves your design");
   });
 
   return <></>;
