@@ -155,6 +155,9 @@ export const TopBar = ({
               <Badge color="gray">Draft</Badge>
             </Tooltip>
           )}
+          <Button variant="outline" highContrast>
+            Use template
+          </Button>
           <DeployButton
             templateId={templateId}
             onDeploy={() => setIsDraft(false)}

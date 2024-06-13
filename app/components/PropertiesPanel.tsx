@@ -128,7 +128,7 @@ export const PropertiesPanel = () => {
         "hidde-scrollbar"
       )}
     >
-      {!properties?.x === undefined &&
+      {properties?.x &&
         properties?.y &&
         properties?.width &&
         properties?.height &&
