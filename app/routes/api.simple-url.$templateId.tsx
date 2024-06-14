@@ -32,8 +32,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url);
 	const searchParams = url.searchParams;
 
-	const isDraft = searchParams.get("draft") === "true";
-
 	const variablesValues = [] as { name: string; value: string }[];
 
 	searchParams.forEach((value, key) => {
@@ -47,9 +45,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 	const cacheKey = `render-${variablesValuesHashed}`;
 
-	const imageLocation = `${CACHED_FOLDER}${templateId}/${
-		isDraft ? "draft" : "prod"
-	}/${cacheKey}.png`;
+	const imageLocation = `${CACHED_FOLDER}${templateId}/${cacheKey}.png`;
 
 	// const resFileExists = await fileExists(imageLocation);
 
@@ -107,12 +103,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 			);
 		}
 
-		// If the template is
-
-		tree =
-			template.prodTree === null || isDraft
-				? (template.tree as unknown as Tree)
-				: (template.prodTree as unknown as Tree);
+		tree = template.tree as unknown as Tree;
 	} catch (error) {
 		console.error("Error fetching template", error);
 		throw json(
