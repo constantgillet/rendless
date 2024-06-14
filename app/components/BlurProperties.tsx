@@ -142,8 +142,8 @@ export const BlurProperties = (props: BlurPropertiesProps) => {
 					<Grid columns="2" gap="2" width="auto">
 						<Box>
 							<PropertyTextField
-								icon={<Icon name="border-outside" />}
-								placeholder="Border width"
+								icon={<Icon name="blur" />}
+								placeholder="Blur"
 								hasVariable={props.properties.blur[0].variable || false}
 								value={blurValue}
 								onChange={(e) => setBlurValue(e.target.value)}
