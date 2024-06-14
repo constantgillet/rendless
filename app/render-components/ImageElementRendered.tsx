@@ -17,6 +17,12 @@ export const ImageElementRendered = (props: ImageElementProps) => {
           borderTopRightRadius: props.borderTopRightRadius,
           borderBottomLeftRadius: props.borderBottomLeftRadius,
           borderBottomRightRadius: props.borderBottomRightRadius,
+          boxShadow:
+            props.borderColor && props.borderType && props.borderWidth
+              ? `0px 0px 0px ${props.borderWidth}px ${
+                  props.borderType === "inside" ? "inset" : ""
+                } ${props.borderColor}`
+              : "none",
           overflow: "hidden",
         }}
       >
@@ -66,6 +72,12 @@ export const ImageElementRendered = (props: ImageElementProps) => {
         borderBottomLeftRadius: `${props.borderBottomLeftRadius}px`,
         borderBottomRightRadius: `${props.borderBottomRightRadius}px`,
         objectFit: props.objectFit,
+        boxShadow:
+          props.borderColor && props.borderType && props.borderWidth
+            ? `0px 0px 0px ${props.borderWidth}px ${
+                props.borderType === "inside" ? "inset" : ""
+              } ${props.borderColor}`
+            : "none",
       }}
     />
   );

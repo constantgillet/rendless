@@ -47,6 +47,7 @@ export const TextElementSchema = BaseElementSchema.merge(
     textAlign: z.enum(["left", "center", "right", "justify"]),
     textTransform: z.enum(["none", "uppercase", "lowercase", "capitalize"]),
     lineHeight: z.number(),
+    blur: z.number().nullish().default(null),
   })
 );
 
@@ -62,6 +63,9 @@ export const ImageElementSchema = BaseElementSchema.merge(
     borderTopRightRadius: z.number(),
     borderBottomLeftRadius: z.number(),
     borderBottomRightRadius: z.number(),
+    borderColor: z.string().nullish().default(null),
+    borderWidth: z.number().nullish().default(null),
+    borderType: z.enum(["inside", "outside"]).nullish().default(null),
   })
 );
 
@@ -147,6 +151,7 @@ export const defaultTextElement: TextElement = {
   textAlign: "left",
   content: "Text",
   lineHeight: 1.5,
+  blur: null,
 };
 
 export const defaultImageElement: ImageElement = {
@@ -162,6 +167,9 @@ export const defaultImageElement: ImageElement = {
   borderTopRightRadius: 0,
   borderBottomRightRadius: 0,
   borderBottomLeftRadius: 0,
+  borderColor: null,
+  borderWidth: null,
+  borderType: null,
   objectFit: "cover",
 };
 
