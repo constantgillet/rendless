@@ -5,42 +5,7 @@ import { type Tree, useEditorStore } from "~/stores/EditorStore";
 import { useMemo } from "react";
 import { css } from "styled-system/css";
 import toast from "react-hot-toast";
-
-const getAllVariablesList = (tree: Tree) => {
-  const variableList: Array<string> = [];
-
-  const findVariables = (node: Tree) => {
-    if (node.variables) {
-      node.variables.forEach((variable) => {
-        if (!variableList.includes(variable.name)) {
-          variableList.push(variable.name);
-        }
-      });
-    }
-
-    if (node.type === "text") {
-      const matches = node.content.match(/{{(.*?)}}/g);
-      if (matches) {
-        matches.forEach((match) => {
-          const variable = match.replace("{{", "").replace("}}", "");
-          if (!variableList.includes(variable)) {
-            variableList.push(variable);
-          }
-        });
-      }
-    }
-
-    if (node.children) {
-      node.children.forEach((child) => {
-        findVariables(child);
-      });
-    }
-  };
-
-  findVariables(tree);
-
-  return variableList;
-};
+import { getAllVariablesList } from "~/utils/getAllVariablesList";
 
 export const VariablesFoundIndicator = () => {
   const tree = useEditorStore((state) => state.tree);

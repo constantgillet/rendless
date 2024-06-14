@@ -6,7 +6,11 @@ import {
   IconButton,
   Inset,
 } from "@radix-ui/themes";
-import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
+import {
+  type LoaderFunctionArgs,
+  type MetaFunction,
+  json,
+} from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -15,8 +19,10 @@ import { grid, gridItem } from "styled-system/patterns";
 import { DeleteTemplateModal } from "~/components/DeleteTemplateModal";
 import { Icon } from "~/components/Icon";
 import { Spinner } from "~/components/Spinner";
+import { UseTemplateDialog } from "~/components/UseTemplateDialog";
 import { prisma } from "~/libs/prisma";
 import type { Tree } from "~/stores/EditorStore";
+import { getAllVariablesList } from "~/utils/getAllVariablesList";
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const userId = context.user?.id;
@@ -132,9 +138,13 @@ const TemplateCard = ({
   template: {
     id: string;
     name: string;
+    tree: Tree;
   };
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [useTemplateDialogOpen, setUseTemplateDialogOpen] = useState(false);
+
+  const variables = getAllVariablesList(template.tree);
 
   return (
     <Card key={template.id} className={gridItem({ colSpan: 4 })}>
@@ -204,7 +214,13 @@ const TemplateCard = ({
                   <Link to={`/editor/${template.id}`}>
                     <DropdownMenu.Item>Edit</DropdownMenu.Item>
                   </Link>
+                  <DropdownMenu.Item
+                    onClick={() => setUseTemplateDialogOpen(true)}
+                  >
+                    Use template
+                  </DropdownMenu.Item>
                   <DuplicateTemplateDropdownItem templateId={template.id} />
+
                   <DropdownMenu.Separator />
                   <DropdownMenu.Item
                     color="red"
@@ -214,6 +230,12 @@ const TemplateCard = ({
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
+              <UseTemplateDialog
+                templateId={template.id}
+                open={useTemplateDialogOpen}
+                onOpenChange={(open) => setUseTemplateDialogOpen(open)}
+                variables={variables}
+              />
               <DeleteTemplateModal
                 templateId={template.id}
                 open={modalOpen}

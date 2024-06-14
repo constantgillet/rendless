@@ -14,7 +14,7 @@ import { type Tool, useEditorStore } from "../stores/EditorStore";
 
 import { ValidatedForm, useFormContext } from "remix-validated-form";
 import { FormInput, FormSubmitButton } from "./Form";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   editTemplateNameValidator,
   type action as updateTemplateNameAction,
@@ -24,6 +24,8 @@ import { Spinner } from "./Spinner";
 import { SaveTreeIndicator } from "./SaveTreeIndicator";
 import toast from "react-hot-toast";
 import type { action as updateTemplateToProdAction } from "~/routes/api.update-template-to-prod";
+import { UseTemplateDialog } from "./UseTemplateDialog";
+import { getAllVariablesList } from "~/utils/getAllVariablesList";
 
 const toolsData = [
   {
@@ -155,9 +157,7 @@ export const TopBar = ({
               <Badge color="gray">Draft</Badge>
             </Tooltip>
           )}
-          <Button variant="outline" highContrast>
-            Use template
-          </Button>
+          <UseTemplateButton templateId={templateId} />
           <DeployButton
             templateId={templateId}
             onDeploy={() => setIsDraft(false)}
@@ -353,5 +353,25 @@ export const DeployButton = ({
         </Flex>
       </AlertDialog.Content>
     </AlertDialog.Root>
+  );
+};
+
+const UseTemplateButton = ({ templateId }: { templateId: string }) => {
+  const tree = useEditorStore((state) => state.tree);
+  const variables = useMemo(() => getAllVariablesList(tree), [tree]);
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="outline" onClick={() => setOpen(true)}>
+        Use template
+      </Button>
+      <UseTemplateDialog
+        templateId={templateId}
+        variables={variables}
+        open={open}
+        onOpenChange={(val) => setOpen(val)}
+      />
+    </>
   );
 };
