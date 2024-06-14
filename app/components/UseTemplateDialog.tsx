@@ -43,6 +43,10 @@ export const UseTemplateDialog = ({
     toast.success("Copied link to clipboard");
   };
 
+  if (!open) {
+    return null;
+  }
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content width={"100%"} maxWidth="1000px">
