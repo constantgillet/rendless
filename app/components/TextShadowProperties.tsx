@@ -63,24 +63,33 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 				: "Mixed";
 	};
 
-	const [textShadowXOffsetValue, settextShadowXOffset] = useState(
+	const [textShadowXOffsetValue, setTextShadowXOffset] = useState(
 		setDefaultValueFromProps("textShadowXOffset"),
 	);
 
+	const [textShadowYOffsetValue, setTextShadowYOffset] = useState(
+		setDefaultValueFromProps("textShadowYOffset"),
+	);
+
+	const [textShadowBlurValue, setTextShadowBlur] = useState(
+		setDefaultValueFromProps("textShadowBlur"),
+	);
+
 	useEffect(() => {
-		settextShadowXOffset(setDefaultValueFromProps("textShadowXOffset"));
+		setTextShadowXOffset(setDefaultValueFromProps("textShadowXOffset"));
 	}, [props.properties.textShadowXOffset]);
 
-	const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			applyPropertytextShadowXOffset(
-				e as unknown as ChangeEvent<HTMLInputElement>,
-			);
-		}
-	};
+	useEffect(() => {
+		setTextShadowYOffset(setDefaultValueFromProps("textShadowYOffset"));
+	}, [props.properties.textShadowYOffset]);
 
-	const applyPropertytextShadowXOffset = (
+	useEffect(() => {
+		setTextShadowBlur(setDefaultValueFromProps("textShadowBlur"));
+	}, [props.properties.textShadowBlur]);
+
+	const applyProperty = (
 		event: React.ChangeEvent<HTMLInputElement>,
+		property: keyof TextShadowPropertiesProps["properties"],
 	) => {
 		const newValue = event.target.value;
 
@@ -88,7 +97,7 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 
 		if (variableName && variableName.length > 0) {
 			updateElements(
-				props.properties.textShadowXOffset.map((property) => {
+				props.properties[property].map((property) => {
 					const currentVariables = getElementVariables(property.nodeId);
 
 					//Create new vaiables with the new variable if it doesn't exist
@@ -115,14 +124,14 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 			return;
 		}
 
-		if (Number.isNaN(Number(newValue))) {
+		if (isNaN(Number(newValue))) {
 			return;
 		}
 
 		const value = Number(newValue);
 
 		updateElements(
-			props.properties.textShadowXOffset.map((property) => {
+			props.properties[property].map((property) => {
 				const newVariablesWithoutProperty = getVariablesWithoutProperty(
 					property.propertyName,
 					property.nodeId,
@@ -138,6 +147,15 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 		);
 
 		event.target.blur();
+	};
+
+	const onKeyUp = (
+		e: React.KeyboardEvent<HTMLInputElement>,
+		property: keyof TextShadowPropertiesProps["properties"],
+	) => {
+		if (e.key === "Enter") {
+			applyProperty(e, property);
+		}
 	};
 
 	const addDefault = () => {
@@ -183,27 +201,27 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 						<Box>
 							<PropertyTextField
 								icon={"x"}
-								placeholder="Border width"
+								placeholder="X offset"
 								hasVariable={
 									props.properties.textShadowXOffset[0].variable || false
 								}
 								value={textShadowXOffsetValue}
-								onChange={(e) => settextShadowXOffset(e.target.value)}
-								onBlur={applyPropertytextShadowXOffset}
-								onKeyUp={onKeyUp}
+								onChange={(e) => setTextShadowXOffset(e.target.value)}
+								onBlur={(e) => applyProperty(e, "textShadowXOffset")}
+								onKeyUp={(e) => onKeyUp(e, "textShadowXOffset")}
 							/>
 						</Box>
 						<Box>
 							<PropertyTextField
 								icon={"y"}
-								placeholder="Border width"
+								placeholder="Y offset"
 								hasVariable={
 									props.properties.textShadowXOffset[0].variable || false
 								}
-								value={textShadowXOffsetValue}
-								onChange={(e) => settextShadowXOffset(e.target.value)}
-								onBlur={applyPropertytextShadowXOffset}
-								onKeyUp={onKeyUp}
+								value={textShadowYOffsetValue}
+								onChange={(e) => setTextShadowYOffset(e.target.value)}
+								onBlur={(e) => applyProperty(e, "textShadowYOffset")}
+								onKeyUp={(e) => onKeyUp(e, "textShadowYOffset")}
 							/>
 						</Box>
 					</Grid>
@@ -215,10 +233,10 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 								hasVariable={
 									props.properties.textShadowXOffset[0].variable || false
 								}
-								value={textShadowXOffsetValue}
-								onChange={(e) => settextShadowXOffset(e.target.value)}
-								onBlur={applyPropertytextShadowXOffset}
-								onKeyUp={onKeyUp}
+								value={textShadowBlurValue}
+								onChange={(e) => setTextShadowBlur(e.target.value)}
+								onBlur={(e) => applyProperty(e, "textShadowBlur")}
+								onKeyUp={(e) => onKeyUp(e, "textShadowBlur")}
 							/>
 						</Box>
 					</Grid>
