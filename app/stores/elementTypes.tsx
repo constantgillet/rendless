@@ -48,6 +48,10 @@ export const TextElementSchema = BaseElementSchema.merge(
 		textTransform: z.enum(["none", "uppercase", "lowercase", "capitalize"]),
 		lineHeight: z.number(),
 		blur: z.number().nullish().default(null),
+		textShadowXOffset: z.number().nullish().default(null),
+		textShadowYOffset: z.number().nullish().default(null),
+		textShadowBlur: z.number().nullish().default(null),
+		textShadowColor: z.string().nullish().default(null),
 	}),
 );
 
@@ -153,6 +157,10 @@ export const defaultTextElement: TextElement = {
 	content: "Text",
 	lineHeight: 1.5,
 	blur: null,
+	textShadowXOffset: null,
+	textShadowYOffset: null,
+	textShadowBlur: null,
+	textShadowColor: null,
 };
 
 export const defaultImageElement: ImageElement = {
