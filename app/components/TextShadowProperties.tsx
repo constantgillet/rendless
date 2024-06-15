@@ -182,7 +182,7 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 					<Grid columns="2" gap="2" width="auto">
 						<Box>
 							<PropertyTextField
-								icon={<Icon name="border-outside" />}
+								icon={"x"}
 								placeholder="Border width"
 								hasVariable={
 									props.properties.textShadowXOffset[0].variable || false
@@ -195,8 +195,23 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 						</Box>
 						<Box>
 							<PropertyTextField
-								icon={<Icon name="border-outside" />}
+								icon={"y"}
 								placeholder="Border width"
+								hasVariable={
+									props.properties.textShadowXOffset[0].variable || false
+								}
+								value={textShadowXOffsetValue}
+								onChange={(e) => settextShadowXOffset(e.target.value)}
+								onBlur={applyPropertytextShadowXOffset}
+								onKeyUp={onKeyUp}
+							/>
+						</Box>
+					</Grid>
+					<Grid columns="2" gap="2" width="auto">
+						<Box>
+							<PropertyTextField
+								icon={<Icon name="blur" />}
+								placeholder="Blur width"
 								hasVariable={
 									props.properties.textShadowXOffset[0].variable || false
 								}
