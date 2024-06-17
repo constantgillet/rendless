@@ -77,14 +77,33 @@ export const ShadowProperties = (props: ShadowPropertiesProps) => {
 		setShadowXOffset(setDefaultValueFromProps("shadowXOffset"));
 	}, [props.properties.shadowXOffset]);
 
-	const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			applyPropertyBorderWidth(e as unknown as ChangeEvent<HTMLInputElement>);
-		}
-	};
+	const [shadowYOffsetValue, setShadowYOffset] = useState(
+		setDefaultValueFromProps("shadowYOffset"),
+	);
 
-	const applyPropertyBorderWidth = (
+	useEffect(() => {
+		setShadowYOffset(setDefaultValueFromProps("shadowYOffset"));
+	}, [props.properties.shadowYOffset]);
+
+	const [shadowBlurValue, setShadowBlur] = useState(
+		setDefaultValueFromProps("shadowBlur"),
+	);
+
+	useEffect(() => {
+		setShadowBlur(setDefaultValueFromProps("shadowBlur"));
+	}, [props.properties.shadowBlur]);
+
+	const [shadowSpreadValue, setShadowSpread] = useState(
+		setDefaultValueFromProps("shadowSpread"),
+	);
+
+	useEffect(() => {
+		setShadowSpread(setDefaultValueFromProps("shadowSpread"));
+	}, [props.properties.shadowSpread]);
+
+	const applyProperty = (
 		event: React.ChangeEvent<HTMLInputElement>,
+		property: keyof ShadowPropertiesProps["properties"],
 	) => {
 		const newValue = event.target.value;
 
@@ -92,7 +111,7 @@ export const ShadowProperties = (props: ShadowPropertiesProps) => {
 
 		if (variableName && variableName.length > 0) {
 			updateElements(
-				props.properties.borderWidth.map((property) => {
+				props.properties[property].map((property) => {
 					const currentVariables = getElementVariables(property.nodeId);
 
 					//Create new vaiables with the new variable if it doesn't exist
@@ -119,14 +138,14 @@ export const ShadowProperties = (props: ShadowPropertiesProps) => {
 			return;
 		}
 
-		if (Number.isNaN(Number(newValue))) {
+		if (isNaN(Number(newValue))) {
 			return;
 		}
 
 		const value = Number(newValue);
 
 		updateElements(
-			props.properties.borderWidth.map((property) => {
+			props.properties[property].map((property) => {
 				const newVariablesWithoutProperty = getVariablesWithoutProperty(
 					property.propertyName,
 					property.nodeId,
@@ -142,6 +161,15 @@ export const ShadowProperties = (props: ShadowPropertiesProps) => {
 		);
 
 		event.target.blur();
+	};
+
+	const onKeyUp = (
+		e: React.KeyboardEvent<HTMLInputElement>,
+		property: keyof ShadowPropertiesProps["properties"],
+	) => {
+		if (e.key === "Enter") {
+			applyProperty(e, property);
+		}
 	};
 
 	const addDefault = () => {
@@ -198,49 +226,47 @@ export const ShadowProperties = (props: ShadowPropertiesProps) => {
 								}
 								value={shadowXOffsetValue}
 								onChange={(e) => setShadowXOffset(e.target.value)}
-								onBlur={applyPropertyBorderWidth}
-								onKeyUp={onKeyUp}
+								onBlur={(e) => applyProperty(e, "shadowXOffset")}
+								onKeyUp={(e) => onKeyUp(e, "shadowXOffset")}
 							/>
 						</Box>
 						<Box>
 							<PropertyTextField
-								icon={"x"}
-								placeholder="X Offset"
+								icon={"y"}
+								placeholder="y Offset"
 								hasVariable={
-									props.properties.shadowXOffset[0].variable || false
+									props.properties.shadowYOffset[0].variable || false
 								}
-								value={shadowXOffsetValue}
-								onChange={(e) => setShadowXOffset(e.target.value)}
-								onBlur={applyPropertyBorderWidth}
-								onKeyUp={onKeyUp}
+								value={shadowYOffsetValue}
+								onChange={(e) => setShadowYOffset(e.target.value)}
+								onBlur={(e) => applyProperty(e, "shadowYOffset")}
+								onKeyUp={(e) => onKeyUp(e, "shadowYOffset")}
 							/>
 						</Box>
 					</Grid>
 					<Grid columns="2" gap="2" width="auto">
 						<Box>
 							<PropertyTextField
-								icon={"x"}
-								placeholder="X Offset"
-								hasVariable={
-									props.properties.shadowXOffset[0].variable || false
-								}
-								value={shadowXOffsetValue}
-								onChange={(e) => setShadowXOffset(e.target.value)}
-								onBlur={applyPropertyBorderWidth}
-								onKeyUp={onKeyUp}
+								icon={<Icon name="blur" />}
+								placeholder="Blur"
+								hasVariable={props.properties.shadowBlur[0].variable || false}
+								value={shadowBlurValue}
+								onChange={(e) => setShadowBlur(e.target.value)}
+								onBlur={(e) => applyProperty(e, "shadowBlur")}
+								onKeyUp={(e) => onKeyUp(e, "shadowBlur")}
 							/>
 						</Box>
 						<Box>
 							<PropertyTextField
-								icon={"x"}
-								placeholder="X Offset"
+								icon={"spread"}
+								placeholder="Spread"
 								hasVariable={
 									props.properties.shadowXOffset[0].variable || false
 								}
-								value={shadowXOffsetValue}
-								onChange={(e) => setShadowXOffset(e.target.value)}
-								onBlur={applyPropertyBorderWidth}
-								onKeyUp={onKeyUp}
+								value={shadowSpreadValue}
+								onChange={(e) => setShadowSpread(e.target.value)}
+								onBlur={(e) => applyProperty(e, "shadowSpread")}
+								onKeyUp={(e) => onKeyUp(e, "shadowSpread")}
 							/>
 						</Box>
 					</Grid>
@@ -400,7 +426,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
 									applyColorInput(e.target.value);
 								}}
 								onKeyUp={(e) => {
-									if (e.key == "Enter") {
+									if (e.key === "Enter") {
 										applyColorInput(e.currentTarget.value);
 									}
 								}}
@@ -418,7 +444,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
 									applyOpacity(e.target.value);
 								}}
 								onKeyUp={(e) => {
-									if (e.key == "Enter") {
+									if (e.key === "Enter") {
 										applyOpacity(e.currentTarget.value);
 									}
 								}}
