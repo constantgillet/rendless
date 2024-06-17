@@ -4,6 +4,24 @@ import { addAlphaToHex } from "~/utils/addAlphaToHex";
 type RectElementProps = RectElement;
 
 export const RectElementRendered = (props: RectElementProps) => {
+	//Create boxShadow string with border and shadow properties
+	const shadowValue =
+		props.shadowXOffset &&
+		props.shadowYOffset &&
+		props.shadowBlur &&
+		props.shadowSpread &&
+		props.shadowColor
+			? `${props.shadowXOffset}px ${props.shadowYOffset}px ${props.shadowBlur}px ${props.shadowSpread}px ${props.shadowColor}`
+			: undefined;
+	const borderValue =
+		props.borderColor && props.borderType && props.borderWidth
+			? `0px 0px 0px ${props.borderWidth}px ${
+					props.borderType === "inside" ? "inset" : ""
+				} ${props.borderColor}`
+			: undefined;
+
+	const shadowList = [shadowValue, borderValue].filter(Boolean).join(", ");
+
 	return (
 		<div
 			style={{
@@ -19,12 +37,7 @@ export const RectElementRendered = (props: RectElementProps) => {
 				borderTopRightRadius: `${props.borderTopRightRadius}px`,
 				borderBottomLeftRadius: `${props.borderBottomLeftRadius}px`,
 				borderBottomRightRadius: `${props.borderBottomRightRadius}px`,
-				boxShadow:
-					props.borderColor && props.borderType && props.borderWidth
-						? `0px 0px 0px ${props.borderWidth}px ${
-								props.borderType === "inside" ? "inset" : ""
-							} ${props.borderColor}`
-						: "none",
+				boxShadow: shadowList !== "" ? shadowList : "unset",
 				filter: props.blur ? `blur(${props.blur}px)` : "none",
 			}}
 		/>
