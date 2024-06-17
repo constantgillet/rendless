@@ -18,382 +18,437 @@ import * as SelectPicker from "react-color";
 import { grid, gridItem } from "styled-system/patterns";
 
 type ShadowPropertiesProps = {
-  properties: {
-    shadowXOffset: ValueType[];
-    shadowYOffset: ValueType[];
-    shadowBlur: ValueType[];
-    shadowColor: ValueType[];
-    shadowOpacity: ValueType[];
-    shadowSpread: ValueType[];
-  };
+	properties: {
+		shadowXOffset: ValueType[];
+		shadowYOffset: ValueType[];
+		shadowBlur: ValueType[];
+		shadowColor: ValueType[];
+		shadowOpacity: ValueType[];
+		shadowSpread: ValueType[];
+	};
 };
 
 //Check if properties values are different from null
 const propertiesHaveValues = (properties: ValueType[]) => {
-  return properties.some((property) => property.value !== null);
+	return properties.some((property) => property.value !== null);
 };
 export const ShadowProperties = (props: ShadowPropertiesProps) => {
-  const updateElements = useEditorStore((state) => state.updateElements);
-  const hasValues =
-    propertiesHaveValues(props.properties.shadowXOffset) &&
-    propertiesHaveValues(props.properties.shadowYOffset) &&
-    propertiesHaveValues(props.properties.shadowBlur) &&
-    propertiesHaveValues(props.properties.shadowColor) &&
-    propertiesHaveValues(props.properties.shadowOpacity) &&
-    propertiesHaveValues(props.properties.shadowSpread);
+	const updateElements = useEditorStore((state) => state.updateElements);
+	const hasValues =
+		propertiesHaveValues(props.properties.shadowXOffset) &&
+		propertiesHaveValues(props.properties.shadowYOffset) &&
+		propertiesHaveValues(props.properties.shadowBlur) &&
+		propertiesHaveValues(props.properties.shadowColor) &&
+		propertiesHaveValues(props.properties.shadowOpacity) &&
+		propertiesHaveValues(props.properties.shadowSpread);
 
-  const [colorValues, setColorValues] = useState(
-    groupBySameColor(
-      props.properties.shadowColor,
-      props.properties.shadowOpacity
-    )
-  );
+	const [colorValues, setColorValues] = useState(
+		groupBySameColor(
+			props.properties.shadowColor,
+			props.properties.shadowOpacity,
+		),
+	);
 
-  useEffect(() => {
-    setColorValues(
-      groupBySameColor(
-        props.properties.shadowColor,
-        props.properties.shadowOpacity
-      )
-    );
-  }, [props.properties.shadowColor, props.properties.shadowOpacity]);
+	useEffect(() => {
+		setColorValues(
+			groupBySameColor(
+				props.properties.shadowColor,
+				props.properties.shadowOpacity,
+			),
+		);
+	}, [props.properties.shadowColor, props.properties.shadowOpacity]);
 
-  const setDefaultValueFromProps = (
-    property: keyof ShadowPropertiesProps["properties"]
-  ) => {
-    return arePropertiesTheSame(props.properties[property]) &&
-      !props.properties[property][0].variable
-      ? props.properties[property][0].value
-      : arePropertiesTheSame(props.properties[property])
-      ? `{{${props.properties[property][0].variableName}}}`
-      : "Mixed";
-  };
+	const setDefaultValueFromProps = (
+		property: keyof ShadowPropertiesProps["properties"],
+	) => {
+		return arePropertiesTheSame(props.properties[property]) &&
+			!props.properties[property][0].variable
+			? props.properties[property][0].value
+			: arePropertiesTheSame(props.properties[property])
+				? `{{${props.properties[property][0].variableName}}}`
+				: "Mixed";
+	};
 
-  const [borderWidthValue, setBorderWidth] = useState(
-    setDefaultValueFromProps("borderWidth")
-  );
+	const [shadowXOffsetValue, setShadowXOffset] = useState(
+		setDefaultValueFromProps("shadowXOffset"),
+	);
 
-  useEffect(() => {
-    setBorderWidth(setDefaultValueFromProps("borderWidth"));
-  }, [props.properties.borderWidth]);
+	useEffect(() => {
+		setShadowXOffset(setDefaultValueFromProps("shadowXOffset"));
+	}, [props.properties.shadowXOffset]);
 
-  const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      applyPropertyBorderWidth(e as unknown as ChangeEvent<HTMLInputElement>);
-    }
-  };
+	const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			applyPropertyBorderWidth(e as unknown as ChangeEvent<HTMLInputElement>);
+		}
+	};
 
-  const applyPropertyBorderWidth = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const newValue = event.target.value;
+	const applyPropertyBorderWidth = (
+		event: React.ChangeEvent<HTMLInputElement>,
+	) => {
+		const newValue = event.target.value;
 
-    const variableName = getVarFromString(newValue);
+		const variableName = getVarFromString(newValue);
 
-    if (variableName && variableName.length > 0) {
-      updateElements(
-        props.properties.borderWidth.map((property) => {
-          const currentVariables = getElementVariables(property.nodeId);
+		if (variableName && variableName.length > 0) {
+			updateElements(
+				props.properties.borderWidth.map((property) => {
+					const currentVariables = getElementVariables(property.nodeId);
 
-          //Create new vaiables with the new variable if it doesn't exist
-          const newVariablesWithoutProperty = currentVariables.filter(
-            (variable) => variable.property !== property.propertyName
-          );
+					//Create new vaiables with the new variable if it doesn't exist
+					const newVariablesWithoutProperty = currentVariables.filter(
+						(variable) => variable.property !== property.propertyName,
+					);
 
-          const newVariables = [
-            ...newVariablesWithoutProperty,
-            {
-              property: property.propertyName,
-              name: variableName,
-            },
-          ];
+					const newVariables = [
+						...newVariablesWithoutProperty,
+						{
+							property: property.propertyName,
+							name: variableName,
+						},
+					];
 
-          return {
-            id: property.nodeId,
-            variables: newVariables,
-          };
-        }),
-        true
-      );
+					return {
+						id: property.nodeId,
+						variables: newVariables,
+					};
+				}),
+				true,
+			);
 
-      return;
-    }
+			return;
+		}
 
-    if (Number.isNaN(Number(newValue))) {
-      return;
-    }
+		if (Number.isNaN(Number(newValue))) {
+			return;
+		}
 
-    const value = Number(newValue);
+		const value = Number(newValue);
 
-    updateElements(
-      props.properties.borderWidth.map((property) => {
-        const newVariablesWithoutProperty = getVariablesWithoutProperty(
-          property.propertyName,
-          property.nodeId
-        );
+		updateElements(
+			props.properties.borderWidth.map((property) => {
+				const newVariablesWithoutProperty = getVariablesWithoutProperty(
+					property.propertyName,
+					property.nodeId,
+				);
 
-        return {
-          id: property.nodeId,
-          [property.propertyName]: value,
-          variables: newVariablesWithoutProperty,
-        };
-      }),
-      true
-    );
+				return {
+					id: property.nodeId,
+					[property.propertyName]: value,
+					variables: newVariablesWithoutProperty,
+				};
+			}),
+			true,
+		);
 
-    event.target.blur();
-  };
+		event.target.blur();
+	};
 
-  const borderType = useMemo(
-    () =>
-      arePropertiesTheSame(props.properties.borderType)
-        ? props.properties.borderType[0].value
-        : "Mixed",
-    [props.properties.borderType]
-  );
+	const addDefault = () => {
+		updateElements(
+			props.properties.shadowXOffset.map((property) => {
+				return {
+					id: property.nodeId,
+					shadowXOffset: 1,
+					shadowYOffset: 1,
+					shadowBlur: 1,
+					shadowColor: "#000000",
+					shadowOpacity: 1,
+					shadowSpread: 1,
+				};
+			}),
+			true,
+		);
+	};
 
-  const addDefault = () => {
-    updateElements(
-      props.properties.borderWidth.map((property) => {
-        return {
-          id: property.nodeId,
-          borderWidth: 1,
-          borderType: "inside",
-          borderColor: "#000000",
-        };
-      }),
-      true
-    );
-  };
+	const removeDefault = () => {
+		updateElements(
+			props.properties.shadowXOffset.map((property) => {
+				return {
+					id: property.nodeId,
+					shadowXOffset: null,
+					shadowYOffset: null,
+					shadowBlur: null,
+					shadowColor: null,
+					shadowOpacity: null,
+					shadowSpread: null,
+				};
+			}),
+			true,
+		);
+	};
 
-  const removeDefault = () => {
-    updateElements(
-      props.properties.borderWidth.map((property) => {
-        return {
-          id: property.nodeId,
-          borderWidth: null,
-          borderType: null,
-          borderColor: null,
-        };
-      }),
-      true
-    );
-  };
-
-  return (
-    <PanelGroup
-      title="Border"
-      isOptional
-      handleClickAdd={addDefault}
-      handleClickRemove={removeDefault}
-      hasValues={hasValues}
-    >
-      {hasValues ? (
-        <>
-          <Grid columns="2" gap="2" width="auto">
-            <Box>
-              <PropertyTextField
-                icon={<Icon name="border-outside" />}
-                placeholder="Border width"
-                hasVariable={props.properties.borderWidth[0].variable || false}
-                value={borderWidthValue}
-                onChange={(e) => setBorderWidth(e.target.value)}
-                onBlur={applyPropertyBorderWidth}
-                onKeyUp={onKeyUp}
-              />
-            </Box>
-            <Box>
-              <Select.Root
-                value={borderType}
-                onValueChange={(value) => {
-                  if (value === "Mixed") {
-                    return;
-                  }
-                  updateElements(
-                    props.properties.borderType.map((property) => ({
-                      id: property.nodeId,
-                      borderType: value,
-                    })),
-                    true
-                  );
-                }}
-              >
-                <SelectPrimitive.Trigger
-                  className={css({
-                    w: "full",
-                  })}
-                >
-                  <Button
-                    variant="surface"
-                    size={"2"}
-                    color="gray"
-                    className={css({
-                      w: "!full",
-                    })}
-                  >
-                    {borderType}
-                    <Icon name="chevron-down" />
-                  </Button>
-                </SelectPrimitive.Trigger>
-                <Select.Content align="end" position="popper">
-                  <Select.Item value="inside">Inside</Select.Item>
-                  <Select.Item value="outside">Outside</Select.Item>
-                </Select.Content>
-              </Select.Root>
-            </Box>
-          </Grid>
-          {colorValues.map((color) => (
-            <ColorLine
-              key={color.elementIds[0]}
-              color={{
-                elementIds: color.elementIds,
-                value: color.value,
-                colorVariable: color.colorVariable,
-              }}
-            />
-          ))}
-        </>
-      ) : null}
-    </PanelGroup>
-  );
+	return (
+		<PanelGroup
+			title="Shadow"
+			isOptional
+			handleClickAdd={addDefault}
+			handleClickRemove={removeDefault}
+			hasValues={hasValues}
+		>
+			{hasValues ? (
+				<>
+					<Grid columns="2" gap="2" width="auto">
+						<Box>
+							<PropertyTextField
+								icon={"x"}
+								placeholder="X Offset"
+								hasVariable={
+									props.properties.shadowXOffset[0].variable || false
+								}
+								value={shadowXOffsetValue}
+								onChange={(e) => setShadowXOffset(e.target.value)}
+								onBlur={applyPropertyBorderWidth}
+								onKeyUp={onKeyUp}
+							/>
+						</Box>
+						<Box>
+							<PropertyTextField
+								icon={"x"}
+								placeholder="X Offset"
+								hasVariable={
+									props.properties.shadowXOffset[0].variable || false
+								}
+								value={shadowXOffsetValue}
+								onChange={(e) => setShadowXOffset(e.target.value)}
+								onBlur={applyPropertyBorderWidth}
+								onKeyUp={onKeyUp}
+							/>
+						</Box>
+					</Grid>
+					<Grid columns="2" gap="2" width="auto">
+						<Box>
+							<PropertyTextField
+								icon={"x"}
+								placeholder="X Offset"
+								hasVariable={
+									props.properties.shadowXOffset[0].variable || false
+								}
+								value={shadowXOffsetValue}
+								onChange={(e) => setShadowXOffset(e.target.value)}
+								onBlur={applyPropertyBorderWidth}
+								onKeyUp={onKeyUp}
+							/>
+						</Box>
+						<Box>
+							<PropertyTextField
+								icon={"x"}
+								placeholder="X Offset"
+								hasVariable={
+									props.properties.shadowXOffset[0].variable || false
+								}
+								value={shadowXOffsetValue}
+								onChange={(e) => setShadowXOffset(e.target.value)}
+								onBlur={applyPropertyBorderWidth}
+								onKeyUp={onKeyUp}
+							/>
+						</Box>
+					</Grid>
+					{colorValues.map((color) => (
+						<ColorLine
+							key={color.elementIds[0]}
+							color={{
+								elementIds: color.elementIds,
+								value: color.value,
+								colorVariable: color.colorVariable,
+								opacity: color.opacity,
+							}}
+						/>
+					))}
+				</>
+			) : null}
+		</PanelGroup>
+	);
 };
 
 type ColorLineProps = {
-  color: {
-    elementIds: string[];
-    value: string;
-    colorVariable?: string | undefined;
-  };
+	color: {
+		elementIds: string[];
+		value: string;
+		opacity: number;
+		colorVariable?: string | undefined;
+		opacityVariable?: string | undefined;
+	};
 };
 
 const ColorLine = ({ color }: ColorLineProps) => {
-  const updateElements = useEditorStore((state) => state.updateElements);
+	const updateElements = useEditorStore((state) => state.updateElements);
 
-  const [colorValue, setColorValue] = useState(
-    color?.colorVariable ? `{{${color.colorVariable}}}` : color.value
-  );
+	const [opacity, setOpacity] = useState(
+		color.opacityVariable
+			? `{{${color.opacityVariable}}}`
+			: `${color.opacity * 100}%`,
+	);
 
-  useEffect(() => {
-    setColorValue(
-      color?.colorVariable ? `{{${color.colorVariable}}}` : color.value
-    );
-  }, [color.value, color.colorVariable]);
+	const [colorValue, setColorValue] = useState(
+		color?.colorVariable ? `{{${color.colorVariable}}}` : color.value,
+	);
 
-  const applyColor = (newColor: string, saveToHistory = false) => {
-    const elementIds = color.elementIds;
+	useEffect(() => {
+		setColorValue(
+			color?.colorVariable ? `{{${color.colorVariable}}}` : color.value,
+		);
+	}, [color.value, color.colorVariable]);
 
-    updateElements(
-      elementIds.map((elementId) => ({
-        id: elementId,
-        borderColor: newColor,
-      })),
-      saveToHistory
-    );
-  };
+	const applyColor = (newColor: string, saveToHistory = false) => {
+		const elementIds = color.elementIds;
 
-  const applyColorInput = (newColorValue: string) => {
-    const elementIds = color.elementIds;
+		updateElements(
+			elementIds.map((elementId) => ({
+				id: elementId,
+				backgroundColor: newColor,
+			})),
+			saveToHistory,
+		);
+	};
 
-    const variableName = getVarFromString(newColorValue);
+	const applyColorInput = (newColorValue: string) => {
+		const elementIds = color.elementIds;
 
-    if (variableName && variableName.length > 0) {
-      updateElementsVariables(elementIds, "borderColor", variableName);
-      return;
-    }
+		const variableName = getVarFromString(newColorValue);
 
-    //Check if the color is hex color and valid
-    if (!/^#[0-9A-F]{6}$/i.test(newColorValue)) {
-      return;
-    }
+		if (variableName && variableName.length > 0) {
+			updateElementsVariables(elementIds, "backgroundColor", variableName);
+			return;
+		}
 
-    updateElements(
-      elementIds.map((elementId) => {
-        const newVariablesWithoutProperty = getVariablesWithoutProperty(
-          "borderColor",
-          elementId
-        );
+		//Check if the color is hex color and valid
+		if (!/^#[0-9A-F]{6}$/i.test(newColorValue)) {
+			return;
+		}
 
-        return {
-          id: elementId,
-          borderColor: newColorValue,
-          variables: newVariablesWithoutProperty,
-        };
-      }),
-      true
-    );
-  };
+		updateElements(
+			elementIds.map((elementId) => {
+				const newVariablesWithoutProperty = getVariablesWithoutProperty(
+					"backgroundColor",
+					elementId,
+				);
 
-  return (
-    <Flex
-      className={css({
-        alignItems: "center",
-        gap: 2,
-      })}
-    >
-      <Popover.Root>
-        <>
-          <PopoverRadix.Anchor>
-            <div className={grid({ columns: 12, gap: 2 })}>
-              <div className={gridItem({ colSpan: 7 })}>
-                <PropertyTextField
-                  icon={
-                    <Popover.Trigger onClick={(e) => e.stopPropagation()}>
-                      <button
-                        className={css({
-                          width: "24px",
-                          height: "20px",
-                          flexShrink: 0,
-                          _hover: {
-                            cursor: "pointer",
-                          },
-                          borderRadius: "3px",
-                        })}
-                        style={{
-                          backgroundColor: color.value,
-                        }}
-                      />
-                    </Popover.Trigger>
-                  }
-                  hasVariable={!!color.colorVariable}
-                  placeholder="color hex"
-                  value={colorValue}
-                  onChange={(e) => setColorValue(e.target.value)}
-                  onBlur={(e) => {
-                    applyColorInput(e.target.value);
-                  }}
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      applyColorInput(e.currentTarget.value);
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          </PopoverRadix.Anchor>
-          <Popover.Content side="left">
-            <SelectPicker.SketchPicker
-              disableAlpha
-              styles={{
-                default: {
-                  picker: {
-                    boxShadow: "none",
-                  },
-                },
-              }}
-              className={css({
-                background: "var(--colors-background)!important",
-              })}
-              color={color.value}
-              onChange={(newColor) => {
-                applyColor(newColor.hex);
-              }}
-              onChangeComplete={(newColor) => {
-                applyColor(newColor.hex, true);
-              }}
-            />
-          </Popover.Content>
-        </>
-      </Popover.Root>
-    </Flex>
-  );
+				return {
+					id: elementId,
+					backgroundColor: newColorValue,
+					variables: newVariablesWithoutProperty,
+				};
+			}),
+			true,
+		);
+	};
+
+	const applyOpacity = (opacity: string) => {
+		const elementIds = color.elementIds;
+
+		const variableName = getVarFromString(opacity);
+
+		if (variableName && variableName.length > 0) {
+			updateElementsVariables(elementIds, "backgroundOpacity", variableName);
+			return;
+		}
+
+		const opacityValue = Number(opacity.replace("%", "")) / 100;
+
+		if (isNaN(opacityValue) || opacityValue < 0 || opacityValue > 1) {
+			return;
+		}
+
+		updateElements(
+			elementIds.map((elementId) => {
+				const newVariablesWithoutProperty = getVariablesWithoutProperty(
+					"backgroundOpacity",
+					elementId,
+				);
+
+				return {
+					id: elementId,
+					backgroundOpacity: opacityValue,
+					variables: newVariablesWithoutProperty,
+				};
+			}),
+			true,
+		);
+	};
+
+	return (
+		<Popover.Root>
+			<>
+				<PopoverRadix.Anchor>
+					<div className={grid({ columns: 12, gap: 2 })}>
+						<div className={gridItem({ colSpan: 7 })}>
+							<PropertyTextField
+								icon={
+									<Popover.Trigger onClick={(e) => e.stopPropagation()}>
+										<button
+											className={css({
+												width: "24px",
+												height: "20px",
+												flexShrink: 0,
+												_hover: {
+													cursor: "pointer",
+												},
+												borderRadius: "3px",
+											})}
+											style={{
+												backgroundColor: color.value,
+											}}
+										/>
+									</Popover.Trigger>
+								}
+								hasVariable={color.colorVariable ? true : false}
+								placeholder="color hex"
+								value={colorValue}
+								onChange={(e) => setColorValue(e.target.value)}
+								onBlur={(e) => {
+									applyColorInput(e.target.value);
+								}}
+								onKeyUp={(e) => {
+									if (e.key == "Enter") {
+										applyColorInput(e.currentTarget.value);
+									}
+								}}
+							/>
+						</div>
+						<div className={gridItem({ colSpan: 5 })}>
+							<PropertyTextField
+								hasVariable={color.opacityVariable ? true : false}
+								placeholder="Opacity"
+								value={opacity}
+								onChange={(e) => {
+									setOpacity(e.target.value);
+								}}
+								onBlur={(e) => {
+									applyOpacity(e.target.value);
+								}}
+								onKeyUp={(e) => {
+									if (e.key == "Enter") {
+										applyOpacity(e.currentTarget.value);
+									}
+								}}
+							/>
+						</div>
+					</div>
+				</PopoverRadix.Anchor>
+				<Popover.Content side="left">
+					<SelectPicker.SketchPicker
+						disableAlpha
+						styles={{
+							default: {
+								picker: {
+									boxShadow: "none",
+								},
+							},
+						}}
+						className={css({
+							background: "var(--colors-background)!important",
+						})}
+						color={color.value}
+						onChange={(newColor) => {
+							applyColor(newColor.hex);
+						}}
+						onChangeComplete={(newColor) => {
+							applyColor(newColor.hex, true);
+						}}
+					/>
+				</Popover.Content>
+			</>
+		</Popover.Root>
+	);
 };
