@@ -18,6 +18,7 @@ import { BorderProperties } from "./BorderProperties";
 import { Icon } from "./Icon";
 import { BlurProperties } from "./BlurProperties";
 import { TextShadowProperties } from "./TextShadowProperties";
+import { ShadowProperties } from "./ShadowProperties";
 
 const Separator = () => {
 	return (
@@ -253,6 +254,26 @@ export const PropertiesPanel = () => {
 								textShadowYOffset: properties.textShadowYOffset,
 								textShadowColor: properties.textShadowColor,
 								textShadowBlur: properties.textShadowBlur,
+							}}
+						/>
+						<Separator />
+					</>
+				)}
+			{properties?.shadowXOffset !== undefined &&
+				properties?.shadowYOffset !== undefined &&
+				properties?.shadowColor !== undefined &&
+				properties?.shadowBlur !== undefined &&
+				properties?.shadowSpread !== undefined &&
+				properties?.shadowOpacity !== undefined && (
+					<>
+						<ShadowProperties
+							properties={{
+								shadowXOffset: properties.shadowXOffset,
+								shadowYOffset: properties.shadowYOffset,
+								shadowColor: properties.shadowColor,
+								shadowBlur: properties.shadowBlur,
+								shadowSpread: properties.shadowSpread,
+								shadowOpacity: properties.shadowOpacity,
 							}}
 						/>
 						<Separator />
