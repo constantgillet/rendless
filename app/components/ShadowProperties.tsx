@@ -296,7 +296,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
 		updateElements(
 			elementIds.map((elementId) => ({
 				id: elementId,
-				backgroundColor: newColor,
+				shadowColor: newColor,
 			})),
 			saveToHistory,
 		);
@@ -308,7 +308,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
 		const variableName = getVarFromString(newColorValue);
 
 		if (variableName && variableName.length > 0) {
-			updateElementsVariables(elementIds, "backgroundColor", variableName);
+			updateElementsVariables(elementIds, "shadowColor", variableName);
 			return;
 		}
 
@@ -320,13 +320,13 @@ const ColorLine = ({ color }: ColorLineProps) => {
 		updateElements(
 			elementIds.map((elementId) => {
 				const newVariablesWithoutProperty = getVariablesWithoutProperty(
-					"backgroundColor",
+					"shadowColor",
 					elementId,
 				);
 
 				return {
 					id: elementId,
-					backgroundColor: newColorValue,
+					shadowColor: newColorValue,
 					variables: newVariablesWithoutProperty,
 				};
 			}),
@@ -340,7 +340,7 @@ const ColorLine = ({ color }: ColorLineProps) => {
 		const variableName = getVarFromString(opacity);
 
 		if (variableName && variableName.length > 0) {
-			updateElementsVariables(elementIds, "backgroundOpacity", variableName);
+			updateElementsVariables(elementIds, "shadowOpacity", variableName);
 			return;
 		}
 
@@ -353,13 +353,13 @@ const ColorLine = ({ color }: ColorLineProps) => {
 		updateElements(
 			elementIds.map((elementId) => {
 				const newVariablesWithoutProperty = getVariablesWithoutProperty(
-					"backgroundOpacity",
+					"shadowOpacity",
 					elementId,
 				);
 
 				return {
 					id: elementId,
-					backgroundOpacity: opacityValue,
+					shadowOpacity: opacityValue,
 					variables: newVariablesWithoutProperty,
 				};
 			}),

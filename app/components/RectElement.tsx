@@ -13,7 +13,12 @@ export const RectElement = (props: ReactElementProps) => {
 		props.shadowBlur &&
 		props.shadowSpread &&
 		props.shadowColor
-			? `${props.shadowXOffset}px ${props.shadowYOffset}px ${props.shadowBlur}px ${props.shadowSpread}px ${props.shadowColor}`
+			? `${props.shadowXOffset}px ${props.shadowYOffset}px ${
+					props.shadowBlur
+				}px ${props.shadowSpread}px ${addAlphaToHex(
+					props.shadowColor,
+					props.shadowOpacity || 1,
+				)}`
 			: undefined;
 	const borderValue =
 		props.borderColor && props.borderType && props.borderWidth
