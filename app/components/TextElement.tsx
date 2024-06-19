@@ -18,8 +18,6 @@ export const TextElement = (props: TextElementProps) => {
 	const updateElements = useEditorStore((state) => state.updateElements);
 
 	const onChangeDebounce = useDebounce((content: string) => {
-		console.log("onChangeDebounce");
-
 		updateElements(
 			[
 				{
@@ -143,8 +141,14 @@ export const TextElement = (props: TextElementProps) => {
 						props.textShadowXOffset &&
 						props.textShadowYOffset &&
 						props.textShadowBlur &&
-						props.textShadowColor
-							? `${props.textShadowXOffset}px ${props.textShadowYOffset}px ${props.textShadowBlur}px ${props.textShadowColor}`
+						props.textShadowColor &&
+						props.textShadowOpacity
+							? `${props.textShadowXOffset}px ${props.textShadowYOffset}px ${
+									props.textShadowBlur
+								}px ${addAlphaToHex(
+									props.textShadowColor,
+									props.textShadowOpacity,
+								)}`
 							: "none",
 				}}
 				onClick={handleClick}

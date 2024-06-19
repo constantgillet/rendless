@@ -56,8 +56,14 @@ export const TextElementRendered = (props: TextElementProps) => {
 					props.textShadowXOffset &&
 					props.textShadowYOffset &&
 					props.textShadowBlur &&
-					props.textShadowColor
-						? `${props.textShadowXOffset}px ${props.textShadowYOffset}px ${props.textShadowBlur}px ${props.textShadowColor}`
+					props.textShadowColor &&
+					props.textShadowOpacity
+						? `${props.textShadowXOffset}px ${props.textShadowYOffset}px ${
+								props.textShadowBlur
+							}px ${addAlphaToHex(
+								props.textShadowColor,
+								props.textShadowOpacity,
+							)}`
 						: "none",
 			}}
 		>

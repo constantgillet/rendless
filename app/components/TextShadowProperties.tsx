@@ -21,6 +21,7 @@ type TextShadowPropertiesProps = {
 		textShadowXOffset: ValueType[];
 		textShadowYOffset: ValueType[];
 		textShadowBlur: ValueType[];
+		textShadowOpacity: ValueType[];
 	};
 };
 
@@ -34,12 +35,13 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 		propertiesHaveValues(props.properties.textShadowXOffset) &&
 		propertiesHaveValues(props.properties.textShadowYOffset) &&
 		propertiesHaveValues(props.properties.textShadowColor) &&
-		propertiesHaveValues(props.properties.textShadowBlur);
+		propertiesHaveValues(props.properties.textShadowBlur) &&
+		propertiesHaveValues(props.properties.textShadowOpacity);
 
 	const [colorValues, setColorValues] = useState(
 		groupBySameColor(
 			props.properties.textShadowColor,
-			props.properties.textShadowColor.map((property) => property.value),
+			props.properties.textShadowOpacity,
 		),
 	);
 
@@ -47,10 +49,10 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 		setColorValues(
 			groupBySameColor(
 				props.properties.textShadowColor,
-				props.properties.textShadowColor.map((property) => property.value),
+				props.properties.textShadowOpacity,
 			),
 		);
-	}, [props.properties.textShadowColor]);
+	}, [props.properties.textShadowColor, props.properties.textShadowOpacity]);
 
 	const setDefaultValueFromProps = (
 		property: keyof TextShadowPropertiesProps["properties"],
@@ -247,6 +249,8 @@ export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 								elementIds: color.elementIds,
 								value: color.value,
 								colorVariable: color.colorVariable,
+								opacity: color.opacity,
+								opacityVariable: color.opacityVariable,
 							}}
 						/>
 					))}
@@ -260,12 +264,20 @@ type ColorLineProps = {
 	color: {
 		elementIds: string[];
 		value: string;
+		opacity: number;
 		colorVariable?: string | undefined;
+		opacityVariable?: string | undefined;
 	};
 };
 
 const ColorLine = ({ color }: ColorLineProps) => {
 	const updateElements = useEditorStore((state) => state.updateElements);
+
+	const [opacity, setOpacity] = useState(
+		color.opacityVariable
+			? `{{${color.opacityVariable}}}`
+			: `${color.opacity * 100}%`,
+	);
 
 	const [colorValue, setColorValue] = useState(
 		color?.colorVariable ? `{{${color.colorVariable}}}` : color.value,
@@ -321,77 +333,121 @@ const ColorLine = ({ color }: ColorLineProps) => {
 		);
 	};
 
+	const applyOpacity = (opacity: string) => {
+		const elementIds = color.elementIds;
+
+		const variableName = getVarFromString(opacity);
+
+		if (variableName && variableName.length > 0) {
+			updateElementsVariables(elementIds, "textShadowOpacity", variableName);
+			return;
+		}
+
+		const opacityValue = Number(opacity.replace("%", "")) / 100;
+
+		if (isNaN(opacityValue) || opacityValue < 0 || opacityValue > 1) {
+			return;
+		}
+
+		updateElements(
+			elementIds.map((elementId) => {
+				const newVariablesWithoutProperty = getVariablesWithoutProperty(
+					"textShadowOpacity",
+					elementId,
+				);
+
+				return {
+					id: elementId,
+					textShadowOpacity: opacityValue,
+					variables: newVariablesWithoutProperty,
+				};
+			}),
+			true,
+		);
+	};
+
 	return (
-		<Flex
-			className={css({
-				alignItems: "center",
-				gap: 2,
-			})}
-		>
-			<Popover.Root>
-				<>
-					<PopoverRadix.Anchor>
-						<div className={grid({ columns: 12, gap: 2 })}>
-							<div className={gridItem({ colSpan: 7 })}>
-								<PropertyTextField
-									icon={
-										<Popover.Trigger onClick={(e) => e.stopPropagation()}>
-											<button
-												className={css({
-													width: "24px",
-													height: "20px",
-													flexShrink: 0,
-													_hover: {
-														cursor: "pointer",
-													},
-													borderRadius: "3px",
-												})}
-												style={{
-													backgroundColor: color.value,
-												}}
-											/>
-										</Popover.Trigger>
+		<Popover.Root>
+			<>
+				<PopoverRadix.Anchor>
+					<div className={grid({ columns: 12, gap: 2 })}>
+						<div className={gridItem({ colSpan: 7 })}>
+							<PropertyTextField
+								icon={
+									<Popover.Trigger onClick={(e) => e.stopPropagation()}>
+										<button
+											className={css({
+												width: "24px",
+												height: "20px",
+												flexShrink: 0,
+												_hover: {
+													cursor: "pointer",
+												},
+												borderRadius: "3px",
+											})}
+											style={{
+												backgroundColor: color.value,
+											}}
+										/>
+									</Popover.Trigger>
+								}
+								hasVariable={color.colorVariable ? true : false}
+								placeholder="color hex"
+								value={colorValue}
+								onChange={(e) => setColorValue(e.target.value)}
+								onBlur={(e) => {
+									applyColorInput(e.target.value);
+								}}
+								onKeyUp={(e) => {
+									if (e.key === "Enter") {
+										applyColorInput(e.currentTarget.value);
 									}
-									hasVariable={!!color.colorVariable}
-									placeholder="color hex"
-									value={colorValue}
-									onChange={(e) => setColorValue(e.target.value)}
-									onBlur={(e) => {
-										applyColorInput(e.target.value);
-									}}
-									onKeyUp={(e) => {
-										if (e.key === "Enter") {
-											applyColorInput(e.currentTarget.value);
-										}
-									}}
-								/>
-							</div>
+								}}
+							/>
 						</div>
-					</PopoverRadix.Anchor>
-					<Popover.Content side="left">
-						<SelectPicker.SketchPicker
-							disableAlpha
-							styles={{
-								default: {
-									picker: {
-										boxShadow: "none",
-									},
+						<div className={gridItem({ colSpan: 5 })}>
+							<PropertyTextField
+								hasVariable={color.opacityVariable ? true : false}
+								placeholder="Opacity"
+								value={opacity}
+								onChange={(e) => {
+									setOpacity(e.target.value);
+								}}
+								onBlur={(e) => {
+									applyOpacity(e.target.value);
+								}}
+								onKeyUp={(e) => {
+									if (e.key === "Enter") {
+										applyOpacity(e.currentTarget.value);
+									}
+								}}
+							/>
+						</div>
+					</div>
+				</PopoverRadix.Anchor>
+				<Popover.Content side="left">
+					<SelectPicker.SketchPicker
+						disableAlpha
+						styles={{
+							default: {
+								picker: {
+									boxShadow: "none",
 								},
-							}}
-							className={css({
-								background: "var(--colors-background)!important",
-							})}
-							color={color.value}
-							onChange={(newColor) => {
-								applyColor(newColor.hex);
-							}}
-							onChangeComplete={(newColor) => {
-								applyColor(newColor.hex, true);
-							}}
-						/>
-					</Popover.Content>
-				</>
-			</Popover.Root>
-		</Flex>
+							},
+						}}
+						className={css({
+							background: "var(--colors-background)!important",
+						})}
+						color={color.value}
+						onChange={(newColor) => {
+							applyColor(newColor.hex);
+						}}
+						onChangeComplete={(newColor) => {
+							applyColor(newColor.hex, true);
+						}}
+					/>
+				</Popover.Content>
+			</>
+		</Popover.Root>
 	);
 };
