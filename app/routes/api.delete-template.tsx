@@ -55,7 +55,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
     //Delete the assets from S3
     if (assets.length > 0) {
       const keys = assets.map((asset) => new URL(asset.url).pathname.slice(1));
-      await multipleDeleteFromS3(keys);
+      multipleDeleteFromS3(keys);
     }
 
     //Delete the template
