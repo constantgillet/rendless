@@ -34,24 +34,31 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   const variablesValues = [] as { name: string; value: string }[];
 
-  searchParams.forEach((value, key) => {
+  //replace foreach with for of
+  for (const [key, value] of searchParams) {
+    // Ignore the templateId
+    if (key === "templateId") {
+      return;
+    }
     variablesValues.push({ name: key, value });
-  });
+  }
 
   //create a hash of the params
   const variablesValuesHashed = CryptoJS.SHA256(
     JSON.stringify(variablesValues)
   ).toString();
 
-  const cacheKey = `render-${variablesValuesHashed}`;
-
-  const imageLocation = `${CACHED_FOLDER}${templateId}/${cacheKey}.png`;
+  const imageKey = `render-${variablesValuesHashed}`;
+  const redisKey = `render:${templateId}:${variablesValuesHashed}`;
+  const imageLocation = `${CACHED_FOLDER}${templateId}/${imageKey}.png`;
 
   if (cacheEnabled) {
-    const resFileExists = await fileExists(imageLocation);
+    const cachedData = await getCacheData(redisKey);
 
     //If the exit 307 the image is cached
-    if (resFileExists.exists) {
+    if (cachedData) {
+      console.log("Image cached", imageLocation);
+
       return new Response(null, {
         status: 307,
         headers: {
@@ -60,28 +67,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       });
     }
   }
-
-  //Get query params
-  //   const url = new URL(`https://og-image/render/${templateName}`);
-
-  //   const urlHashed = CryptoJS.SHA256(url.toString()).toString();
-  //   const cacheKey = `og-image-render-${urlHashed}`;
-
-  //   const imageLocation = `ogimages/generated/${urlHashed}.png`;
-  //   const imageUrl = `${BUCKET_URL}/${imageLocation}`;
-
-  //   try {
-  //     const cachedData = await getCacheData(cacheKey);
-
-  //     if (cachedData && cacheEnabled) {
-  //       return json({
-  //         ok: true,
-  //         data: {
-  //           url: imageUrl,
-  //         },
-  //       });
-  //     }
-  //   } catch (error) {}
 
   let tree: Tree | null = null;
 
@@ -164,18 +149,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     //Save the image to S3 as a cache
     uploadToS3(pngBuffer, imageLocation);
 
-    //Add redis log for doing analytics
-    // const monitorKey = `render:simple:${templateId}:${
-    //   isDraft ? "draft" : "prod"
-    // }:${new Date().getTime()}`;
-
     // //Save the log to redis
-    // setCacheData(
-    //   monitorKey,
-    //   JSON.stringify({
-    //     values: variablesValues,
-    //   })
-    // );
+    setCacheData(redisKey, "true");
 
     return new Response(pngBuffer, {
       headers: {
