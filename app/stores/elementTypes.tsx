@@ -221,3 +221,8 @@ export const defaultElements = {
 
 //Element is type of RectElement, TextElement or ImageElement
 export type Element = RectElement | TextElement | ImageElement;
+
+export type ElementWithVariables =
+	| RectElementWithVariables
+	| TextElementWithVariables
+	| ImageElementWithVariables;

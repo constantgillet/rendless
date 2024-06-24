@@ -5,6 +5,8 @@ import { RectElementRendered } from "~/render-components/RectElementRendered";
 import { TextElementRendered } from "~/render-components/TextElementRendered";
 import type { Tree } from "~/stores/EditorStore";
 import NodeFetchCache, { FileSystemCache } from "node-fetch-cache";
+import { addVariablesValuesToElementProperties } from "./addVariablesValuesToElementProperties";
+import type { ElementWithVariables } from "~/stores/elementTypes";
 
 const fetch = NodeFetchCache.create({
 	cache: new FileSystemCache({
@@ -122,13 +124,14 @@ const TreeToJsx = ({
 			{tree.children.map((child) => {
 				const Component = renderedComponentsMap[child.type];
 
-				return (
-					<Component
-						key={child.id}
-						variablesValues={variablesValues}
-						{...child}
-					/>
+				const propsWithVariables = addVariablesValuesToElementProperties(
+					child as ElementWithVariables,
+					variablesValues,
 				);
+
+				console.log("propsWithVariables", propsWithVariables);
+
+				return <Component key={child.id} {...propsWithVariables} />;
 			})}
 		</div>
 	);
