@@ -1,32 +1,9 @@
-import type { VariablesValues } from "~/utils/svgGenerate";
 import { addAlphaToHex } from "~/utils/addAlphaToHex";
 import type { TextElement } from "~/stores/elementTypes";
 
-type TextElementProps = TextElement & {
-	variablesValues: VariablesValues;
-};
-
-const setValueFromVariable = (
-	value: string,
-	variablesValues: VariablesValues,
-) => {
-	const variable = variablesValues.find((variable) => variable.name === value);
-
-	return variable ? variable.value : value;
-};
+type TextElementProps = TextElement;
 
 export const TextElementRendered = (props: TextElementProps) => {
-	const contentWithVariables = props.content.replace(
-		/{{(.*?)}}/g,
-		(_, match) => {
-			const variable = props.variablesValues.find(
-				(variable) => variable.name === match,
-			);
-
-			return variable ? variable.value : `{{${match}}}`;
-		},
-	);
-
 	return (
 		<p
 			style={{
@@ -67,7 +44,7 @@ export const TextElementRendered = (props: TextElementProps) => {
 						: "none",
 			}}
 		>
-			{contentWithVariables}
+			{props.content}
 		</p>
 	);
 };
