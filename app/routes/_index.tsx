@@ -118,11 +118,9 @@ const HeroSection = () => {
             })}
           >
             The fastest way to {""}
-            <span className={css({ color: "var(--accent-9)" })}>
+            <span className={"text-gradient"}>
               generate dynamic
-            </span>{" "}
-            opengraph{" "}
-            <span className={css({ color: "var(--accent-9)" })}>images</span>{" "}
+            </span> opengraph <span className={"text-gradient"}>images</span>{" "}
           </h1>
           <p
             className={css({
@@ -167,20 +165,103 @@ const FeaturesSection = () => {
     <section
       id="features"
       className={css({
-        py: "px",
+        py: "48px",
         bg: "var(--gray-2)",
       })}
     >
-      <h2
-        className={css({
-          fontSize: "38px",
-          fontWeight: "bold",
-          textAlign: "center",
-          mb: "32px",
-        })}
-      >
-        Features
-      </h2>
+      <div className={container()}>
+        <div
+          className={css({
+            display: "flex",
+            flexDirection: "column",
+            spaceY: "8",
+            mb: "48px",
+          })}
+        >
+          <h2
+            className={css({
+              fontSize: "38px",
+              fontWeight: "bold",
+              textAlign: "center",
+            })}
+          >
+            Features
+          </h2>
+          <p
+            className={css({
+              fontSize: "20px",
+              textAlign: "center",
+              color: "var(--gray-11)",
+            })}
+          >
+            Everything you need to create dynamic opengraph images for your
+            website.
+          </p>
+        </div>
+
+        <div
+          className={css({
+            backgroundColor: "var(--gray-3)",
+            borderRadius: "12px",
+            display: "flex",
+            border: "1px solid var(--gray-4)",
+            overflow: "hidden",
+          })}
+        >
+          <div
+            className={css({
+              display: "flex",
+              flexDirection: "column",
+              w: "65%",
+              p: "32px",
+              justifyContent: "center",
+              alignItems: "center",
+            })}
+          >
+            <h3
+              className={css({
+                fontSize: "34px",
+                fontWeight: "bold",
+                textAlign: "center",
+                mb: "16px",
+              })}
+            >
+              A <span className={"text-gradient"}>simple editor</span> to create
+              dynamic images
+            </h3>
+            <p
+              className={css({
+                fontSize: "20px",
+                textAlign: "center",
+                color: "var(--gray-11)",
+                px: "32px",
+                pb: "32px",
+              })}
+            >
+              Rendless provides a simple editor to create dynamic opengraph
+              images for your website, blog, or app. You can customize the
+              background, text, images, and more.
+            </p>
+          </div>
+          <div
+            className={css({
+              pt: "86px",
+            })}
+          >
+            <img
+              src="/images/illustration-1.png"
+              alt="Illustration 1"
+              width="100%"
+              height="auto"
+              className={css({
+                borderTopLeftRadius: "12px",
+                borderTop: "1px solid var(--gray-3)",
+                borderLeft: "1px solid var(--gray-3)",
+              })}
+            />
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
