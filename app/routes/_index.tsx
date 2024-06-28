@@ -1,4 +1,4 @@
-import { Badge, Button } from "@radix-ui/themes";
+import { Badge, Button, SegmentedControl } from "@radix-ui/themes";
 import { type LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { css } from "styled-system/css";
@@ -444,6 +444,20 @@ const PricingSection = () => {
 					>
 						Upgrade to a pro plan and create unlimited dynamic opengraph images
 					</div>
+				</div>
+				<div
+					className={css({
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					})}
+				>
+					<SegmentedControl.Root defaultValue="yearly" radius="full">
+						<SegmentedControl.Item value="monthly">
+							Monthly
+						</SegmentedControl.Item>
+						<SegmentedControl.Item value="yearly">Yearly</SegmentedControl.Item>
+					</SegmentedControl.Root>
 				</div>
 				<div
 					className={grid({
