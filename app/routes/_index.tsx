@@ -1,4 +1,4 @@
-import { Button } from "@radix-ui/themes";
+import { Badge, Button } from "@radix-ui/themes";
 import { type LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { css } from "styled-system/css";
@@ -50,7 +50,7 @@ const Header = () => {
           padding: 3,
         })}
       >
-        <Link to={"/app"}>
+        <Link to={"/register"}>
           <img
             src="/images/rendless-logo.png"
             alt="Logo"
@@ -86,7 +86,7 @@ const Header = () => {
           </a>
         </div>
         <div>
-          <Link to={"/signin"}>
+          <Link to={"/register"}>
             <Button size={"3"}>Get started</Button>
           </Link>
         </div>
@@ -132,7 +132,7 @@ const HeroSection = () => {
           </p>
           <div>
             <Link
-              to={"/signin"}
+              to={"/register"}
               className={css({
                 w: "fit",
                 mx: "auto",
@@ -271,6 +271,7 @@ const FeaturesSection = () => {
               backgroundColor: "var(--gray-3)",
               border: "1px solid var(--gray-4)",
               borderRadius: "12px",
+              p: "32px",
             })}
           >
             <h3
@@ -283,6 +284,36 @@ const FeaturesSection = () => {
             >
               Ultra fast <span className={"text-gradient"}>API</span>
             </h3>
+            <div
+              className={css({
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                pb: "12px",
+              })}
+            >
+              <Badge variant="outline" size="3" highContrast>
+                180ms{" "}
+              </Badge>
+            </div>
+            <div
+              className={css({
+                textAlign: "center",
+              })}
+            >
+              <span className={"text-gradient"}>average response time</span>
+            </div>
+            <p
+              className={css({
+                fontSize: "20px",
+                textAlign: "center",
+                color: "var(--gray-11)",
+                px: "32px",
+                pt: "18px",
+              })}
+            >
+              Rendless provides an ultra fast API to generate dynamic opengraph
+            </p>
           </div>
           <div
             className={gridItem({
@@ -411,7 +442,7 @@ const BottomCTA = () => {
           </p>
           <div>
             <Link
-              to={"/signin"}
+              to={"/register"}
               className={css({
                 w: "fit",
                 mx: "auto",
