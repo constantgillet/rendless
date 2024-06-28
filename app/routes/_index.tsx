@@ -41,6 +41,10 @@ const Header = () => {
 				position: "sticky",
 				top: 0,
 				left: 0,
+				background: "rgb(20 20 20 / 38%)",
+				zIndex: 100,
+				borderBottom: "1px solid var(--gray-4)",
+				backdropFilter: "blur(14px)",
 			})}
 		>
 			<div
