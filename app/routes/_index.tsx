@@ -301,7 +301,9 @@ const FeaturesSection = () => {
                 textAlign: "center",
               })}
             >
-              <span className={"text-gradient"}>average response time</span>
+              <span className={"text-gradient"}>
+                average initial image render time
+              </span>
             </div>
             <p
               className={css({
