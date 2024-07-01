@@ -8,7 +8,7 @@ import { SvgGenerate } from "~/utils/svgGenerate";
 import { fileExists, uploadToS3 } from "~/libs/s3";
 import { CACHED_FOLDER, BUCKET_URL } from "~/constants/s3Constants";
 
-const cacheEnabled = false;
+const cacheEnabled = true;
 
 //TODO prevent duplicated templateName
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
