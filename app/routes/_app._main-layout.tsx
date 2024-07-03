@@ -272,9 +272,9 @@ export default function MainLayout() {
             <Link to={"/privacy"} className={linkClassName}>
               Privacy
             </Link>
-            <Link to={"/contact"} className={linkClassName}>
+            <a href="mailto:contact@rendless.com" className={linkClassName}>
               Contact
-            </Link>
+            </a>
             <Link to={"https://docs.rendless.com"} className={linkClassName}>
               Docs
             </Link>
