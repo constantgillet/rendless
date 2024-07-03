@@ -48,10 +48,6 @@ export async function storeWebhookEvent(
 	eventName: string,
 	body: NewWebhookEvent["body"],
 ) {
-	if (!process.env.POSTGRES_URL) {
-		throw new Error("POSTGRES_URL is not set");
-	}
-
 	const returnedValue = await prisma.webhookEvent.create({
 		data: {
 			eventName: eventName,
