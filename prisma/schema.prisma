@@ -61,3 +61,31 @@ model ResetPassword {
     userId    String
     createdAt DateTime @default(now())
 }
+
+model WebhookEvent {
+    id              Int      @id @default(autoincrement())
+    createdAt       DateTime @default(now())
+    eventName       String
+    processed       Boolean  @default(false)
+    body            Json
+    processingError String?
+}
+
+model Subscription {
+    id                 Int     @id @default(autoincrement())
+    lemonSqueezyId     String  @unique
+    orderId            Int
+    name               String
+    email              String
+    status             String
+    statusFormatted    String
+    renewsAt           String
+    endsAt             String
+    trialEndsAt        String
+    price              String
+    isUsageBased       Boolean @default(false)
+    isPaused           Boolean @default(false)
+    subscriptionItemId Int
+    userId             String
+    planId             Int
+}
