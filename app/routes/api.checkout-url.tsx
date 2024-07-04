@@ -1,5 +1,5 @@
 import { createCheckout } from "@lemonsqueezy/lemonsqueezy.js";
-import { json, type ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { withZod } from "@remix-validated-form/with-zod";
 import { validationError } from "remix-validated-form";
 import { z } from "zod";
@@ -55,5 +55,10 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 		},
 	);
 
-	return json({ url: checkout.data?.data.attributes.url });
+	const url = checkout.data?.data.attributes.url;
+	if (!url) {
+		return json({ error: "Error creating checkout" }, { status: 500 });
+	}
+
+	return json({ url: url });
 };
