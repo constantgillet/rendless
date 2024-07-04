@@ -89,3 +89,19 @@ model Subscription {
     userId             String
     planId             Int
 }
+
+model Plan {
+    id                 Int     @id @default(autoincrement())
+    productId          Int
+    productName        String?
+    variantId          Int     @unique
+    name               String
+    description        String?
+    price              String
+    isUsageBased       Boolean @default(false)
+    interval           String?
+    intervalCount      Int?
+    trialInterval      String?
+    trialIntervalCount Int?
+    sort               Int?
+}
