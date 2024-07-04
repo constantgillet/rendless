@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.515.0",
+    "@lemonsqueezy/lemonsqueezy.js": "^3.2.0",
     "@lucia-auth/adapter-prisma": "^4.0.0",
     "@prisma/client": "^5.9.1",
     "@radix-ui/themes": "^3.0.2",
