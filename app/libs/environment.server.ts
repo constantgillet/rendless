@@ -15,6 +15,8 @@ const environmentSchema = z.object({
 	RESEND_API_KEY: z.string().min(1),
 	EMAIL_FROM: z.string().email().default("noreply@rendless.com"),
 	LEMONSQUEEZY_WEBHOOK_SECRET: z.string().min(1),
+	LEMONSQUEEZY_API_KEY: z.string().min(1),
+	LEMONSQUEEZY_STORE_ID: z.string().default("93622"),
 });
 
 const environment = () => environmentSchema.parse(process.env);
