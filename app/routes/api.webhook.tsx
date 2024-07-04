@@ -92,13 +92,9 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
       const variantId = attributes.variant_id as string;
 
       // We assume that the Plan table is up to date.
-      const plan = await db
-        .select()
-        .from(plans)
-        .where(eq(plans.variantId, Number.parseInt(variantId, 10)));
 
-      if (plan.length < 1) {
-        processingError = `Plan with variantId ${variantId} not found.`;
+      if (variantId.length < 1) {
+        processingError = `variantId ${variantId} not found.`;
       } else {
         // Update the subscription in the database.
 
@@ -130,7 +126,7 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
           subscriptionItemId: attributes.first_subscription_item.id,
           isUsageBased: attributes.first_subscription_item.is_usage_based,
           userId: eventBody.meta.custom_data.user_id,
-          planId: plan[0].id,
+          planId: variantId,
         };
 
         // Create/update subscription in the database.
