@@ -155,6 +155,9 @@ export default function MainLayout() {
                   <Link to={"/account"}>
                     <DropdownMenu.Item>General settings</DropdownMenu.Item>
                   </Link>
+                  <Link to={"/account/billing"}>
+                    <DropdownMenu.Item>Billing</DropdownMenu.Item>
+                  </Link>
                   <Link to={"/onboarding"}>
                     <DropdownMenu.Item>Onboarding</DropdownMenu.Item>
                   </Link>
