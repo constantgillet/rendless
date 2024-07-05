@@ -87,10 +87,7 @@ type PlanCardProps = {
 };
 
 const PlanCard = ({ variantId, price, type }: PlanCardProps) => {
-  const data = useActionData<typeof action>();
-  const fetcherPost = useFetcher();
-
-  console.log(data);
+  const fetcherPost = useFetcher<typeof action>();
 
   const handleClick = async () => {
     fetcherPost.submit(
@@ -105,12 +102,10 @@ const PlanCard = ({ variantId, price, type }: PlanCardProps) => {
   };
 
   useEffect(() => {
-    if (data?.url) {
-      console.log(data.url);
-
-      window.location.href = data.url;
+    if (fetcherPost.data?.url) {
+      window.location.href = fetcherPost.data.url;
     }
-  }, [data]);
+  }, [fetcherPost.data]);
 
   return (
     <div
@@ -152,7 +147,7 @@ const PlanCard = ({ variantId, price, type }: PlanCardProps) => {
               fontWeight: "bold",
             })}
           >
-            {price / 100}€
+            €{price / 100}
           </div>
           <div>
             <span
@@ -166,7 +161,15 @@ const PlanCard = ({ variantId, price, type }: PlanCardProps) => {
         </div>
       </div>
       <div>
-        <Button size={"4"} highContrast onClick={handleClick}>
+        <Button
+          size={"4"}
+          highContrast
+          onClick={handleClick}
+          loading={
+            fetcherPost.state === "submitting" ||
+            fetcherPost.state === "loading"
+          }
+        >
           Upgrade
         </Button>
       </div>
