@@ -1,9 +1,11 @@
 import { Badge, Button } from "@radix-ui/themes";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
 import { css } from "styled-system/css";
 import { grid, gridItem } from "styled-system/patterns";
 import { prisma } from "~/libs/prisma";
+import type { action } from "./api.checkout-url";
+import { useEffect } from "react";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Billing - Rendless" }];
@@ -62,8 +64,16 @@ export default function BillingPage() {
             mx: "auto",
           })}
         >
-          <PlanCard variantId={monthly.variantId} price={monthly.price} />
-          <PlanCard variantId={yearly.variantId} price={yearly.price} />
+          <PlanCard
+            type="monthly"
+            variantId={monthly.variantId}
+            price={monthly.price}
+          />
+          <PlanCard
+            type="yearly"
+            variantId={yearly.variantId}
+            price={yearly.price}
+          />
         </div>
       </div>
     </div>
@@ -71,19 +81,45 @@ export default function BillingPage() {
 }
 
 type PlanCardProps = {
+  type: "monthly" | "yearly";
   variantId: number;
   price: number;
 };
 
-const PlanCard = ({ variantId, price }: PlanCardProps) => {
+const PlanCard = ({ variantId, price, type }: PlanCardProps) => {
+  const data = useActionData<typeof action>();
+  const fetcherPost = useFetcher();
+
+  console.log(data);
+
+  const handleClick = async () => {
+    fetcherPost.submit(
+      {
+        variantId: variantId,
+      },
+      {
+        method: "POST",
+        action: "/api/checkout-url",
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (data?.url) {
+      console.log(data.url);
+
+      window.location.href = data.url;
+    }
+  }, [data]);
+
   return (
     <div
       className={gridItem({
         colSpan: 6,
-        backgroundColor: "var(--accent-9)",
+        backgroundColor: "var(--gray-3)",
         p: "32px",
         rounded: "12px",
-        border: "1px solid var(--accent-10)",
+        border: "1px solid var(--gray-4)",
         spaceY: "6",
       })}
     >
@@ -101,11 +137,13 @@ const PlanCard = ({ variantId, price }: PlanCardProps) => {
               fontSize: "22px",
             })}
           >
-            Pro Plan
+            {type === "monthly" ? "Monthly" : "Yearly"}
           </h3>
-          <Badge size="3" variant="solid" color="yellow" radius="full">
-            50% off
-          </Badge>
+          {type === "yearly" && (
+            <Badge size="3" variant="solid" color="yellow" radius="full">
+              50% off
+            </Badge>
+          )}
         </div>
         <div>
           <div
@@ -128,7 +166,7 @@ const PlanCard = ({ variantId, price }: PlanCardProps) => {
         </div>
       </div>
       <div>
-        <Button size={"4"} highContrast>
+        <Button size={"4"} highContrast onClick={handleClick}>
           Upgrade
         </Button>
       </div>
