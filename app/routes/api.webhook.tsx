@@ -91,9 +91,15 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
 			const variantId = attributes.variant_id as number;
 
 			// We assume that the Plan table is up to date.
+			//Get plan from the database with the variantId.
+			const plan = await prisma.plan.findUnique({
+				where: {
+					variantId: variantId,
+				},
+			});
 
-			if (variantId === undefined) {
-				processingError = `variantId ${variantId} not found.`;
+			if (!plan) {
+				processingError = `Plan of ${variantId} not found.`;
 			} else {
 				// Update the subscription in the database.
 
@@ -125,17 +131,14 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
 					subscriptionItemId: attributes.first_subscription_item.id,
 					isUsageBased: attributes.first_subscription_item.is_usage_based,
 					userId: eventBody.meta.custom_data.user_id,
-					planId: variantId,
+					planId: plan.id,
 				};
-
-				//Create or update the subscription in the database.
 
 				// Create/update subscription in the database.
 				try {
 					await prisma.subscription.upsert({
-						data: {
-							...updateData,
-						},
+						update: updateData,
+						create: updateData,
 						where: {
 							lemonSqueezyId: updateData.lemonSqueezyId,
 						},

@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-    id             String     @id
+    id             String         @id
     sessions       Session[]
-    email          String     @unique
-    username       String     @unique
+    email          String         @unique
+    username       String         @unique
     hashedPassword String
     Template       Template[]
     Token          Token[]
+    Subscription   Subscription[]
 }
 
 model Session {
@@ -79,29 +80,32 @@ model Subscription {
     email              String
     status             String
     statusFormatted    String
-    renewsAt           String
-    endsAt             String
-    trialEndsAt        String
+    renewsAt           String?
+    endsAt             String?
+    trialEndsAt        String?
     price              String
     isUsageBased       Boolean @default(false)
     isPaused           Boolean @default(false)
-    subscriptionItemId Int
+    subscriptionItemId Int     @default(autoincrement())
     userId             String
     planId             Int
+    user               User    @relation(fields: [userId], references: [id])
+    plan               Plan    @relation(fields: [planId], references: [id])
 }
 
 model Plan {
-    id                 Int     @id @default(autoincrement())
+    id                 Int            @id @default(autoincrement())
     productId          Int
     productName        String?
-    variantId          Int     @unique
+    variantId          Int            @unique
     name               String
     description        String?
     price              String
-    isUsageBased       Boolean @default(false)
+    isUsageBased       Boolean        @default(false)
     interval           String?
     intervalCount      Int?
     trialInterval      String?
     trialIntervalCount Int?
     sort               Int?
+    Subscription       Subscription[] @relation()
 }
