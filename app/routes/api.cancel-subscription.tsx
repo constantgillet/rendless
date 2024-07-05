@@ -68,7 +68,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 				endsAt: cancelledSub.data?.data.attributes.ends_at,
 			},
 		});
-	} catch (error) {
+	} catch {
 		throw new Error(
 			`Failed to cancel Subscription #${subscription.id} in the database.`,
 		);
