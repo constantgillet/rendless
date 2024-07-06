@@ -90,7 +90,17 @@ const Header = () => {
 						</Button>
 					</a>
 				</div>
-				<div>
+				<div
+					className={css({
+						display: "flex",
+						gap: 2,
+					})}
+				>
+					<Link to={"/login"}>
+						<Button size={"3"} variant="outline">
+							Login
+						</Button>
+					</Link>
 					<Link to={"/register"}>
 						<Button size={"3"}>Get started</Button>
 					</Link>
