@@ -5,7 +5,10 @@ import { css } from "styled-system/css";
 import { grid, gridItem } from "styled-system/patterns";
 import { prisma } from "~/libs/prisma";
 import type { action } from "./api.checkout-url";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import type { action as cancelSubscriptionAction } from "./api.cancel-subscription";
+import { Spinner } from "~/components/Spinner";
+import toast from "react-hot-toast";
 
 export const meta: MetaFunction = () => {
 	return [{ title: "Billing - Rendless" }];
@@ -101,31 +104,7 @@ export default function BillingPage() {
 								>
 									Currrent plan:
 								</h2>
-								<AlertDialog.Root>
-									<AlertDialog.Trigger>
-										<Button variant="surface">Cancel subscription</Button>
-									</AlertDialog.Trigger>
-									<AlertDialog.Content maxWidth="450px">
-										<AlertDialog.Title>Cancel subscription</AlertDialog.Title>
-										<AlertDialog.Description size="2">
-											Are you sure you want to cancel your subscription? You
-											will loose access to all premium features.
-										</AlertDialog.Description>
-
-										<Flex gap="3" mt="4" justify="end">
-											<AlertDialog.Cancel>
-												<Button variant="soft" color="gray">
-													Cancel
-												</Button>
-											</AlertDialog.Cancel>
-											<AlertDialog.Action>
-												<Button variant="solid" color="red">
-													Cancel subscription
-												</Button>
-											</AlertDialog.Action>
-										</Flex>
-									</AlertDialog.Content>
-								</AlertDialog.Root>
+								<CancelSubscriptionButton />
 							</div>
 							<div
 								className={css({
@@ -296,5 +275,67 @@ const PlanCard = ({ variantId, price, type }: PlanCardProps) => {
 			</div>
 			<div>Create unlimited dynamic opengraph images</div>
 		</div>
+	);
+};
+
+const CancelSubscriptionButton = () => {
+	const [open, setOpen] = useState(false);
+
+	const fetcher = useFetcher<typeof cancelSubscriptionAction>();
+
+	const onClick = () => {
+		fetcher.submit(
+			{
+				subscriptionId: "",
+			},
+			{
+				action: "/api/cancel-subscription",
+				method: "POST",
+			},
+		);
+	};
+
+	useEffect(() => {
+		if (fetcher.data?.data) {
+			setOpen(false);
+			toast.success("Template name updated");
+		}
+	}, [fetcher.data]);
+
+	return (
+		<AlertDialog.Root open={open} onOpenChange={setOpen}>
+			<AlertDialog.Trigger>
+				<Button variant="surface">Cancel subscription</Button>
+			</AlertDialog.Trigger>
+			<AlertDialog.Content maxWidth="450px">
+				<AlertDialog.Title>Cancel subscription</AlertDialog.Title>
+				<AlertDialog.Description size="2">
+					Are you sure you want to cancel your subscription? You will loose
+					access to all premium features.
+				</AlertDialog.Description>
+
+				<Flex gap="3" mt="4" justify="end">
+					<AlertDialog.Cancel>
+						<Button variant="soft" color="gray">
+							Cancel
+						</Button>
+					</AlertDialog.Cancel>
+					<AlertDialog.Action>
+						<Button
+							variant="solid"
+							color="red"
+							onClick={onClick}
+							disabled={
+								fetcher.state === "loading" || fetcher.state === "submitting"
+							}
+						>
+							{fetcher.state === "loading" ||
+								(fetcher.state === "submitting" && <Spinner />)}
+							Cancel subscription
+						</Button>
+					</AlertDialog.Action>
+				</Flex>
+			</AlertDialog.Content>
+		</AlertDialog.Root>
 	);
 };
