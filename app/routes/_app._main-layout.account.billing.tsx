@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import type { action as cancelSubscriptionAction } from "./api.cancel-subscription";
 import { Spinner } from "~/components/Spinner";
 import toast from "react-hot-toast";
+import { environment } from "~/libs/environment.server";
 
 export const meta: MetaFunction = () => {
 	return [{ title: "Billing - Rendless" }];
@@ -30,6 +31,10 @@ export const loader = async ({ context: { user } }: LoaderFunctionArgs) => {
 	const yearly = plans.find((plan) => plan.interval === "year");
 
 	if (!monthly || !yearly) {
+		const fetchPlansURL = `${environment().WEBSITE_URL}/api/sync-plans`;
+		fetch(fetchPlansURL, {
+			method: "POST",
+		});
 		throw new Error("Missing plans");
 	}
 
