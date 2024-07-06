@@ -1,6 +1,11 @@
 import { AlertDialog, Badge, Button, Flex } from "@radix-ui/themes";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
+import {
+	useActionData,
+	useFetcher,
+	useLoaderData,
+	useRevalidator,
+} from "@remix-run/react";
 import { css } from "styled-system/css";
 import { grid, gridItem } from "styled-system/patterns";
 import { prisma } from "~/libs/prisma";
@@ -18,9 +23,7 @@ export const handle = {
 	pageTitle: "Billing",
 };
 
-export const loader = async ({
-	context: { user, lang },
-}: LoaderFunctionArgs) => {
+export const loader = async ({ context: { user } }: LoaderFunctionArgs) => {
 	const plans = await prisma.plan.findMany();
 
 	const monthly = plans.find((plan) => plan.interval === "month");
@@ -33,7 +36,6 @@ export const loader = async ({
 	const subscription = await prisma.subscription.findFirst({
 		where: {
 			userId: user?.id,
-			//Status is active or on_trial
 			status: {
 				in: ["active", "on_trial"],
 			},
@@ -292,6 +294,7 @@ const CancelSubscriptionButton = ({
 	const [open, setOpen] = useState(false);
 
 	const fetcher = useFetcher<typeof cancelSubscriptionAction>();
+	const revalidator = useRevalidator();
 
 	const onClick = () => {
 		fetcher.submit(
@@ -308,7 +311,11 @@ const CancelSubscriptionButton = ({
 	useEffect(() => {
 		if (fetcher.data?.data) {
 			setOpen(false);
-			toast.success("Subscription cancelled");
+			toast.success("You have successfully canceled your subscription");
+
+			setTimeout(() => {
+				revalidator.revalidate();
+			}, 1500);
 		}
 	}, [fetcher.data]);
 
