@@ -33,6 +33,10 @@ export const loader = async ({
 	const subscription = await prisma.subscription.findFirst({
 		where: {
 			userId: user?.id,
+			//Status is active or on_trial
+			status: {
+				in: ["active", "on_trial"],
+			},
 		},
 		include: {
 			plan: true,
@@ -104,7 +108,7 @@ export default function BillingPage() {
 								>
 									Currrent plan:
 								</h2>
-								<CancelSubscriptionButton />
+								<CancelSubscriptionButton subscriptionId={subscription.id} />
 							</div>
 							<div
 								className={css({
@@ -278,7 +282,13 @@ const PlanCard = ({ variantId, price, type }: PlanCardProps) => {
 	);
 };
 
-const CancelSubscriptionButton = () => {
+type CancelSubscriptionButtonProps = {
+	subscriptionId: number;
+};
+
+const CancelSubscriptionButton = ({
+	subscriptionId,
+}: CancelSubscriptionButtonProps) => {
 	const [open, setOpen] = useState(false);
 
 	const fetcher = useFetcher<typeof cancelSubscriptionAction>();
@@ -286,7 +296,7 @@ const CancelSubscriptionButton = () => {
 	const onClick = () => {
 		fetcher.submit(
 			{
-				subscriptionId: "",
+				subscriptionId: subscriptionId,
 			},
 			{
 				action: "/api/cancel-subscription",
@@ -298,7 +308,7 @@ const CancelSubscriptionButton = () => {
 	useEffect(() => {
 		if (fetcher.data?.data) {
 			setOpen(false);
-			toast.success("Template name updated");
+			toast.success("Subscription cancelled");
 		}
 	}, [fetcher.data]);
 

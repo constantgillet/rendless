@@ -38,6 +38,18 @@ export async function loader({ context }: LoaderFunctionArgs) {
 		},
 	});
 
+	const subscription = await prisma.subscription.findFirst({
+		where: {
+			userId: userId,
+			//Status is active or on_trial
+			status: {
+				in: ["active", "on_trial"],
+			},
+		},
+	});
+
+	const hasSubscription = Boolean(subscription);
+
 	//Convert template.tree to Tree type
 	const templatesWithTree = templates.map((template) => {
 		const tree = template.tree as Tree;
@@ -47,11 +59,11 @@ export async function loader({ context }: LoaderFunctionArgs) {
 		};
 	});
 
-	return json({ templates: templatesWithTree });
+	return json({ templates: templatesWithTree, hasSubscription });
 }
 
 export default function TemplatePage() {
-	const { templates } = useLoaderData<typeof loader>();
+	const { templates, hasSubscription } = useLoaderData<typeof loader>();
 
 	const createTemplateFetcher = useFetcher();
 
@@ -78,27 +90,29 @@ export default function TemplatePage() {
 	return (
 		<>
 			<div className={css({ spaceY: "4" })}>
-				<div>
-					<Callout.Root>
-						<Callout.Icon>
-							<Icon name="info" />
-						</Callout.Icon>
-						<Callout.Text>
-							Please{" "}
-							<Link
-								to="/account/billing"
-								className={css({
-									color: "var(--accent-12)",
-									textDecoration: "underline",
-									cursor: "pointer",
-								})}
-							>
-								upgrade to premium
-							</Link>{" "}
-							plan to create more than 2 templates
-						</Callout.Text>
-					</Callout.Root>
-				</div>
+				{hasSubscription ? null : (
+					<div>
+						<Callout.Root>
+							<Callout.Icon>
+								<Icon name="info" />
+							</Callout.Icon>
+							<Callout.Text>
+								Please{" "}
+								<Link
+									to="/account/billing"
+									className={css({
+										color: "var(--accent-12)",
+										textDecoration: "underline",
+										cursor: "pointer",
+									})}
+								>
+									upgrade to premium
+								</Link>{" "}
+								plan to create more than 2 templates
+							</Callout.Text>
+						</Callout.Root>
+					</div>
+				)}
 				<div
 					className={css({
 						display: "flex",
@@ -116,7 +130,7 @@ export default function TemplatePage() {
 					<Button
 						variant="classic"
 						onClick={onClickCreateButton}
-						disabled={templates?.length >= 2}
+						disabled={templates?.length >= 2 && !hasSubscription}
 					>
 						{createTemplateFetcher.state === "loading" ||
 							(createTemplateFetcher.state === "submitting" && <Spinner />)}
