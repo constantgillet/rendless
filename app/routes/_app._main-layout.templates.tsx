@@ -1,6 +1,7 @@
 import {
 	Badge,
 	Button,
+	Callout,
 	Card,
 	DropdownMenu,
 	IconButton,
@@ -77,6 +78,27 @@ export default function TemplatePage() {
 	return (
 		<>
 			<div className={css({ spaceY: "4" })}>
+				<div>
+					<Callout.Root>
+						<Callout.Icon>
+							<Icon name="info" />
+						</Callout.Icon>
+						<Callout.Text>
+							Please{" "}
+							<Link
+								to="/account/billing"
+								className={css({
+									color: "var(--accent-12)",
+									textDecoration: "underline",
+									cursor: "pointer",
+								})}
+							>
+								upgrade to premium
+							</Link>{" "}
+							plan to create more than 2 templates
+						</Callout.Text>
+					</Callout.Root>
+				</div>
 				<div
 					className={css({
 						display: "flex",
@@ -91,12 +113,17 @@ export default function TemplatePage() {
 					>
 						You will discover here all your images templates
 					</div>
-					<Button variant="classic" onClick={onClickCreateButton}>
+					<Button
+						variant="classic"
+						onClick={onClickCreateButton}
+						disabled={templates?.length >= 2}
+					>
 						{createTemplateFetcher.state === "loading" ||
 							(createTemplateFetcher.state === "submitting" && <Spinner />)}
 						Create a template
 					</Button>
 				</div>
+
 				{templates?.length > 0 ? (
 					<div className={grid({ columns: 12, gap: 6 })}>
 						{templates?.map((template) => {

@@ -1,4 +1,4 @@
-import { Badge, Button } from "@radix-ui/themes";
+import { AlertDialog, Badge, Button, Flex } from "@radix-ui/themes";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
 import { css } from "styled-system/css";
@@ -82,7 +82,7 @@ export default function BillingPage() {
 								p: "32px",
 								rounded: "12px",
 								border: "1px solid var(--gray-4)",
-								spaceY: "4",
+								spaceY: "3",
 							})}
 						>
 							<div
@@ -101,11 +101,35 @@ export default function BillingPage() {
 								>
 									Currrent plan:
 								</h2>
-								<Button variant="surface">Cancel subscription</Button>
+								<AlertDialog.Root>
+									<AlertDialog.Trigger>
+										<Button variant="surface">Cancel subscription</Button>
+									</AlertDialog.Trigger>
+									<AlertDialog.Content maxWidth="450px">
+										<AlertDialog.Title>Cancel subscription</AlertDialog.Title>
+										<AlertDialog.Description size="2">
+											Are you sure you want to cancel your subscription? You
+											will loose access to all premium features.
+										</AlertDialog.Description>
+
+										<Flex gap="3" mt="4" justify="end">
+											<AlertDialog.Cancel>
+												<Button variant="soft" color="gray">
+													Cancel
+												</Button>
+											</AlertDialog.Cancel>
+											<AlertDialog.Action>
+												<Button variant="solid" color="red">
+													Cancel subscription
+												</Button>
+											</AlertDialog.Action>
+										</Flex>
+									</AlertDialog.Content>
+								</AlertDialog.Root>
 							</div>
 							<div
 								className={css({
-									spaceY: "4",
+									spaceY: "2  ",
 								})}
 							>
 								<div
