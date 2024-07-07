@@ -161,7 +161,7 @@ export const PropertiesPanel = () => {
 				</>
 			)}
 			{properties?.backgroundGradientColorFrom !== undefined &&
-				properties?.BackgroundGradientColorFromOpacity !== undefined &&
+				properties?.backgroundGradientColorFromOpacity !== undefined &&
 				properties?.backgroundGradientColorTo !== undefined &&
 				properties?.backgroundGradientColorToOpacity !== undefined &&
 				properties?.backgroundGradientType !== undefined &&
@@ -172,7 +172,7 @@ export const PropertiesPanel = () => {
 								backgroundGradientColorFrom:
 									properties.backgroundGradientColorFrom,
 								backgroundGradientColorFromOpacity:
-									properties.BackgroundGradientColorFromOpacity,
+									properties.backgroundGradientColorFromOpacity,
 								backgroundGradientColorTo: properties.backgroundGradientColorTo,
 								backgroundGradientColorToOpacity:
 									properties.backgroundGradientColorToOpacity,

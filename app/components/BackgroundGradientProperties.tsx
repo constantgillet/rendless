@@ -1,5 +1,6 @@
 import { propertiesHaveValues } from "~/utils/propertiesHaveValues";
 import { PanelGroup, type ValueType } from "./PropertiesPanel";
+import { useEditorStore } from "~/stores/EditorStore";
 
 type BackgroundGradientPropertiesProps = {
 	properties: {
@@ -24,13 +25,13 @@ export const BackgroundGradientProperties = (
 
 	return (
 		<PanelGroup
-			title="Blur"
+			title="Background Gradient"
 			isOptional
 			handleClickAdd={() => {}}
 			handleClickRemove={() => {}}
-			hasValues={false}
+			hasValues={hasValues}
 		>
-			panel
+			{hasValues ? <>values</> : null}
 		</PanelGroup>
 	);
 };

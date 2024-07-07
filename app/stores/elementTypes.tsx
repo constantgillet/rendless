@@ -21,7 +21,7 @@ export const RectElementSchema = BaseElementSchema.merge(
 		backgroundColor: z.string(),
 		backgroundOpacity: z.number(),
 		backgroundGradientColorFrom: z.string().nullish().default(null),
-		BackgroundGradientColorFromOpacity: z.number().nullish().default(null),
+		backgroundGradientColorFromOpacity: z.number().nullish().default(null),
 		backgroundGradientColorTo: z.string().nullish().default(null),
 		backgroundGradientColorToOpacity: z.number().nullish().default(null),
 		backgroundGradientType: z
@@ -153,7 +153,7 @@ export const defaultRectElement: RectElement = {
 	backgroundColor: "#ff0000",
 	backgroundOpacity: 1,
 	backgroundGradientColorFrom: null,
-	BackgroundGradientColorFromOpacity: null,
+	backgroundGradientColorFromOpacity: null,
 	backgroundGradientColorTo: null,
 	backgroundGradientColorToOpacity: null,
 	backgroundGradientType: null,
