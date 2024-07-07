@@ -20,6 +20,15 @@ export const RectElementSchema = BaseElementSchema.merge(
 		type: z.enum(["rect"]),
 		backgroundColor: z.string(),
 		backgroundOpacity: z.number(),
+		backgroundGradientColorFrom: z.string().nullish().default(null),
+		BackgroundGradientColorFromOpacity: z.number().nullish().default(null),
+		backgroundGradientColorTo: z.string().nullish().default(null),
+		backgroundGradientColorToOpacity: z.number().nullish().default(null),
+		backgroundGradientType: z
+			.enum(["linear", "radial"])
+			.nullish()
+			.default(null),
+		backgroundGradientAngle: z.number().nullish().default(null),
 		borderTopLeftRadius: z.number(),
 		borderTopRightRadius: z.number(),
 		borderBottomLeftRadius: z.number(),
@@ -143,6 +152,12 @@ export const defaultRectElement: RectElement = {
 	rotate: 0,
 	backgroundColor: "#ff0000",
 	backgroundOpacity: 1,
+	backgroundGradientColorFrom: null,
+	BackgroundGradientColorFromOpacity: null,
+	backgroundGradientColorTo: null,
+	backgroundGradientColorToOpacity: null,
+	backgroundGradientType: null,
+	backgroundGradientAngle: null,
 	borderTopLeftRadius: 0,
 	borderTopRightRadius: 0,
 	borderBottomLeftRadius: 0,
