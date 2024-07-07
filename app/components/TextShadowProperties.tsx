@@ -14,6 +14,7 @@ import { updateElementsVariables } from "~/stores/actions/updateElementsVariable
 import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
 import * as SelectPicker from "react-color";
 import { grid, gridItem } from "styled-system/patterns";
+import { propertiesHaveValues } from "~/utils/propertiesHaveValues";
 
 type TextShadowPropertiesProps = {
 	properties: {
@@ -25,10 +26,6 @@ type TextShadowPropertiesProps = {
 	};
 };
 
-//Check if properties values are different from null
-const propertiesHaveValues = (properties: ValueType[]) => {
-	return properties.some((property) => property.value !== null);
-};
 export const TextShadowProperties = (props: TextShadowPropertiesProps) => {
 	const updateElements = useEditorStore((state) => state.updateElements);
 	const hasValues =
