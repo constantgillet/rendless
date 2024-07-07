@@ -338,7 +338,10 @@ const DuplicateTemplateDropdownItem = ({
 	};
 
 	return (
-		<DropdownMenu.Item onClick={onClickDuplicateButton} disabled={canDuplicate}>
+		<DropdownMenu.Item
+			onClick={onClickDuplicateButton}
+			disabled={!canDuplicate}
+		>
 			{duplicateTemplateFetcher.state === "loading" ||
 				(duplicateTemplateFetcher.state === "submitting" && <Spinner />)}
 			Duplicate
