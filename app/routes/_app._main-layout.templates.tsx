@@ -141,7 +141,13 @@ export default function TemplatePage() {
 				{templates?.length > 0 ? (
 					<div className={grid({ columns: 12, gap: 6 })}>
 						{templates?.map((template) => {
-							return <TemplateCard key={template.id} template={template} />;
+							return (
+								<TemplateCard
+									key={template.id}
+									template={template}
+									canDuplicate={templates.length < 2 || hasSubscription}
+								/>
+							);
 						})}
 					</div>
 				) : (
@@ -175,12 +181,14 @@ const onClickCopyId = (id: string) => {
 
 const TemplateCard = ({
 	template,
+	canDuplicate,
 }: {
 	template: {
 		id: string;
 		name: string;
 		tree: Tree;
 	};
+	canDuplicate?: boolean;
 }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [useTemplateDialogOpen, setUseTemplateDialogOpen] = useState(false);
@@ -260,8 +268,10 @@ const TemplateCard = ({
 									>
 										Use template
 									</DropdownMenu.Item>
-									<DuplicateTemplateDropdownItem templateId={template.id} />
-
+									<DuplicateTemplateDropdownItem
+										templateId={template.id}
+										canDuplicate={canDuplicate}
+									/>
 									<DropdownMenu.Separator />
 									<DropdownMenu.Item
 										color="red"
@@ -296,8 +306,10 @@ const TemplateCard = ({
 
 const DuplicateTemplateDropdownItem = ({
 	templateId,
+	canDuplicate,
 }: {
 	templateId: string;
+	canDuplicate?: boolean;
 }) => {
 	const duplicateTemplateFetcher = useFetcher();
 
@@ -314,6 +326,8 @@ const DuplicateTemplateDropdownItem = ({
 	};
 
 	const onClickDuplicateButton = () => {
+		if (!canDuplicate) return;
+
 		if (
 			duplicateTemplateFetcher.state === "loading" ||
 			duplicateTemplateFetcher.state === "submitting"
@@ -324,7 +338,7 @@ const DuplicateTemplateDropdownItem = ({
 	};
 
 	return (
-		<DropdownMenu.Item onClick={onClickDuplicateButton}>
+		<DropdownMenu.Item onClick={onClickDuplicateButton} disabled={canDuplicate}>
 			{duplicateTemplateFetcher.state === "loading" ||
 				(duplicateTemplateFetcher.state === "submitting" && <Spinner />)}
 			Duplicate
