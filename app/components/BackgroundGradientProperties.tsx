@@ -74,7 +74,10 @@ export const BackgroundGradientProperties = (
 			{hasValues ? (
 				<>
 					<PropertyLine label="From color" direction="column">
-						from{" "}
+						from
+					</PropertyLine>
+					<PropertyLine label="To color" direction="column">
+						to
 					</PropertyLine>
 					<Grid columns="2" gap="2" width="auto">
 						<Box>
@@ -96,7 +99,7 @@ export const BackgroundGradientProperties = (
 											width: "100%!important",
 										})}
 									>
-										<Icon name="chevron-down" />
+										linear <Icon name="chevron-down" />
 									</Button>
 								</SelectPrimitive.Trigger>
 								<Select.Content position="popper" align="end">
