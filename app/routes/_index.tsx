@@ -49,7 +49,10 @@ const Header = () => {
 		>
 			<div
 				className={container({
-					display: "flex",
+					display: {
+						base: "none",
+						md: "flex",
+					},
 					justifyContent: "space-between",
 					alignItems: "center",
 					padding: 3,
@@ -224,13 +227,20 @@ const FeaturesSection = () => {
 							border: "1px solid var(--gray-4)",
 							overflow: "hidden",
 							colSpan: 12,
+							flexDirection: {
+								base: "column",
+								lg: "row",
+							},
 						})}
 					>
 						<div
 							className={css({
 								display: "flex",
 								flexDirection: "column",
-								w: "65%",
+								w: {
+									base: "100%",
+									lg: "65%",
+								},
 								p: "32px",
 								justifyContent: "center",
 								alignItems: "center",
@@ -263,7 +273,11 @@ const FeaturesSection = () => {
 						</div>
 						<div
 							className={css({
-								pt: "86px",
+								pt: {
+									base: "0px",
+									md: "32px",
+									lg: "86px",
+								},
 							})}
 						>
 							<img
@@ -281,7 +295,10 @@ const FeaturesSection = () => {
 					</div>
 					<div
 						className={gridItem({
-							colSpan: 6,
+							colSpan: {
+								base: 12,
+								lg: 6,
+							},
 							backgroundColor: "var(--gray-3)",
 							border: "1px solid var(--gray-4)",
 							borderRadius: "12px",
@@ -333,7 +350,10 @@ const FeaturesSection = () => {
 					</div>
 					<div
 						className={gridItem({
-							colSpan: 6,
+							colSpan: {
+								base: 12,
+								lg: 6,
+							},
 							backgroundColor: "var(--gray-3)",
 							border: "1px solid var(--gray-4)",
 							borderRadius: "12px",
@@ -490,7 +510,10 @@ const PricingSection = () => {
 				>
 					<div
 						className={gridItem({
-							colSpan: 6,
+							colSpan: {
+								base: 12,
+								sm: 6,
+							},
 							backgroundColor: "var(--gray-3)",
 							p: "32px",
 							rounded: "12px",
@@ -544,7 +567,10 @@ const PricingSection = () => {
 					</div>
 					<div
 						className={gridItem({
-							colSpan: 6,
+							colSpan: {
+								base: 12,
+								sm: 6,
+							},
 							backgroundColor: "var(--accent-9)",
 							p: "32px",
 							rounded: "12px",
