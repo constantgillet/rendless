@@ -5,6 +5,8 @@ import { Box, Button, Grid, Select } from "@radix-ui/themes";
 import { PropertyTextField } from "./PropertyTextField";
 import { Icon } from "./Icon";
 import * as SelectPrimitive from "@radix-ui/react-select";
+import { PropertyLine } from "./PropertyLine";
+import { css } from "styled-system/css";
 
 type BackgroundGradientPropertiesProps = {
 	properties: {
@@ -27,16 +29,53 @@ export const BackgroundGradientProperties = (
 		propertiesHaveValues(props.properties.backgroundGradientType) &&
 		propertiesHaveValues(props.properties.backgroundGradientAngle);
 
+	const addDefault = () => {
+		updateElements(
+			props.properties.backgroundGradientColorFrom.map((property) => {
+				return {
+					id: property.nodeId,
+					backgroundGradientColorFrom: "#000000",
+					backgroundGradientColorFromOpacity: 1,
+					backgroundGradientColorTo: "#ffffff",
+					backgroundGradientColorToOpacity: 1,
+					backgroundGradientType: "radial",
+					backgroundGradientAngle: 0,
+				};
+			}),
+			true,
+		);
+	};
+
+	const remove = () => {
+		updateElements(
+			props.properties.backgroundGradientColorFrom.map((property) => {
+				return {
+					id: property.nodeId,
+					backgroundGradientColorFrom: null,
+					backgroundGradientColorFromOpacity: null,
+					backgroundGradientColorTo: null,
+					backgroundGradientColorToOpacity: null,
+					backgroundGradientType: null,
+					backgroundGradientAngle: null,
+				};
+			}),
+			true,
+		);
+	};
+
 	return (
 		<PanelGroup
 			title="Background Gradient"
 			isOptional
-			handleClickAdd={() => {}}
-			handleClickRemove={() => {}}
+			handleClickAdd={addDefault}
+			handleClickRemove={remove}
 			hasValues={hasValues}
 		>
 			{hasValues ? (
 				<>
+					<PropertyLine label="From color" direction="column">
+						from{" "}
+					</PropertyLine>
 					<Grid columns="2" gap="2" width="auto">
 						<Box>
 							<Select.Root
@@ -44,8 +83,19 @@ export const BackgroundGradientProperties = (
 									console.log(newValue);
 								}}
 							>
-								<SelectPrimitive.Trigger>
-									<Button variant="surface" size={"2"} color="gray">
+								<SelectPrimitive.Trigger
+									className={css({
+										width: "100%!important",
+									})}
+								>
+									<Button
+										variant="surface"
+										size={"2"}
+										color="gray"
+										className={css({
+											width: "100%!important",
+										})}
+									>
 										<Icon name="chevron-down" />
 									</Button>
 								</SelectPrimitive.Trigger>
