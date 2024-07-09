@@ -159,6 +159,94 @@ type ColorLineProps = {
 	backgroundGradientColorFromOpacity: ValueType[];
 };
 
-const ColorLine = ({}: ColorLineProps) => {
-	return <>color line</>;
+const ColorLine = (props: ColorLineProps) => {
+	const setDefaultValueFromProps = (property: keyof ColorLineProps) => {
+		return arePropertiesTheSame(props[property]) && !props[property][0].variable
+			? props[property][0].value
+			: arePropertiesTheSame(props[property])
+				? `{{${props[property][0].variableName}}}`
+				: "Mixed";
+	};
+
+	const [colorValue, setColorValue] = useState(
+		setDefaultValueFromProps("backgroundGradientColorFrom"),
+	);
+	const [opacityValue, setOpacityValue] = useState(
+		setDefaultValueFromProps("backgroundGradientColorFromOpacity"),
+	);
+
+	return (
+		<div>
+			<Popover.Root>
+				<>
+					<PopoverRadix.Anchor>
+						<div className={grid({ columns: 12, gap: 2 })}>
+							<div className={gridItem({ colSpan: 7 })}>
+								<PropertyTextField
+									icon={
+										<Popover.Trigger onClick={(e) => e.stopPropagation()}>
+											<button
+												className={css({
+													width: "24px",
+													height: "20px",
+													flexShrink: 0,
+													_hover: {
+														cursor: "pointer",
+													},
+													borderRadius: "3px",
+												})}
+												style={{
+													backgroundColor: colorValue,
+												}}
+											/>
+										</Popover.Trigger>
+									}
+									hasVariable={false}
+									placeholder="color hex"
+									value={colorValue}
+									onChange={(e) => setColorValue(e.target.value)}
+									onBlur={(e) => {}}
+									onKeyUp={(e) => {
+										if (e.key === "Enter") {
+										}
+									}}
+								/>
+							</div>
+							<div className={gridItem({ colSpan: 5 })}>
+								<PropertyTextField
+									hasVariable={false}
+									placeholder="Opacity"
+									value={opacityValue}
+									onChange={(e) => {}}
+									onBlur={(e) => {}}
+									onKeyUp={(e) => {
+										if (e.key == "Enter") {
+										}
+									}}
+								/>
+							</div>
+						</div>
+					</PopoverRadix.Anchor>
+					<Popover.Content side="left">
+						<SelectPicker.SketchPicker
+							disableAlpha
+							styles={{
+								default: {
+									picker: {
+										boxShadow: "none",
+									},
+								},
+							}}
+							className={css({
+								background: "var(--colors-background)!important",
+							})}
+							color={colorValue}
+							onChange={(newColor) => {}}
+							onChangeComplete={(newColor) => {}}
+						/>
+					</Popover.Content>
+				</>
+			</Popover.Root>
+		</div>
+	);
 };
