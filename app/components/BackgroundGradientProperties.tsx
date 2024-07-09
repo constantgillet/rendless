@@ -160,6 +160,8 @@ type ColorLineProps = {
 };
 
 const ColorLine = (props: ColorLineProps) => {
+	const updateElements = useEditorStore((state) => state.updateElements);
+
 	const setDefaultValueFromProps = (property: keyof ColorLineProps) => {
 		return arePropertiesTheSame(props[property]) && !props[property][0].variable
 			? props[property][0].value
@@ -174,6 +176,68 @@ const ColorLine = (props: ColorLineProps) => {
 	const [opacityValue, setOpacityValue] = useState(
 		setDefaultValueFromProps("backgroundGradientColorFromOpacity"),
 	);
+
+	useEffect(() => {
+		setColorValue(setDefaultValueFromProps("backgroundGradientColorFrom"));
+		setOpacityValue(
+			setDefaultValueFromProps("backgroundGradientColorFromOpacity"),
+		);
+	}, [
+		props.backgroundGradientColorFrom,
+		props.backgroundGradientColorFromOpacity,
+	]);
+
+	const applyColor = (newColor: string, saveToHistory = false) => {
+		const elementIds = props.backgroundGradientColorFrom.map(
+			(property) => property.nodeId,
+		);
+
+		updateElements(
+			elementIds.map((elementId) => ({
+				id: elementId,
+				backgroundGradientColorFrom: newColor,
+			})),
+			saveToHistory,
+		);
+	};
+
+	const applyColorInput = (newColorValue: string) => {
+		const elementIds = props.backgroundGradientColorFrom.map(
+			(property) => property.nodeId,
+		);
+
+		const variableName = getVarFromString(newColorValue);
+
+		if (variableName && variableName.length > 0) {
+			updateElementsVariables(
+				elementIds,
+				"backgroundGradientColorFrom",
+				variableName,
+			);
+			return;
+		}
+
+		//Check if the color is hex color and valid
+		if (!/^#[0-9A-F]{6}$/i.test(newColorValue)) {
+			return;
+		}
+
+		updateElements(
+			elementIds.map((elementId) => {
+				const newVariablesWithoutProperty = getVariablesWithoutProperty(
+					"backgroundGradientColorFrom",
+					elementId,
+				);
+
+				return {
+					id: elementId,
+					backgroundGradientColorFrom: newColorValue,
+					variables: newVariablesWithoutProperty,
+				};
+			}),
+			true,
+		);
+	};
 
 	return (
 		<div>
@@ -205,9 +269,12 @@ const ColorLine = (props: ColorLineProps) => {
 									placeholder="color hex"
 									value={colorValue}
 									onChange={(e) => setColorValue(e.target.value)}
-									onBlur={(e) => {}}
+									onBlur={(e) => {
+										applyColorInput(e.target.value);
+									}}
 									onKeyUp={(e) => {
 										if (e.key === "Enter") {
+											applyColorInput(e.currentTarget.value);
 										}
 									}}
 								/>
@@ -241,8 +308,12 @@ const ColorLine = (props: ColorLineProps) => {
 								background: "var(--colors-background)!important",
 							})}
 							color={colorValue}
-							onChange={(newColor) => {}}
-							onChangeComplete={(newColor) => {}}
+							onChange={(newColor) => {
+								applyColor(newColor.hex);
+							}}
+							onChangeComplete={(newColor) => {
+								applyColor(newColor.hex, true);
+							}}
 						/>
 					</Popover.Content>
 				</>
