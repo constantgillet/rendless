@@ -162,9 +162,14 @@ type ColorLineProps = {
 const ColorLine = (props: ColorLineProps) => {
 	const updateElements = useEditorStore((state) => state.updateElements);
 
-	const setDefaultValueFromProps = (property: keyof ColorLineProps) => {
+	const setDefaultValueFromProps = (
+		property: keyof ColorLineProps,
+		isPercentage = false,
+	) => {
 		return arePropertiesTheSame(props[property]) && !props[property][0].variable
-			? props[property][0].value
+			? isPercentage
+				? `${props[property][0].value * 100}%`
+				: props[property][0].value
 			: arePropertiesTheSame(props[property])
 				? `{{${props[property][0].variableName}}}`
 				: "Mixed";
@@ -174,13 +179,13 @@ const ColorLine = (props: ColorLineProps) => {
 		setDefaultValueFromProps("backgroundGradientColorFrom"),
 	);
 	const [opacityValue, setOpacityValue] = useState(
-		setDefaultValueFromProps("backgroundGradientColorFromOpacity"),
+		setDefaultValueFromProps("backgroundGradientColorFromOpacity", true),
 	);
 
 	useEffect(() => {
 		setColorValue(setDefaultValueFromProps("backgroundGradientColorFrom"));
 		setOpacityValue(
-			setDefaultValueFromProps("backgroundGradientColorFromOpacity"),
+			setDefaultValueFromProps("backgroundGradientColorFromOpacity", true),
 		);
 	}, [
 		props.backgroundGradientColorFrom,
@@ -239,6 +244,48 @@ const ColorLine = (props: ColorLineProps) => {
 		);
 	};
 
+	const applyOpacity = (opacity: string) => {
+		const elementIds = props.backgroundGradientColorFrom.map(
+			(property) => property.nodeId,
+		);
+
+		const variableName = getVarFromString(opacity);
+
+		if (variableName && variableName.length > 0) {
+			updateElementsVariables(
+				elementIds,
+				"backgroundGradientColorFromOpacity",
+				variableName,
+			);
+			return;
+		}
+
+		const opacityValue = Number(opacity.replace("%", "")) / 100;
+
+		if (isNaN(opacityValue) || opacityValue < 0 || opacityValue > 1) {
+			return;
+		}
+
+		updateElements(
+			elementIds.map((elementId) => {
+				const newVariablesWithoutProperty = getVariablesWithoutProperty(
+					"backgroundGradientColorFromOpacity",
+					elementId,
+				);
+
+				return {
+					id: elementId,
+					backgroundGradientColorFromOpacity: opacityValue,
+					variables: newVariablesWithoutProperty,
+				};
+			}),
+			true,
+		);
+	};
+
+	const isMixedColor = colorValue === "Mixed";
+	const isMixedOpacity = opacityValue === "Mixed";
+
 	return (
 		<div>
 			<Popover.Root>
@@ -265,7 +312,11 @@ const ColorLine = (props: ColorLineProps) => {
 											/>
 										</Popover.Trigger>
 									}
-									hasVariable={false}
+									hasVariable={
+										isMixedColor
+											? false
+											: props.backgroundGradientColorFrom[0].variable || false
+									}
 									placeholder="color hex"
 									value={colorValue}
 									onChange={(e) => setColorValue(e.target.value)}
@@ -281,13 +332,23 @@ const ColorLine = (props: ColorLineProps) => {
 							</div>
 							<div className={gridItem({ colSpan: 5 })}>
 								<PropertyTextField
-									hasVariable={false}
+									hasVariable={
+										isMixedOpacity
+											? false
+											: props.backgroundGradientColorFromOpacity[0].variable ||
+												false
+									}
 									placeholder="Opacity"
 									value={opacityValue}
-									onChange={(e) => {}}
-									onBlur={(e) => {}}
+									onChange={(e) => {
+										setOpacityValue(e.target.value);
+									}}
+									onBlur={(e) => {
+										applyOpacity(e.target.value);
+									}}
 									onKeyUp={(e) => {
-										if (e.key == "Enter") {
+										if (e.key === "Enter") {
+											applyOpacity(e.currentTarget.value);
 										}
 									}}
 								/>
