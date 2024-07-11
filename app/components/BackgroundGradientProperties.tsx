@@ -94,16 +94,17 @@ export const BackgroundGradientProperties = (
 				<>
 					<PropertyLine label="From color" direction="column">
 						<ColorLine
-							backgroundGradientColorFrom={
-								props.properties.backgroundGradientColorFrom
-							}
-							backgroundGradientColorFromOpacity={
-								props.properties.backgroundGradientColorFromOpacity
-							}
+							colorPropertyName="backgroundGradientColorFrom"
+							opacityPropertyName="backgroundGradientColorFromOpacity"
+							properties={props.properties}
 						/>
 					</PropertyLine>
 					<PropertyLine label="To color" direction="column">
-						to
+						<ColorLine
+							colorPropertyName="backgroundGradientColorTo"
+							opacityPropertyName="backgroundGradientColorToOpacity"
+							properties={props.properties}
+						/>
 					</PropertyLine>
 					<Grid columns="2" gap="2" width="auto">
 						<Box>
@@ -155,59 +156,69 @@ export const BackgroundGradientProperties = (
 };
 
 type ColorLineProps = {
-	backgroundGradientColorFrom: ValueType[];
-	backgroundGradientColorFromOpacity: ValueType[];
+	colorPropertyName:
+		| "backgroundGradientColorFrom"
+		| "backgroundGradientColorTo";
+	opacityPropertyName:
+		| "backgroundGradientColorFromOpacity"
+		| "backgroundGradientColorToOpacity";
+	properties: {
+		[key in
+			| ColorLineProps["colorPropertyName"]
+			| ColorLineProps["opacityPropertyName"]]: ValueType[];
+	};
 };
 
 const ColorLine = (props: ColorLineProps) => {
 	const updateElements = useEditorStore((state) => state.updateElements);
 
 	const setDefaultValueFromProps = (
-		property: keyof ColorLineProps,
+		property:
+			| ColorLineProps["colorPropertyName"]
+			| ColorLineProps["opacityPropertyName"],
 		isPercentage = false,
 	) => {
-		return arePropertiesTheSame(props[property]) && !props[property][0].variable
+		return arePropertiesTheSame(props.properties[property]) &&
+			!props.properties[property][0].variable
 			? isPercentage
-				? `${props[property][0].value * 100}%`
-				: props[property][0].value
-			: arePropertiesTheSame(props[property])
-				? `{{${props[property][0].variableName}}}`
+				? `${props.properties[property][0].value * 100}%`
+				: props.properties[property][0].value
+			: arePropertiesTheSame(props.properties[property])
+				? `{{${props.properties[property][0].variableName}}}`
 				: "Mixed";
 	};
 
 	const [colorValue, setColorValue] = useState(
-		setDefaultValueFromProps("backgroundGradientColorFrom"),
+		setDefaultValueFromProps(props.colorPropertyName),
 	);
 	const [opacityValue, setOpacityValue] = useState(
-		setDefaultValueFromProps("backgroundGradientColorFromOpacity", true),
+		setDefaultValueFromProps(props.opacityPropertyName, true),
 	);
 
 	useEffect(() => {
-		setColorValue(setDefaultValueFromProps("backgroundGradientColorFrom"));
-		setOpacityValue(
-			setDefaultValueFromProps("backgroundGradientColorFromOpacity", true),
-		);
+		setColorValue(setDefaultValueFromProps(props.colorPropertyName));
+		setOpacityValue(setDefaultValueFromProps(props.opacityPropertyName, true));
 	}, [
-		props.backgroundGradientColorFrom,
-		props.backgroundGradientColorFromOpacity,
+		props.properties[props.colorPropertyName],
+		props.properties[props.opacityPropertyName],
 	]);
 
 	const applyColor = (newColor: string, saveToHistory = false) => {
-		const elementIds = props.backgroundGradientColorFrom.map(
+		const elementIds = props.properties[props.colorPropertyName].map(
 			(property) => property.nodeId,
 		);
 
 		updateElements(
 			elementIds.map((elementId) => ({
 				id: elementId,
-				backgroundGradientColorFrom: newColor,
+				[props.colorPropertyName]: newColor,
 			})),
 			saveToHistory,
 		);
 	};
 
 	const applyColorInput = (newColorValue: string) => {
-		const elementIds = props.backgroundGradientColorFrom.map(
+		const elementIds = props.properties[props.colorPropertyName].map(
 			(property) => property.nodeId,
 		);
 
@@ -216,7 +227,7 @@ const ColorLine = (props: ColorLineProps) => {
 		if (variableName && variableName.length > 0) {
 			updateElementsVariables(
 				elementIds,
-				"backgroundGradientColorFrom",
+				props.colorPropertyName,
 				variableName,
 			);
 			return;
@@ -230,13 +241,13 @@ const ColorLine = (props: ColorLineProps) => {
 		updateElements(
 			elementIds.map((elementId) => {
 				const newVariablesWithoutProperty = getVariablesWithoutProperty(
-					"backgroundGradientColorFrom",
+					props.colorPropertyName,
 					elementId,
 				);
 
 				return {
 					id: elementId,
-					backgroundGradientColorFrom: newColorValue,
+					[props.colorPropertyName]: newColorValue,
 					variables: newVariablesWithoutProperty,
 				};
 			}),
@@ -245,7 +256,7 @@ const ColorLine = (props: ColorLineProps) => {
 	};
 
 	const applyOpacity = (opacity: string) => {
-		const elementIds = props.backgroundGradientColorFrom.map(
+		const elementIds = props.properties[props.opacityPropertyName].map(
 			(property) => property.nodeId,
 		);
 
@@ -254,7 +265,7 @@ const ColorLine = (props: ColorLineProps) => {
 		if (variableName && variableName.length > 0) {
 			updateElementsVariables(
 				elementIds,
-				"backgroundGradientColorFromOpacity",
+				props.opacityPropertyName,
 				variableName,
 			);
 			return;
@@ -269,13 +280,13 @@ const ColorLine = (props: ColorLineProps) => {
 		updateElements(
 			elementIds.map((elementId) => {
 				const newVariablesWithoutProperty = getVariablesWithoutProperty(
-					"backgroundGradientColorFromOpacity",
+					props.opacityPropertyName,
 					elementId,
 				);
 
 				return {
 					id: elementId,
-					backgroundGradientColorFromOpacity: opacityValue,
+					[props.opacityPropertyName]: opacityValue,
 					variables: newVariablesWithoutProperty,
 				};
 			}),
@@ -315,7 +326,8 @@ const ColorLine = (props: ColorLineProps) => {
 									hasVariable={
 										isMixedColor
 											? false
-											: props.backgroundGradientColorFrom[0].variable || false
+											: props.properties[props.colorPropertyName][0].variable ||
+												false
 									}
 									placeholder="color hex"
 									value={colorValue}
@@ -335,8 +347,8 @@ const ColorLine = (props: ColorLineProps) => {
 									hasVariable={
 										isMixedOpacity
 											? false
-											: props.backgroundGradientColorFromOpacity[0].variable ||
-												false
+											: props.properties[props.opacityPropertyName][0]
+													.variable || false
 									}
 									placeholder="Opacity"
 									value={opacityValue}
