@@ -48,6 +48,53 @@ export const BackgroundGradientProperties = (
 				: "Mixed";
 	};
 
+	const [angleValue, setAngleValue] = useState(
+		setDefaultValueFromProps("backgroundGradientAngle"),
+	);
+
+	useEffect(() => {
+		setAngleValue(setDefaultValueFromProps("backgroundGradientAngle"));
+	}, [props.properties.backgroundGradientAngle]);
+
+	const applyPropertyAngle = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const elementIds = props.properties.backgroundGradientAngle.map(
+			(property) => property.nodeId,
+		);
+
+		const variableName = getVarFromString(event.target.value);
+
+		if (variableName && variableName.length > 0) {
+			updateElementsVariables(
+				elementIds,
+				"backgroundGradientAngle",
+				variableName,
+			);
+			return;
+		}
+
+		const angleValue = Number(event.target.value);
+
+		if (isNaN(angleValue) || angleValue < 0 || angleValue > 360) {
+			return;
+		}
+
+		updateElements(
+			elementIds.map((elementId) => {
+				const newVariablesWithoutProperty = getVariablesWithoutProperty(
+					"backgroundGradientAngle",
+					elementId,
+				);
+
+				return {
+					id: elementId,
+					backgroundGradientAngle: angleValue,
+					variables: newVariablesWithoutProperty,
+				};
+			}),
+			true,
+		);
+	};
+
 	const addDefault = () => {
 		updateElements(
 			props.properties.backgroundGradientColorFrom.map((property) => {
@@ -109,8 +156,17 @@ export const BackgroundGradientProperties = (
 					<Grid columns="2" gap="2" width="auto">
 						<Box>
 							<Select.Root
-								onValueChange={(newValue) => {
-									console.log(newValue);
+								onValueChange={(value) => {
+									if (value === "Mixed") {
+										return;
+									}
+									updateElements(
+										props.properties.backgroundGradientType.map((property) => ({
+											id: property.nodeId,
+											backgroundGradientType: value,
+										})),
+										true,
+									);
 								}}
 							>
 								<SelectPrimitive.Trigger
@@ -142,10 +198,14 @@ export const BackgroundGradientProperties = (
 								hasVariable={
 									props.properties.backgroundGradientAngle[0].variable || false
 								}
-								value={"0"}
-								onChange={(e) => {}}
-								onBlur={(e) => {}}
-								onKeyUp={(e) => {}}
+								value={angleValue}
+								onChange={(e) => setAngleValue(e.target.value)}
+								onBlur={(e) => applyPropertyAngle(e)}
+								onKeyUp={(e) => {
+									if (e.key === "Enter") {
+										applyPropertyAngle(e);
+									}
+								}}
 							/>
 						</Box>
 					</Grid>
