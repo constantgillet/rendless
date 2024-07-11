@@ -11,7 +11,7 @@ import * as SelectPicker from "react-color";
 import * as PopoverRadix from "@radix-ui/react-popover";
 import { arePropertiesTheSame } from "~/utils/arePropertiesTheSame";
 import { grid, gridItem } from "styled-system/patterns";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
 import { getVarFromString } from "~/utils/getVarFromString";
 import { updateElementsVariables } from "~/stores/actions/updateElementsVariables";
@@ -55,6 +55,14 @@ export const BackgroundGradientProperties = (
 	useEffect(() => {
 		setAngleValue(setDefaultValueFromProps("backgroundGradientAngle"));
 	}, [props.properties.backgroundGradientAngle]);
+
+	const gradientType = useMemo(
+		() =>
+			arePropertiesTheSame(props.properties.backgroundGradientType)
+				? props.properties.backgroundGradientType[0].value
+				: "Mixed",
+		[props.properties.backgroundGradientType],
+	);
 
 	const applyPropertyAngle = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const elementIds = props.properties.backgroundGradientAngle.map(
@@ -156,6 +164,7 @@ export const BackgroundGradientProperties = (
 					<Grid columns="2" gap="2" width="auto">
 						<Box>
 							<Select.Root
+								value={gradientType}
 								onValueChange={(value) => {
 									if (value === "Mixed") {
 										return;
@@ -182,7 +191,7 @@ export const BackgroundGradientProperties = (
 											width: "100%!important",
 										})}
 									>
-										linear <Icon name="chevron-down" />
+										{gradientType} <Icon name="chevron-down" />
 									</Button>
 								</SelectPrimitive.Trigger>
 								<Select.Content position="popper" align="end">
