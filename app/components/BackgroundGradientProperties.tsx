@@ -64,6 +64,11 @@ export const BackgroundGradientProperties = (
 		[props.properties.backgroundGradientType],
 	);
 
+	const hasAngle = useMemo(
+		() => gradientType === "linear" || gradientType === "Mixed",
+		[gradientType],
+	);
+
 	const applyPropertyAngle = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const elementIds = props.properties.backgroundGradientAngle.map(
 			(property) => property.nodeId,
@@ -200,23 +205,26 @@ export const BackgroundGradientProperties = (
 								</Select.Content>
 							</Select.Root>
 						</Box>
-						<Box>
-							<PropertyTextField
-								icon={<Icon name="rotate-left" />}
-								placeholder="Angle"
-								hasVariable={
-									props.properties.backgroundGradientAngle[0].variable || false
-								}
-								value={angleValue}
-								onChange={(e) => setAngleValue(e.target.value)}
-								onBlur={(e) => applyPropertyAngle(e)}
-								onKeyUp={(e) => {
-									if (e.key === "Enter") {
-										applyPropertyAngle(e);
+						{hasAngle ? (
+							<Box>
+								<PropertyTextField
+									icon={<Icon name="rotate-left" />}
+									placeholder="Angle"
+									hasVariable={
+										props.properties.backgroundGradientAngle[0].variable ||
+										false
 									}
-								}}
-							/>
-						</Box>
+									value={angleValue}
+									onChange={(e) => setAngleValue(e.target.value)}
+									onBlur={(e) => applyPropertyAngle(e)}
+									onKeyUp={(e) => {
+										if (e.key === "Enter") {
+											applyPropertyAngle(e);
+										}
+									}}
+								/>
+							</Box>
+						) : null}
 					</Grid>
 				</>
 			) : null}
