@@ -63,8 +63,6 @@ export const RectElement = (props: ReactElementProps) => {
 		.filter(Boolean)
 		.join(", ");
 
-	console.log("backgroundList", backgroundList);
-
 	return (
 		<div
 			className={cx(
