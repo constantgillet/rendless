@@ -5,6 +5,7 @@ import { useState } from "react";
 import { css } from "styled-system/css";
 import { container, grid, gridItem } from "styled-system/patterns";
 import CookieBanner from "~/components/CookieBanner";
+import { Footer } from "~/components/Footer";
 import * as m from "~/paraglide/messages";
 
 export default function Index() {
@@ -21,6 +22,7 @@ export default function Index() {
 			<FeaturesSection />
 			<PricingSection />
 			<BottomCTA />
+			<Footer />
 			<CookieBanner />
 		</div>
 	);
@@ -49,10 +51,7 @@ const Header = () => {
 		>
 			<div
 				className={container({
-					display: {
-						base: "none",
-						md: "flex",
-					},
+					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "center",
 					padding: 3,
@@ -68,10 +67,16 @@ const Header = () => {
 				</Link>
 				<div
 					style={{
-						display: "flex",
 						justifyContent: "space-between",
 						gap: 24,
 					}}
+					className={css({
+						display: {
+							base: "none",
+							md: "flex",
+						},
+						gap: 2,
+					})}
 				>
 					<Link to={"/#features"}>
 						<Button variant="ghost" size="3" color="gray">
@@ -99,7 +104,15 @@ const Header = () => {
 						gap: 2,
 					})}
 				>
-					<Link to={"/login"}>
+					<Link
+						to={"/login"}
+						className={css({
+							display: {
+								base: "none",
+								md: "flex",
+							},
+						})}
+					>
 						<Button size={"3"} variant="outline">
 							Login
 						</Button>
@@ -128,7 +141,10 @@ const HeroSection = () => {
 				>
 					<h1
 						className={css({
-							fontSize: "48px",
+							fontSize: {
+								base: "36px",
+								md: "48px",
+							},
 							fontWeight: "bold",
 							textAlign: "center",
 						})}
@@ -139,7 +155,10 @@ const HeroSection = () => {
 					</h1>
 					<p
 						className={css({
-							fontSize: "24px",
+							fontSize: {
+								base: "20px",
+								md: "24px",
+							},
 							textAlign: "center",
 							color: "var(--gray-11)",
 						})}
@@ -216,7 +235,10 @@ const FeaturesSection = () => {
 				<div
 					className={grid({
 						columns: 12,
-						gap: 12,
+						gap: {
+							base: 4,
+							md: 12,
+						},
 					})}
 				>
 					<div
@@ -262,8 +284,14 @@ const FeaturesSection = () => {
 									fontSize: "20px",
 									textAlign: "center",
 									color: "var(--gray-11)",
-									px: "32px",
-									pb: "32px",
+									px: {
+										base: "0px",
+										md: "32px",
+									},
+									pb: {
+										base: "0px",
+										md: "32px",
+									},
 								})}
 							>
 								Rendless provides a simple editor to create dynamic opengraph
@@ -341,8 +369,15 @@ const FeaturesSection = () => {
 								fontSize: "20px",
 								textAlign: "center",
 								color: "var(--gray-11)",
-								px: "32px",
-								pt: "18px",
+								px: {
+									base: "0px",
+									md: "32px",
+								},
+
+								pt: {
+									base: "7px",
+									md: "18px",
+								},
 							})}
 						>
 							Rendless provides an ultra fast API to generate dynamic opengraph
@@ -376,8 +411,14 @@ const FeaturesSection = () => {
 								fontSize: "20px",
 								textAlign: "center",
 								color: "var(--gray-11)",
-								px: "32px",
-								pb: "32px",
+								px: {
+									base: "0px",
+									md: "32px",
+								},
+								pb: {
+									base: "16px",
+									md: "32px",
+								},
 							})}
 						>
 							Rendless integrates with your favorite tools, frameworks, and
@@ -386,7 +427,10 @@ const FeaturesSection = () => {
 						<div
 							className={grid({
 								columns: 6,
-								gap: 4,
+								gap: {
+									base: 2,
+									md: 4,
+								},
 							})}
 						>
 							<ToolItem image="/images/logos/wordpress.png" />
@@ -502,7 +546,10 @@ const PricingSection = () => {
 				<div
 					className={grid({
 						columns: 12,
-						gap: 12,
+						gap: {
+							base: 4,
+							md: 12,
+						},
 						w: "full",
 						maxW: "900px",
 						mx: "auto",
@@ -553,7 +600,7 @@ const PricingSection = () => {
 											color: "var(--gray-11)",
 										})}
 									>
-										per month, paid yearly
+										Unlimited
 									</span>
 								</div>
 							</div>
