@@ -44,22 +44,18 @@ export const RectElementRendered = (props: RectElementProps) => {
 				? `linear-gradient(${props.backgroundGradientAngle}deg, ${addAlphaToHex(
 						props.backgroundGradientColorFrom,
 						props.backgroundGradientColorFromOpacity || 1,
-					)} 0%, ${addAlphaToHex(
+					)}, ${addAlphaToHex(
 						props.backgroundGradientColorTo,
 						props.backgroundGradientColorToOpacity || 1,
-					)} 100%)`
+					)})`
 				: `radial-gradient(${addAlphaToHex(
 						props.backgroundGradientColorFrom,
 						props.backgroundGradientColorFromOpacity || 1,
-					)} 0%, ${addAlphaToHex(
+					)}, ${addAlphaToHex(
 						props.backgroundGradientColorTo,
 						props.backgroundGradientColorToOpacity || 1,
-					)} 100%)`
+					)})`
 			: undefined;
-
-	const backgroundList = [backgroundGradientValue, backgroundValue]
-		.filter(Boolean)
-		.join(", ");
 
 	return (
 		<div
@@ -68,14 +64,24 @@ export const RectElementRendered = (props: RectElementProps) => {
 				transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
 				width: `${props.width}px`,
 				height: `${props.height}px`,
-				background: backgroundList,
+				background: backgroundValue,
 				borderTopLeftRadius: `${props.borderTopLeftRadius}px`,
 				borderTopRightRadius: `${props.borderTopRightRadius}px`,
 				borderBottomLeftRadius: `${props.borderBottomLeftRadius}px`,
 				borderBottomRightRadius: `${props.borderBottomRightRadius}px`,
 				boxShadow: shadowList !== "" ? shadowList : "unset",
 				filter: props.blur ? `blur(${props.blur}px)` : "none",
+				overflow: "hidden",
+				display: "flex",
 			}}
-		/>
+		>
+			<div
+				style={{
+					width: "100%",
+					height: "100%",
+					background: backgroundGradientValue,
+				}}
+			/>
+		</div>
 	);
 };

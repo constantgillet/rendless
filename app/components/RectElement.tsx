@@ -59,10 +59,6 @@ export const RectElement = (props: ReactElementProps) => {
 					)} 100%)`
 			: undefined;
 
-	const backgroundList = [backgroundGradientValue, backgroundValue]
-		.filter(Boolean)
-		.join(", ");
-
 	return (
 		<div
 			className={cx(
@@ -82,7 +78,7 @@ export const RectElement = (props: ReactElementProps) => {
 				transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
 				width: props.width,
 				height: props.height,
-				background: backgroundList,
+				background: backgroundValue,
 				borderTopLeftRadius: `${props.borderTopLeftRadius}px`,
 				borderTopRightRadius: `${props.borderTopRightRadius}px`,
 				borderBottomLeftRadius: `${props.borderBottomLeftRadius}px`,
@@ -90,6 +86,14 @@ export const RectElement = (props: ReactElementProps) => {
 				boxShadow: shadowList !== "" ? shadowList : "unset",
 				filter: props.blur ? `blur(${props.blur}px)` : "none",
 			}}
-		/>
+		>
+			<div
+				style={{
+					width: "100%",
+					height: "100%",
+					background: backgroundGradientValue,
+				}}
+			/>
+		</div>
 	);
 };
