@@ -119,6 +119,8 @@ export const BackgroundGradientProperties = (
 					backgroundGradientColorToOpacity: 1,
 					backgroundGradientType: "radial",
 					backgroundGradientAngle: 0,
+					backgroundColor: null,
+					backgroundOpacity: null,
 				};
 			}),
 			true,

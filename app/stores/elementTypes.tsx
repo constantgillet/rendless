@@ -18,8 +18,8 @@ const BaseElementSchema = z.object({
 export const RectElementSchema = BaseElementSchema.merge(
 	z.object({
 		type: z.enum(["rect"]),
-		backgroundColor: z.string(),
-		backgroundOpacity: z.number(),
+		backgroundColor: z.string().nullish().default(null),
+		backgroundOpacity: z.number().nullish().default(null),
 		backgroundGradientColorFrom: z.string().nullish().default(null),
 		backgroundGradientColorFromOpacity: z.number().nullish().default(null),
 		backgroundGradientColorTo: z.string().nullish().default(null),
