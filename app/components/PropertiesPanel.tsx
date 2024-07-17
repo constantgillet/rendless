@@ -19,6 +19,8 @@ import { Icon } from "./Icon";
 import { BlurProperties } from "./BlurProperties";
 import { TextShadowProperties } from "./TextShadowProperties";
 import { ShadowProperties } from "./ShadowProperties";
+import { BackgroundGradientProperties } from "./BackgroundGradientProperties";
+import { BackgroundProperties } from "./BackgroundProperties";
 
 const Separator = () => {
 	return (
@@ -148,17 +150,33 @@ export const PropertiesPanel = () => {
 						<Separator />
 					</>
 				)}
-			{properties?.backgroundColor && properties?.backgroundOpacity && (
-				<>
-					<BackgroundColorProperties
-						properties={{
-							backgroundColor: properties.backgroundColor,
-							backgroundOpacity: properties.backgroundOpacity,
-						}}
-					/>
-					<Separator />
-				</>
-			)}
+			{properties?.backgroundColor !== undefined &&
+				properties?.backgroundOpacity !== undefined &&
+				properties?.backgroundGradientColorFrom !== undefined &&
+				properties?.backgroundGradientColorFromOpacity !== undefined &&
+				properties?.backgroundGradientColorTo !== undefined &&
+				properties?.backgroundGradientColorToOpacity !== undefined &&
+				properties?.backgroundGradientType !== undefined &&
+				properties?.backgroundGradientAngle !== undefined && (
+					<>
+						<BackgroundProperties
+							properties={{
+								backgroundColor: properties.backgroundColor,
+								backgroundOpacity: properties.backgroundOpacity,
+								backgroundGradientColorFrom:
+									properties.backgroundGradientColorFrom,
+								backgroundGradientColorFromOpacity:
+									properties.backgroundGradientColorFromOpacity,
+								backgroundGradientColorTo: properties.backgroundGradientColorTo,
+								backgroundGradientColorToOpacity:
+									properties.backgroundGradientColorToOpacity,
+								backgroundGradientType: properties.backgroundGradientType,
+								backgroundGradientAngle: properties.backgroundGradientAngle,
+							}}
+						/>
+						<Separator />
+					</>
+				)}
 			{properties?.src && properties?.objectFit && (
 				<>
 					<ImageItemsProperties

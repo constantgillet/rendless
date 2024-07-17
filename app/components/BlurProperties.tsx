@@ -8,6 +8,7 @@ import { getVarFromString } from "~/utils/getVarFromString";
 import { getElementVariables } from "~/stores/actions/getElementVariables";
 import { PropertyTextField } from "./PropertyTextField";
 import { getVariablesWithoutProperty } from "~/utils/getVariablesWithoutProperty";
+import { propertiesHaveValues } from "~/utils/propertiesHaveValues";
 
 type BlurPropertiesProps = {
 	properties: {
@@ -15,10 +16,6 @@ type BlurPropertiesProps = {
 	};
 };
 
-//Check if properties values are different from null
-const propertiesHaveValues = (properties: ValueType[]) => {
-	return properties.some((property) => property.value !== null);
-};
 export const BlurProperties = (props: BlurPropertiesProps) => {
 	const updateElements = useEditorStore((state) => state.updateElements);
 	const hasValues = propertiesHaveValues(props.properties.blur);
