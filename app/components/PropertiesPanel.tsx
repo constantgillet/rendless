@@ -151,18 +151,6 @@ export const PropertiesPanel = () => {
 					</>
 				)}
 			{properties?.backgroundColor !== undefined &&
-				properties?.backgroundOpacity !== undefined && (
-					<>
-						<BackgroundColorProperties
-							properties={{
-								backgroundColor: properties.backgroundColor,
-								backgroundOpacity: properties.backgroundOpacity,
-							}}
-						/>
-						<Separator />
-					</>
-				)}
-			{properties?.backgroundColor !== undefined &&
 				properties?.backgroundOpacity !== undefined &&
 				properties?.backgroundGradientColorFrom !== undefined &&
 				properties?.backgroundGradientColorFromOpacity !== undefined &&

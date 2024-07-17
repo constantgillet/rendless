@@ -31,10 +31,9 @@ export const RectElementRendered = (props: RectElementProps) => {
 
 	const shadowList = [shadowValue, borderValue].filter(Boolean).join(", ");
 
-	const backgroundValue = addAlphaToHex(
-		props.backgroundColor,
-		props.backgroundOpacity,
-	);
+	const backgroundValue = props.backgroundColor
+		? addAlphaToHex(props.backgroundColor, props.backgroundOpacity || 1)
+		: undefined;
 
 	const backgroundGradientValue =
 		props.backgroundGradientColorFrom &&
@@ -44,18 +43,21 @@ export const RectElementRendered = (props: RectElementProps) => {
 				? `linear-gradient(${props.backgroundGradientAngle}deg, ${addAlphaToHex(
 						props.backgroundGradientColorFrom,
 						props.backgroundGradientColorFromOpacity || 1,
-					)}, ${addAlphaToHex(
+					)} 0%, ${addAlphaToHex(
 						props.backgroundGradientColorTo,
 						props.backgroundGradientColorToOpacity || 1,
-					)})`
+					)} 100%)`
 				: `radial-gradient(${addAlphaToHex(
 						props.backgroundGradientColorFrom,
 						props.backgroundGradientColorFromOpacity || 1,
-					)}, ${addAlphaToHex(
+					)} 0%, ${addAlphaToHex(
 						props.backgroundGradientColorTo,
 						props.backgroundGradientColorToOpacity || 1,
-					)})`
+					)} 100%)`
 			: undefined;
+
+	const background =
+		backgroundValue || backgroundGradientValue || "transparent";
 
 	return (
 		<div
@@ -64,7 +66,7 @@ export const RectElementRendered = (props: RectElementProps) => {
 				transform: `translate(${props.x}px, ${props.y}px) rotate(${props.rotate}deg)`,
 				width: `${props.width}px`,
 				height: `${props.height}px`,
-				background: backgroundValue,
+				background: background,
 				borderTopLeftRadius: `${props.borderTopLeftRadius}px`,
 				borderTopRightRadius: `${props.borderTopRightRadius}px`,
 				borderBottomLeftRadius: `${props.borderBottomLeftRadius}px`,
@@ -74,14 +76,6 @@ export const RectElementRendered = (props: RectElementProps) => {
 				overflow: "hidden",
 				display: "flex",
 			}}
-		>
-			<div
-				style={{
-					width: "100%",
-					height: "100%",
-					background: backgroundGradientValue,
-				}}
-			/>
-		</div>
+		/>
 	);
 };
