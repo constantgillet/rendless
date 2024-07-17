@@ -34,7 +34,7 @@ export const BackgroundProperties = (props: BackgroundPropertiesProps) => {
 		propertiesHaveValues(props.properties.backgroundGradientAngle);
 
 	const addBackgroundColor = () => {
-		removeGradient;
+		removeGradient();
 		updateElements(
 			props.properties.backgroundColor.map((property) => {
 				return {
