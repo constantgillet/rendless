@@ -172,24 +172,22 @@ export const FramePage = (props: Props) => {
 		updateElements([element], false);
 	};
 
-	const onResize = (resizeEvent: OnResize, isEnd = false) => {
+	const onResize = (resizeEvent: OnResize) => {
 		const { target, width, height, delta, drag } = resizeEvent;
 
 		delta[0] && (target!.style.width = `${Math.round(width)}px`);
 		delta[1] && (target!.style.height = `${Math.round(height)}px`);
 		target!.style.transform = drag.transform;
 
-		const targetRect = target!.getBoundingClientRect();
-
 		const element = {
 			id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-			width: Math.round(targetRect.width / scale),
-			height: Math.round(targetRect.height / scale),
+			width: width,
+			height: height,
 			x: Math.round(drag.translate[0]),
 			y: Math.round(drag.translate[1]),
 		};
 
-		updateElements([element], isEnd ? true : false);
+		updateElements([element], false);
 	};
 
 	const onResizeGroup = (e: OnResizeGroup) => {
@@ -302,7 +300,7 @@ export const FramePage = (props: Props) => {
 							/* resizable*/
 							/* Only one of resizable, scalable, warpable can be used. */
 							resizable={true}
-							onResize={(e) => onResize(e, false)}
+							onResize={(e) => onResize(e)}
 							onResizeEnd={saveCurrentElementsToHistory}
 							onResizeGroup={(e) => onResizeGroup(e)}
 							onResizeGroupEnd={saveCurrentElementsToHistory}
