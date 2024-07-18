@@ -227,23 +227,24 @@ export const FramePage = (props: Props) => {
 	const onRotateGroup = (e: OnRotateGroup) => {
 		const { events } = e;
 
-		events.forEach((ev) => {
-			ev.target.style.transform = ev.drag.transform;
-		});
-
 		const elements = [];
 		for (let i = 0; i < events.length; ++i) {
 			const event = events[i];
 			const target = event.target;
 
+			event.target.style.transform = event.drag.transform;
+
 			const element = {
 				id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-				rotate: event.absoluteRotation,
+				rotate: event.rotation,
+				x: Math.round(event.drag.translate[0]),
+				y: Math.round(event.drag.translate[1]),
 			};
 
 			elements.push(element);
 		}
-		updateElements(elements, false);
+		//TODO
+		// updateElements(elements, false);
 	};
 
 	//Add the oposite zoom of scale
