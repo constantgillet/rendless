@@ -128,12 +128,9 @@ export const FramePage = (props: Props) => {
 		const { targets, events } = dragEvent;
 
 		const elements = [];
-		const containerRect = container.current!.getBoundingClientRect();
 
 		for (let i = 0; i < targets.length; ++i) {
 			const target = targets[i];
-
-			const targetRect = target!.getBoundingClientRect();
 
 			const event = events[i];
 
@@ -141,14 +138,10 @@ export const FramePage = (props: Props) => {
 				target.style.transform = event.transform;
 			}
 
-			//Set x and y with scale factor
-			const x = Math.round((targetRect.x - containerRect.x) / scale);
-			const y = Math.round((targetRect.y - containerRect.y) / scale);
-
 			const element = {
 				id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
-				x: x,
-				y: y,
+				x: Math.round(event.translate[0]),
+				y: Math.round(event.translate[1]),
 			};
 
 			elements.push(element);
@@ -240,6 +233,8 @@ export const FramePage = (props: Props) => {
 				x: Math.round(event.drag.translate[0]),
 				y: Math.round(event.drag.translate[1]),
 			};
+
+			console.log(element);
 
 			elements.push(element);
 		}
