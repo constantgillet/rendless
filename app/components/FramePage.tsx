@@ -185,24 +185,20 @@ export const FramePage = (props: Props) => {
 
 	const onResizeGroup = (e: OnResizeGroup) => {
 		const { events } = e;
-		events.forEach((ev) => {
-			ev.target.style.width = `${ev.width}px`;
-			ev.target.style.height = `${ev.height}px`;
-			ev.target.style.transform = ev.drag.transform;
-		});
 
 		const elements = [];
-		const containerRect = container.current!.getBoundingClientRect();
 
 		for (let i = 0; i < events.length; ++i) {
 			const event = events[i];
 			const target = event.target;
 
-			const targetRect = target!.getBoundingClientRect();
+			event.target.style.width = `${event.width}px`;
+			event.target.style.height = `${event.height}px`;
+			event.target.style.transform = event.drag.transform;
 
 			//Set x and y with scale factor
-			const x = Math.round((targetRect.x - containerRect.x) / scale);
-			const y = Math.round((targetRect.y - containerRect.y) / scale);
+			const x = Math.round(event.drag.translate[0]);
+			const y = Math.round(event.drag.translate[1]);
 
 			const element = {
 				id: target!.getAttribute(DATA_SCENA_ELEMENT_ID)!,
