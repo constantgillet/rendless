@@ -235,7 +235,7 @@ export const FramePage = (props: Props) => {
 			elements.push(element);
 		}
 		//TODO
-		// updateElements(elements, false);
+		updateElements(elements, false);
 	};
 
 	//Add the oposite zoom of scale
