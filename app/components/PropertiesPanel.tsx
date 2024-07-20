@@ -115,8 +115,6 @@ export const PropertiesPanel = () => {
 	//Get the properties list of the selected node
 	const properties = GroupProperties(selectedNodes);
 
-	console.log(properties);
-
 	return (
 		<aside
 			className={cx(
