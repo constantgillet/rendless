@@ -230,8 +230,6 @@ export const FramePage = (props: Props) => {
 				y: Math.round(event.drag.translate[1]),
 			};
 
-			console.log(element);
-
 			elements.push(element);
 		}
 		//TODO
@@ -310,6 +308,11 @@ export const FramePage = (props: Props) => {
 							onRotateEnd={saveCurrentElementsToHistory}
 							onRotateGroup={(e) => onRotateGroup(e)}
 							onRotateGroupEnd={saveCurrentElementsToHistory}
+							onClickGroup={(e) => {
+								if (e.isTrusted) {
+									selecto.current?.clickTarget(e.inputEvent, e.moveableTarget);
+								}
+							}}
 						/>
 						<div
 							ref={container}
@@ -349,7 +352,8 @@ export const FramePage = (props: Props) => {
 					hitRate={0}
 					selectableTargets={[`.scena-viewport [${DATA_SCENA_ELEMENT_ID}]`]}
 					selectByClick={true}
-					selectFromInside={false}
+					preventDragFromInside={true}
+					selectFromInside={true}
 					toggleContinueSelect={["shift"]}
 					preventDefault={true}
 					// scrollOptions={
@@ -420,14 +424,7 @@ export const FramePage = (props: Props) => {
 						//   moveableManager.current!.getMoveable().dragStart(inputEvent);
 						// });
 					}}
-					onScroll={({ direction }) => {
-						console.log(direction);
-
-						// infiniteViewer.current!.scrollBy(
-						//   direction[0] * 10,
-						//   direction[1] * 10
-						// );
-					}}
+					onKeydown={(e) => console.log("onKeydown", e)}
 				/>
 			</div>
 		</CanvasContextMenu>
