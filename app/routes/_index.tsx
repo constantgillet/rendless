@@ -1,5 +1,9 @@
 import { Badge, Button, SegmentedControl } from "@radix-ui/themes";
-import { type LoaderFunctionArgs, redirect } from "@remix-run/node";
+import {
+	type LoaderFunctionArgs,
+	type MetaFunction,
+	redirect,
+} from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { css } from "styled-system/css";
@@ -7,6 +11,21 @@ import { container, grid, gridItem } from "styled-system/patterns";
 import CookieBanner from "~/components/CookieBanner";
 import { Footer } from "~/components/Footer";
 import * as m from "~/paraglide/messages";
+
+export const meta: MetaFunction = () => {
+	return [
+		{ title: "Generate dynamic opengraph images easily and fastly - Rendless" },
+		{
+			property: "og:title",
+			content: "Generate dynamic opengraph images easily and fastly - Rendless",
+		},
+		{
+			name: "description",
+			content:
+				"Generate dynamic opengraph images easily and fastly with Rendless. Make your website stand out on social media.",
+		},
+	];
+};
 
 export default function Index() {
 	return (
