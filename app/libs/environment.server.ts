@@ -13,7 +13,7 @@ const environmentSchema = z.object({
 	SPACES_KEY: z.string().min(1),
 	SPACES_SECRET: z.string().min(1),
 	RESEND_API_KEY: z.string().min(1),
-	EMAIL_FROM: z.string().email().default("noreply@rendless.com"),
+	EMAIL_FROM: z.string().email().default("no-reply@mail.rendless.com"),
 	LEMONSQUEEZY_WEBHOOK_SECRET: z.string().min(1),
 	LEMONSQUEEZY_API_KEY: z.string().min(1),
 	LEMONSQUEEZY_STORE_ID: z.string().default("93622"),
