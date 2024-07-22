@@ -1,4 +1,5 @@
 import type { Tree } from "~/stores/EditorStore";
+import { getPublicEnv } from "~/utils/getPublicEnv";
 
 export const defaultTree: Tree = {
 	x: 0,
@@ -53,7 +54,7 @@ export const defaultTree: Tree = {
 			x: 529,
 			y: 112,
 			id: "0d31f776-b839-4648-b848-9e8b602fdc91",
-			src: `${window.ENV.WEBSITE_URL}/images/favicon-xl.png`,
+			src: `${getPublicEnv("WEBSITE_URL")}/images/favicon-xl.png`,
 			type: "image",
 			width: 149,
 			height: 149,
