@@ -24,6 +24,11 @@ export const meta: MetaFunction = () => {
 			content:
 				"Generate dynamic opengraph images easily and fastly with Rendless. Make your website stand out on social media.",
 		},
+		//OG Image
+		{
+			property: "og:image",
+			content: "https://rendless.com/images/og-image.png",
+		},
 	];
 };
 

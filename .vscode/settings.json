@@ -3,5 +3,9 @@
 	"editor.codeActionsOnSave": {
 		"quickfix.biome": "explicit"
 	},
-	"biome.requireConfiguration": false
+	"biome.requireConfiguration": false,
+	"editor.defaultFormatter": "biomejs.biome",
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	}
 }
