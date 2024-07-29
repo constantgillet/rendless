@@ -1,4 +1,5 @@
 import type { Tree } from "~/stores/EditorStore";
+import { getPublicEnv } from "~/utils/getPublicEnv";
 
 type PublicTemplate = {
 	name: string;
@@ -81,7 +82,9 @@ export const publicTemplates: PublicTemplate[] = [
 					x: 90,
 					y: 394,
 					id: "325d5380-83eb-46b3-b7c5-a668a018b536",
-					src: "https://cgbucket.ams3.digitaloceanspaces.com/ogimages/uploaded/0cca067b-33e0-4485-a908-9b5d16dabf5c.jpg",
+					src: `${getPublicEnv(
+						"WEBSITE_URL",
+					)}/images/public-templates/contents/0cca067b-33e0-4485-a908-9b5d16dabf5c.png`,
 					blur: null,
 					type: "image",
 					width: 129,
@@ -161,6 +164,8 @@ export const publicTemplates: PublicTemplate[] = [
 			backgroundColor: "#e88aff",
 			backgroundOpacity: 1,
 		},
-		preview: "https://via.placeholder.com/150",
+		preview: `${getPublicEnv(
+			"WEBSITE_URL",
+		)}/images/public-templates/previews/render-4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945.png`,
 	},
 ];
