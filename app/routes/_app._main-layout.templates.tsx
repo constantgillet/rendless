@@ -108,7 +108,7 @@ export default function TemplatePage() {
 								>
 									upgrade to premium
 								</Link>{" "}
-								plan to create more than 2 templates
+								plan to create more than 1 template
 							</Callout.Text>
 						</Callout.Root>
 					</div>
@@ -130,7 +130,7 @@ export default function TemplatePage() {
 					<Button
 						variant="classic"
 						onClick={onClickCreateButton}
-						disabled={templates?.length >= 2 && !hasSubscription}
+						disabled={templates?.length >= 1 && !hasSubscription}
 					>
 						{createTemplateFetcher.state === "loading" ||
 							(createTemplateFetcher.state === "submitting" && <Spinner />)}
