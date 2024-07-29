@@ -36,6 +36,9 @@ export async function loader({ context }: LoaderFunctionArgs) {
 		where: {
 			userId,
 		},
+		orderBy: {
+			updatedAt: "desc",
+		},
 	});
 
 	const subscription = await prisma.subscription.findFirst({
