@@ -107,7 +107,7 @@ export const UseTemplateDialog = ({
 								<Callout.Text>
 									You can use these variables in your template{" "}
 									<Link
-										to="/docs/variables"
+										to="https://docs.rendless.com/essentials/variables"
 										target="_blank"
 										className={css({
 											color: "var(--accent-9)",
@@ -149,7 +149,7 @@ export const UseTemplateDialog = ({
 						</div>
 						<div>
 							<Link
-								to="/docs/variables"
+								to="https://docs.rendless.com/essentials/variables"
 								target="_blank"
 								className={css({
 									color: "var(--accent-9)",
