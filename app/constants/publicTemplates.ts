@@ -1,7 +1,7 @@
 import type { Tree } from "~/stores/EditorStore";
 import { getPublicEnv } from "~/utils/getPublicEnv";
 
-type PublicTemplate = {
+export type PublicTemplate = {
 	name: string;
 	tree: Tree;
 	preview: string;
