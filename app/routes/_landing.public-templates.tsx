@@ -1,5 +1,5 @@
 import { Button, Card, Inset } from "@radix-ui/themes";
-import { Link, type MetaFunction } from "@remix-run/react";
+import { Link, useFetcher, type MetaFunction } from "@remix-run/react";
 import { css, cx } from "styled-system/css";
 import { container, grid, gridItem } from "styled-system/patterns";
 import { Icon } from "~/components/Icon";
@@ -107,6 +107,30 @@ type PublicTemplateCardProps = {
 const PublicTemplateCard = ({ template }: PublicTemplateCardProps) => {
 	const user = useUser();
 
+	const createTemplateFetcher = useFetcher();
+
+	const createTemplate = async () => {
+		createTemplateFetcher.submit(
+			{
+				fromPublicTemplate: template.name,
+			},
+			{
+				action: "/api/create-template",
+				method: "POST",
+			},
+		);
+	};
+
+	const onClickCreateButton = () => {
+		if (
+			createTemplateFetcher.state === "loading" ||
+			createTemplateFetcher.state === "submitting"
+		)
+			return;
+
+		createTemplate();
+	};
+
 	return (
 		<Card key={template.name} className={gridItem({ colSpan: 4 })}>
 			<Inset
@@ -138,7 +162,14 @@ const PublicTemplateCard = ({ template }: PublicTemplateCardProps) => {
 					</div>
 					{user ? (
 						<div>
-							<Button variant="outline">
+							<Button
+								variant="outline"
+								loading={
+									createTemplateFetcher.state === "submitting" ||
+									createTemplateFetcher.state === "loading"
+								}
+								onClick={onClickCreateButton}
+							>
 								Use Template
 								<Icon name="chevron-left" />
 							</Button>
@@ -148,7 +179,7 @@ const PublicTemplateCard = ({ template }: PublicTemplateCardProps) => {
 							<Button variant="outline">Login to use</Button>
 						</Link>
 					)}
-				</div>{" "}
+				</div>
 			</Inset>
 		</Card>
 	);
