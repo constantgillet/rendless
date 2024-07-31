@@ -20,6 +20,7 @@ import { grid, gridItem } from "styled-system/patterns";
 import { DeleteTemplateModal } from "~/components/DeleteTemplateModal";
 import { Icon } from "~/components/Icon";
 import { Spinner } from "~/components/Spinner";
+import { UpgradeCallout } from "~/components/UpgradeCallout";
 import { UseTemplateDialog } from "~/components/UseTemplateDialog";
 import { prisma } from "~/libs/prisma";
 import type { Tree } from "~/stores/EditorStore";
@@ -93,29 +94,7 @@ export default function TemplatePage() {
 	return (
 		<>
 			<div className={css({ spaceY: "4" })}>
-				{hasSubscription ? null : (
-					<div>
-						<Callout.Root>
-							<Callout.Icon>
-								<Icon name="info" />
-							</Callout.Icon>
-							<Callout.Text>
-								Please{" "}
-								<Link
-									to="/account/billing"
-									className={css({
-										color: "var(--accent-12)",
-										textDecoration: "underline",
-										cursor: "pointer",
-									})}
-								>
-									upgrade to premium
-								</Link>{" "}
-								plan to create more than 1 template
-							</Callout.Text>
-						</Callout.Root>
-					</div>
-				)}
+				{hasSubscription ? null : <UpgradeCallout />}
 				<div
 					className={css({
 						display: "flex",

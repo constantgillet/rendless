@@ -1,19 +1,59 @@
 import { Button, Card, Inset } from "@radix-ui/themes";
-import { Link, useFetcher, type MetaFunction } from "@remix-run/react";
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import {
+	Link,
+	useFetcher,
+	useLoaderData,
+	type MetaFunction,
+} from "@remix-run/react";
 import { css, cx } from "styled-system/css";
 import { container, grid, gridItem } from "styled-system/patterns";
 import { Icon } from "~/components/Icon";
+import { UpgradeCallout } from "~/components/UpgradeCallout";
 import {
 	type PublicTemplate,
 	publicTemplates,
 } from "~/constants/publicTemplates";
 import { useUser } from "~/hooks/useUser";
+import { prisma } from "~/libs/prisma";
 
 export const meta: MetaFunction = () => {
 	return [{ title: "Public templates - Rendless" }];
 };
 
+export async function loader({ context }: LoaderFunctionArgs) {
+	const userId = context.user?.id;
+
+	if (!userId) {
+		return json({ templatesNumber: 0, hasSubscription: false });
+	}
+
+	//Count the numver
+	const templatesNumber = await prisma.template.count({
+		where: {
+			userId,
+		},
+	});
+
+	const subscription = await prisma.subscription.findFirst({
+		where: {
+			userId: userId,
+			//Status is active or on_trial
+			status: {
+				in: ["active", "on_trial"],
+			},
+		},
+	});
+
+	const hasSubscription = Boolean(subscription);
+
+	return json({ templatesNumber: templatesNumber, hasSubscription });
+}
+
 export default function PublicTemplates() {
+	const { templatesNumber, hasSubscription } = useLoaderData<typeof loader>();
+	const user = useUser();
+
 	return (
 		<div
 			className={css({
@@ -76,7 +116,12 @@ export default function PublicTemplates() {
 					})}
 				></div>
 			</div>
-			<div className={container()}>
+			<div
+				className={container({
+					spaceY: "24px",
+				})}
+			>
+				{hasSubscription || !user ? null : <UpgradeCallout />}
 				<div
 					className={cx(
 						grid({
@@ -90,7 +135,7 @@ export default function PublicTemplates() {
 							<PublicTemplateCard
 								key={template.name}
 								template={template}
-								// canDuplicate={publicTemplates.length < 2 || user?.hasSubscription}
+								canDuplicate={templatesNumber < 2 || hasSubscription || false}
 							/>
 						);
 					})}
@@ -102,6 +147,7 @@ export default function PublicTemplates() {
 
 type PublicTemplateCardProps = {
 	template: PublicTemplate;
+	canDuplicate?: boolean;
 };
 
 const PublicTemplateCard = ({ template }: PublicTemplateCardProps) => {
