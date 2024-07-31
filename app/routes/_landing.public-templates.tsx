@@ -171,7 +171,7 @@ const PublicTemplateCard = ({ template }: PublicTemplateCardProps) => {
 								onClick={onClickCreateButton}
 							>
 								Use Template
-								<Icon name="chevron-left" />
+								<Icon name="chevron-right" />
 							</Button>
 						</div>
 					) : (

@@ -15,6 +15,7 @@ export type IconName =
 	| "text-align-right"
 	| "chevron-down"
 	| "chevron-left"
+	| "chevron-right"
 	| "settings"
 	| "home"
 	| "templates"
