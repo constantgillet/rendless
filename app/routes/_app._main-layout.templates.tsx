@@ -130,15 +130,25 @@ export default function TemplatePage() {
 					>
 						You will discover here all your images templates
 					</div>
-					<Button
-						variant="classic"
-						onClick={onClickCreateButton}
-						disabled={templates?.length >= 1 && !hasSubscription}
+					<div
+						className={css({
+							display: "flex",
+							gap: "4",
+						})}
 					>
-						{createTemplateFetcher.state === "loading" ||
-							(createTemplateFetcher.state === "submitting" && <Spinner />)}
-						Create a template
-					</Button>
+						<Link to="/public-templates">
+							<Button variant="outline">Public templates</Button>
+						</Link>
+						<Button
+							variant="classic"
+							onClick={onClickCreateButton}
+							disabled={templates?.length >= 1 && !hasSubscription}
+						>
+							{createTemplateFetcher.state === "loading" ||
+								(createTemplateFetcher.state === "submitting" && <Spinner />)}
+							Create a template
+						</Button>
+					</div>
 				</div>
 
 				{templates?.length > 0 ? (

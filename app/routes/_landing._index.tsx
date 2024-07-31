@@ -35,7 +35,6 @@ export const meta: MetaFunction = () => {
 export default function Index() {
 	return (
 		<div>
-			<Header />
 			<div
 				style={{
 					backgroundImage: `url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='20' height='20' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0)'/><path d='M 10,-2.55e-7 V 20 Z M -1.1677362e-8,10 H 20 Z'  stroke-width='0.5' stroke='hsla(259, 1%, 57%, 0.1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>")`,
@@ -59,96 +58,6 @@ export function loader({ context: { user } }: LoaderFunctionArgs) {
 
 	return { ok: true };
 }
-
-const Header = () => {
-	return (
-		<header
-			className={css({
-				position: "sticky",
-				top: 0,
-				left: 0,
-				background: "rgb(20 20 20 / 38%)",
-				zIndex: 100,
-				borderBottom: "1px solid var(--gray-4)",
-				backdropFilter: "blur(14px)",
-			})}
-		>
-			<div
-				className={container({
-					display: "flex",
-					justifyContent: "space-between",
-					alignItems: "center",
-					padding: 3,
-				})}
-			>
-				<Link to={"/register"}>
-					<img
-						src="/images/rendless-logo.png"
-						alt="Logo"
-						width={160}
-						height={"auto"}
-					/>
-				</Link>
-				<div
-					style={{
-						justifyContent: "space-between",
-						gap: 24,
-					}}
-					className={css({
-						display: {
-							base: "none",
-							md: "flex",
-						},
-						gap: 2,
-					})}
-				>
-					<Link to={"/#features"}>
-						<Button variant="ghost" size="3" color="gray">
-							Features
-						</Button>
-					</Link>
-					<Link to={"/#pricing"}>
-						<Button variant="ghost" size="3" color="gray">
-							Pro Pricing
-						</Button>
-					</Link>
-					<a
-						href={"https://docs.rendless.com"}
-						target="_blank"
-						rel="noreferrer"
-					>
-						<Button variant="ghost" size="3" color="gray">
-							Documentation
-						</Button>
-					</a>
-				</div>
-				<div
-					className={css({
-						display: "flex",
-						gap: 2,
-					})}
-				>
-					<Link
-						to={"/login"}
-						className={css({
-							display: {
-								base: "none",
-								md: "flex",
-							},
-						})}
-					>
-						<Button size={"3"} variant="outline">
-							Login
-						</Button>
-					</Link>
-					<Link to={"/register"}>
-						<Button size={"3"}>Get started</Button>
-					</Link>
-				</div>
-			</div>
-		</header>
-	);
-};
 
 const HeroSection = () => {
 	return (
