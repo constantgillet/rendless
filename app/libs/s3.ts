@@ -7,6 +7,7 @@ import {
 	HeadObjectCommand,
 	ListObjectsCommand,
 	ListObjectsV2Command,
+	GetObjectCommand,
 } from "@aws-sdk/client-s3";
 import { environment } from "./environment.server";
 
@@ -156,3 +157,19 @@ export async function deleteFolder(location: string) {
 	// start the recursive function
 	return recursiveDelete();
 }
+
+/**
+ * Get a file from the S3 server based on the key
+ * @param key key of the file, the path of the file in the S3 server
+ * @returns
+ */
+export const getFile = async (key: string) => {
+	const params = {
+		Bucket: environment().BUCKET_NAME,
+		Key: key,
+	};
+
+	const data = await s3.send(new GetObjectCommand(params));
+
+	return data;
+};
