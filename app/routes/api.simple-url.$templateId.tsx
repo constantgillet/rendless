@@ -5,7 +5,7 @@ import { Resvg } from "@resvg/resvg-js";
 import CryptoJS from "crypto-js";
 import { getCacheData, setCacheData } from "~/libs/redis.server";
 import { SvgGenerate } from "~/utils/svgGenerate";
-import { fileExists, getFile, uploadToS3 } from "~/libs/s3";
+import { fileExists, uploadToS3 } from "~/libs/s3";
 import { CACHED_FOLDER, BUCKET_URL } from "~/constants/s3Constants";
 
 const cacheEnabled = true;
@@ -59,23 +59,12 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 		if (cachedData) {
 			console.log("Image cached", imageLocation);
 
-			try {
-				const file = await getFile(imageLocation);
-				const imageBody = await file.Body?.transformToByteArray();
-				return new Response(imageBody, {
-					headers: {
-						"Content-Type": "image/png",
-					},
-				});
-			} catch (e) {
-				if (e instanceof Error && e.name === "NoSuchKey") {
-					return new Response(null, {
-						status: 404,
-					});
-				}
-				console.error("Error getting image", e);
-				throw new Error("Error getting image");
-			}
+			return new Response(null, {
+				status: 307,
+				headers: {
+					Location: `${BUCKET_URL}/${imageLocation}`,
+				},
+			});
 		}
 	}
 
