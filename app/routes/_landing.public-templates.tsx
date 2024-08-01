@@ -150,7 +150,10 @@ type PublicTemplateCardProps = {
 	canDuplicate?: boolean;
 };
 
-const PublicTemplateCard = ({ template }: PublicTemplateCardProps) => {
+const PublicTemplateCard = ({
+	template,
+	canDuplicate,
+}: PublicTemplateCardProps) => {
 	const user = useUser();
 
 	const createTemplateFetcher = useFetcher();
@@ -214,6 +217,7 @@ const PublicTemplateCard = ({ template }: PublicTemplateCardProps) => {
 									createTemplateFetcher.state === "submitting" ||
 									createTemplateFetcher.state === "loading"
 								}
+								disabled={!canDuplicate}
 								onClick={onClickCreateButton}
 							>
 								Use Template
