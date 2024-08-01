@@ -79,7 +79,7 @@ export const ImageElementSchema = BaseElementSchema.merge(
 	z.object({
 		type: z.literal("image"),
 		src: z.string().nullable(),
-		objectFit: z.enum(["fill", "contain", "cover", "none", "scale-down"]),
+		objectFit: z.enum(["contain", "cover", "none"]),
 		borderTopLeftRadius: z.number(),
 		borderTopRightRadius: z.number(),
 		borderBottomLeftRadius: z.number(),
