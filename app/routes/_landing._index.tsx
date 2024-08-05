@@ -366,7 +366,10 @@ const FeaturesSection = () => {
 								},
 							})}
 						>
-							<ToolItem image="/images/logos/wordpress.png" />
+							<ToolItem
+								image="/images/logos/wordpress.png"
+								link="https://docs.rendless.com/essentials/wordpress-integration"
+							/>
 							<ToolItem image="/images/logos/webflow.svg" />
 							<ToolItem image="/images/logos/php.webp" />
 							<ToolItem image="/images/logos/symfony.webp" />
@@ -395,11 +398,14 @@ const FeaturesSection = () => {
 
 type ToolItemProps = {
 	image: string;
+	link?: string;
 };
 
-const ToolItem = ({ image }: ToolItemProps) => {
+const ToolItem = ({ image, link }: ToolItemProps) => {
 	return (
-		<div
+		<a
+			href={link ? link : "#"}
+			target="_blank"
 			className={css({
 				display: "flex",
 				justifyContent: "center",
@@ -408,9 +414,10 @@ const ToolItem = ({ image }: ToolItemProps) => {
 				p: "8px",
 				rounded: "12px",
 			})}
+			rel="noreferrer"
 		>
 			<img src={image} alt="" />
-		</div>
+		</a>
 	);
 };
 
