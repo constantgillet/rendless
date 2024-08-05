@@ -587,7 +587,7 @@ const PricingSection = () => {
 										fontWeight: "bold",
 									})}
 								>
-									{selectedPlan === "yearly" ? "$4.99" : "$9.99"}
+									{selectedPlan === "yearly" ? "4.99€" : "9.99€"}
 								</div>
 								<div>
 									<span
