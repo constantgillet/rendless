@@ -17,6 +17,7 @@ const environmentSchema = z.object({
 	LEMONSQUEEZY_WEBHOOK_SECRET: z.string().min(1),
 	LEMONSQUEEZY_API_KEY: z.string().min(1),
 	LEMONSQUEEZY_STORE_ID: z.string().default("93622"),
+	GA_TRACKING_ID: z.string().optional(),
 });
 
 const environment = () => environmentSchema.parse(process.env);

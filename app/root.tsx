@@ -33,6 +33,7 @@ export const loader = ({ context: { user, lang } }: LoaderFunctionArgs) => {
 		lang,
 		ENV: {
 			WEBSITE_URL: environment().WEBSITE_URL,
+			GA_TRACKING_ID: environment().GA_TRACKING_ID,
 		},
 	};
 };
@@ -50,6 +51,30 @@ export default function App() {
 				<Links />
 			</head>
 			<body className="dark">
+				{process.env.NODE_ENV === "development" ||
+				!ENV.GA_TRACKING_ID ? null : (
+					<>
+						<script
+							async
+							src={`https://www.googletagmanager.com/gtag/js?id=${ENV.GA_TRACKING_ID}`}
+						/>
+						<script
+							async
+							id="gtag-init"
+							dangerouslySetInnerHTML={{
+								__html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '${ENV.GA_TRACKING_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+							}}
+						/>
+					</>
+				)}
 				<Toaster position="bottom-center" reverseOrder={true} />
 				<Theme accentColor="indigo" grayColor="slate" radius="medium">
 					<Outlet />
