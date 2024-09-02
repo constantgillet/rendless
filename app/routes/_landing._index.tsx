@@ -540,7 +540,7 @@ const PricingSection = () => {
 											color: "var(--gray-11)",
 										})}
 									>
-										Unlimited
+										{"No credit card required"}
 									</span>
 								</div>
 							</div>
@@ -687,7 +687,7 @@ const BottomCTA = () => {
 							})}
 						>
 							<Button size={"4"} highContrast>
-								Get started
+								Get started for free
 							</Button>
 						</Link>
 					</div>
