@@ -546,9 +546,18 @@ const PricingSection = () => {
 							</div>
 						</div>
 						<div>
-							<Button size={"4"} highContrast variant="outline">
-								Get started
-							</Button>
+							<Link
+								to={"/register"}
+								className={css({
+									w: "fit",
+									mx: "auto",
+									display: "block",
+								})}
+							>
+								<Button size={"4"} highContrast variant="outline">
+									Get started
+								</Button>
+							</Link>
 						</div>
 						<div>Create up to 1 template</div>
 					</div>
@@ -608,9 +617,18 @@ const PricingSection = () => {
 							</div>
 						</div>
 						<div>
-							<Button size={"4"} highContrast>
-								Get started
-							</Button>
+							<Link
+								to={"/register"}
+								className={css({
+									w: "fit",
+									mx: "auto",
+									display: "block",
+								})}
+							>
+								<Button size={"4"} highContrast>
+									Get started
+								</Button>
+							</Link>
 						</div>
 						<div>Create unlimited dynamic opengraph images</div>
 					</div>
