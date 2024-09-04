@@ -371,7 +371,10 @@ const FeaturesSection = () => {
 								link="https://docs.rendless.com/essentials/wordpress-integration"
 							/>
 							<ToolItem image="/images/logos/webflow.svg" />
-							<ToolItem image="/images/logos/php.webp" />
+							<ToolItem
+								image="/images/logos/php.webp"
+								link="https://docs.rendless.com/essentials/php-integration"
+							/>
 							<ToolItem image="/images/logos/symfony.webp" />
 							<ToolItem image="/images/logos/shopify.webp" />
 							<div
@@ -611,7 +614,8 @@ const PricingSection = () => {
 											color: "var(--gray-11)",
 										})}
 									>
-										per month, paid yearly
+										per month, paid{" "}
+										{selectedPlan === "yearly" ? "yearly" : "monthly"}
 									</span>
 								</div>
 							</div>
