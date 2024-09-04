@@ -266,7 +266,7 @@ const PlanCard = ({ variantId, price, type }: PlanCardProps) => {
 								color: "var(--gray-11)",
 							})}
 						>
-							per month, paid yearly
+							per month, paid monthly
 						</span>
 					</div>
 				</div>
