@@ -135,7 +135,7 @@ export default function PublicTemplates() {
 							<PublicTemplateCard
 								key={template.name}
 								template={template}
-								canDuplicate={templatesNumber < 2 || hasSubscription || false}
+								canDuplicate={templatesNumber < 1 || hasSubscription || false}
 							/>
 						);
 					})}
